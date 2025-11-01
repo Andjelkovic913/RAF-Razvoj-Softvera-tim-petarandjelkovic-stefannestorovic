@@ -1,18 +1,17 @@
 package org.raflab.studsluzba.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
+@Entity
 public class IspitniRok {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private LocalDate datumPocetka;
     private LocalDate datumZavrsetka;
+
     @ManyToMany
     private Set<Ispit> ispiti;
 

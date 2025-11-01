@@ -1,15 +1,22 @@
 package org.raflab.studsluzba.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.Data;
 
+import javax.persistence.*;
+
+@Entity
+@Data
 public class PredispitnaObaveza {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
     private int maksimalanBrojPoena; // mozda budemo morali kasnije da menjamo u Integer
     private String vrsta;
+
+    @ManyToOne
+    private Predmet predmet;
+
+
 }
 
 /*

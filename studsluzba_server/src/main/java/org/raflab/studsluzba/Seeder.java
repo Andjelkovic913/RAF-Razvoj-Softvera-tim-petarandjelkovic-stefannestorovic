@@ -102,7 +102,9 @@ public class Seeder implements CommandLineRunner {
             s.setPol(i % 2 == 0 ? 'F' : 'M');
             s.setAdresa("Adresa " + i);
             s.setBrojTelefonaMobilni("06123456" + i);
-            s.setEmail("student" + i + "@example.com");
+            s.setBrojTelefonaFiksni("01123456" + i);
+            s.setEmailFakultetski("student" + i + "@raf.rs");
+            s.setEmailPrivatni("student" + i + "@gmail.com");
             studentPodaciList.add(studentPodaciRepository.save(s));
         }
 

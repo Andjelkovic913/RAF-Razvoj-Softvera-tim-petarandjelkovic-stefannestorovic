@@ -3,13 +3,15 @@ package org.raflab.studsluzba.model;
 import lombok.Data;
 import net.minidev.json.JSONUtil;
 
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+@Entity
 @Data
 public class Ispit {
-    private long id;
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
     private LocalDate datumOdrzavanja;
 
     @ManyToOne
