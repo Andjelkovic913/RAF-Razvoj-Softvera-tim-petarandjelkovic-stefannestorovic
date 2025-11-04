@@ -69,7 +69,8 @@ public class EntityMappers {
         response.setAdresa(sp.getAdresa());
         response.setBrojTelefonaMobilni(sp.getBrojTelefonaMobilni());
         response.setBrojTelefonaFiksni(sp.getBrojTelefonaFiksni());
-        response.setEmail(sp.getEmail());
+        response.setEmail(sp.getEmailFakultetski());
+        response.setEmail(sp.getEmailPrivatni());
         response.setBrojLicneKarte(sp.getBrojLicneKarte());
         response.setLicnuKartuIzdao(sp.getLicnuKartuIzdao());
         response.setMestoStanovanja(sp.getMestoStanovanja());
