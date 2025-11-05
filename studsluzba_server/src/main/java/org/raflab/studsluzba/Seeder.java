@@ -203,7 +203,8 @@ public class Seeder implements CommandLineRunner {
             s.setAdresaStanovanja("Adresa stanovanja " + (i + 1));
             s.setBrojTelefonaMobilni("061" + String.format("%07d", i + 1));
             s.setBrojTelefonaFiksni("011" + String.format("%07d", i + 1));
-            s.setEmail(studentImena[i].toLowerCase() + "." + studentPrezimena[i].toLowerCase() + "@student.raf.rs");
+            s.setEmailPrivatni(studentImena[i].toLowerCase() + "." + studentPrezimena[i].toLowerCase() + "@gmail.com");
+            s.setEmailFakultetski(studentImena[i].toLowerCase() + "." + studentPrezimena[i].toLowerCase() + "@raf.rs");
             s.setBrojLicneKarte("123456789");
             s.setLicnuKartuIzdao("MUP");
             studentPodaciList.add(studentPodaciRepository.save(s));

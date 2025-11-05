@@ -68,7 +68,8 @@ public class Converters {
         studentPodaci.setAdresa(request.getAdresa());
         studentPodaci.setBrojTelefonaMobilni(request.getBrojTelefonaMobilni());
         studentPodaci.setBrojTelefonaFiksni(request.getBrojTelefonaFiksni());
-        studentPodaci.setEmail(request.getEmail());
+        studentPodaci.setEmailPrivatni(request.getEmailPrivatni());
+        studentPodaci.setEmailFakultetski(request.getEmailFakultetski());
         studentPodaci.setBrojLicneKarte(request.getBrojLicneKarte());
         studentPodaci.setLicnuKartuIzdao(request.getLicnuKartuIzdao());
         studentPodaci.setMestoStanovanja(request.getMestoStanovanja());
