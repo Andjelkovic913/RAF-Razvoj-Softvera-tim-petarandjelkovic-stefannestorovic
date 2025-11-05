@@ -1,0 +1,10 @@
+package org.raflab.studsluzba.repositories;
+
+import org.raflab.studsluzba.model.SrednjaSkola;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface SrednjaSkolaRepository extends CrudRepository<SrednjaSkola, Long> {
+}
+

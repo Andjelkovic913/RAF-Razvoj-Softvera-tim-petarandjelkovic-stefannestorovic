@@ -9,29 +9,27 @@ import javax.persistence.*;
 @Entity
 @Data
 public class StudentPodaci {
-	
-	 @Id
-	 @GeneratedValue(strategy=GenerationType.IDENTITY)
-	 private Long id;
-	 private String ime;	  // not null
-	 private String prezime;  // not null
-	 private String srednjeIme;   // not null 
-	 private String jmbg;    
-	 private LocalDate datumRodjenja;  // not null
-	 private String mestoRodjenja; 
-	 private String mestoPrebivalista;  // not null
-	 private String drzavaRodjenja;   
-	 private String drzavljanstvo;   // not null
-	 private String nacionalnost;   // samoizjasnjavanje, moze bilo sta  
-	 private Character pol;    // not null
-	 private String adresa;  // not null
-	 private String brojTelefonaMobilni;  
-	 private String brojTelefonaFiksni;
-	 private String emailFakultetski;  // not null
-	 private String emailPrivatni;  // not null
-	 private String brojLicneKarte;
-	 private String licnuKartuIzdao;
-	 private String mestoStanovanja;
-	 private String adresaStanovanja;   // u toku studija
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
+    private String ime;
+    private String prezime;
+    private String srednjeIme;
+    private String jmbg;
+    private LocalDate datumRodjenja;
+    private String mestoRodjenja;
+    private String mestoPrebivalista;
+    private String drzavaRodjenja;
+    private String drzavljanstvo;
+    private String nacionalnost;
+    private Character pol;
+    private String adresa;
+    private String brojTelefonaMobilni;
+    private String brojTelefonaFiksni;
+    private String email;
+    private String brojLicneKarte;
+    private String licnuKartuIzdao;
+    private String mestoStanovanja;
+    private String adresaStanovanja;
 }
