@@ -1,12 +1,8 @@
 package org.raflab.studsluzba.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
 import lombok.Data;
+
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -21,4 +17,8 @@ public class DrziPredmet {
 	
 	@ManyToOne
 	private Predmet predmet;
+
+	@ManyToOne
+	@JoinColumn(name = "skolska_godina_id")
+	private SkolskaGodina skolskaGodina;
 }

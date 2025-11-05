@@ -2,14 +2,8 @@ package org.raflab.studsluzba.model;
 
 import lombok.Data;
 
+import javax.persistence.*;
 import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 
 @Entity
 @Data
@@ -25,4 +19,7 @@ public class Grupa {
 	@ManyToMany
 	private List<Predmet> predmeti;
 
+	@ManyToOne
+	@JoinColumn(name = "skolska_godina_id")
+	private SkolskaGodina skolskaGodina;
 }
