@@ -25,6 +25,20 @@ public class Converters {
         return nastavnik;
     }
 
+    public static Predmet toPredmet(PredmetRequest predmetRequest) {
+        Predmet predmet = new Predmet();
+        predmet.setSifra(predmetRequest.getSifra());
+        predmet.setNaziv(predmetRequest.getNaziv());
+        predmet.setOpis(predmetRequest.getOpis());
+        predmet.setEspb(predmetRequest.getEspb());
+        predmet.setSemestar(predmetRequest.getSemestar());
+        predmet.setFondCasovaVezbe(predmetRequest.getFondCasovaVezbe());
+        predmet.setFondCasovaPredavanja(predmetRequest.getFondCasovaPredavanja());
+        predmet.setStudProgram(predmetRequest.getStudProgram());
+        predmet.setObavezan(predmetRequest.isObavezan());
+        return predmet;
+    }
+
     public static NastavnikResponse toNastavnikResponse(Nastavnik nastavnik)
     {
         NastavnikResponse response = new NastavnikResponse();

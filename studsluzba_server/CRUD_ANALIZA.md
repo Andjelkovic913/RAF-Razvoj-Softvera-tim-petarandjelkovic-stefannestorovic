@@ -31,7 +31,7 @@
 - **DELETE**: ❌ Nedostaje
 
 ### 4. **Predmet** ✅ (Samo READ)
-- **CREATE**: ❌ Nedostaje
+- **CREATE**:  `POST /api/predmet/add`
 - **READ**: ✅ `GET /api/predmet/all` - Lista svih predmeta
 - **READ**: ✅ `GET /api/predmet/all/{godinaAkreditacije}` - Predmeti za godinu akreditacije
 - **UPDATE**: ❌ Nedostaje
