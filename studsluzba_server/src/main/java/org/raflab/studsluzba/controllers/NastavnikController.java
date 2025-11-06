@@ -3,42 +3,45 @@ package org.raflab.studsluzba.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
 import org.raflab.studsluzba.controllers.request.NastavnikRequest;
 import org.raflab.studsluzba.controllers.response.NastavnikResponse;
 import org.raflab.studsluzba.model.Nastavnik;
+import org.raflab.studsluzba.repositories.NastavnikRepository;
 import org.raflab.studsluzba.services.NastavnikService;
 import org.raflab.studsluzba.utils.Converters;
+import org.raflab.studsluzba.utils.EntityMappers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
 
 @CrossOrigin
 @RestController
+@AllArgsConstructor
 @RequestMapping(path = "/api/nastavnik")
 public class NastavnikController {
 
-	@Autowired
 	NastavnikService nastavnikService;
-	
+    private NastavnikRepository nastavnikRepository;
+    private EntityMappers entityMappers;
+
+
+	// kreiranje novog nastavnika
 	@PostMapping(path = "/add")
 	public Long addNewNastavnik(@RequestBody @Valid NastavnikRequest nastavnikRequest) {
 		Nastavnik nastavnik = nastavnikService.save(Converters.toNastavnik(nastavnikRequest));
 		return nastavnik.getId();
 	}
-	
+
+	// lsita svih nastavnika
 	@GetMapping(path = "/all")
 	public List<NastavnikResponse> getAllNastavnik() {
 		return Converters.toNastavnikResponseList(nastavnikService.findAll());
 	}
 
+	// dobavljanje nastavnika po id-u
 	@GetMapping(path = "/{id}")
 	public NastavnikResponse getNastavnikById(@PathVariable Long id)
 	{
@@ -46,7 +49,8 @@ public class NastavnikController {
 
 		return rez.map(Converters::toNastavnikResponse).orElse(null);
 	}
-	
+
+	// pretraga po imenu i prezimenu
 	@GetMapping(path = "/search")
 	public List<NastavnikResponse> search(
 			@RequestParam(required = false) String ime,
@@ -54,5 +58,22 @@ public class NastavnikController {
 
         return Converters.toNastavnikResponseList(nastavnikService.findByImeAndPrezime(ime, prezime));
 	}
+
+	//azuriranje nastavnika na osnovu id-a
+	@PutMapping(path = "/nastavnik/update/{id}")
+	public NastavnikResponse updateNastavnik(@PathVariable Long id, @RequestBody NastavnikRequest zahtev){
+		Nastavnik nastavnik = nastavnikRepository.findById(id).orElseThrow(
+				() -> new EntityExistsException("Nastavnik ne postoji"));
+		Converters.updateNastavnik(nastavnik, zahtev);
+		Nastavnik promenjen = nastavnikRepository.save(nastavnik);
+		return entityMappers.fromNastavnikToResponse(promenjen);
+	}
+
+	//brisanje nastavnik na osnovu id-a
+	@DeleteMapping(path = "/nastavnik/delete/{id}")
+	public void deleteNastavnik(@PathVariable Long id){
+		nastavnikRepository.deleteById(id);
+	}
+
 	
 }

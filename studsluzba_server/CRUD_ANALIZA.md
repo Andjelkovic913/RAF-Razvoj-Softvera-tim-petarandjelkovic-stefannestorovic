@@ -19,7 +19,8 @@
 - **READ**: ✅ `GET /api/student/search` - Napredna pretraga
 - **READ**: ✅ `GET /api/student/profile/{studentIndeksId}` - Profil studenta
 - **READ**: ✅ `GET /api/student/webprofile/{studentIndeksId}` - Web profil
-- **UPDATE**: ❌ Nedostaje
+- **READ**: ✅ `GET /api/student/webprofile/email` - Web profil po email-u (parsira indeks iz emaila)
+- **UPDATE**: ✅ `PUT /api/student/update/{studProgramOznaka}/{godina}/{broj}` - Ažuriranje podataka studenta po indeksu
 - **DELETE**: ❌ Nedostaje
 
 ### 3. **Nastavnik** ✅ (Delimično)
@@ -53,12 +54,10 @@
 - **READ**: ❌ Nedostaje lista svih
 - **UPDATE**: ❌ Nedostaje
 
-### 7. **SlusaPredmet** ✅ (Delimično)
-- **CREATE**: ✅ `POST /api/professor/raspodelanastave/slusapredmet/add` - Kreiranje
-- **READ**: ✅ `GET /api/professor/raspodelanastave/slusapredmetaktivna/{idPredmeta}/{idNastavnika}` - Studenti koji slušaju
-- **READ**: ✅ `GET /api/professor/raspodelanastave/slusapredmetaktivna/{idDrziPredmet}` - Studenti za DrziPredmet
-- **READ**: ✅ `GET /api/professor/raspodelanastave/neslusapredmetaktivna/{idDrziPredmet}` - Studenti koji ne slušaju
-- **READ**: ❌ Nedostaje dohvatanje po ID-u
-- **READ**: ❌ Nedostaje lista svih
-- **UPDATE**: ❌ Nedostaje
-- **DELETE**: ❌ Nedostaje
+### 7. **SlusaPredmet** ✅ (Potpuno implementirano) (`/api/slusapredmet`):
+- **CREATE**: ✅ `POST /add` - Kreiranje novog SlusaPredmet
+- **READ**: ✅ `GET /slusapredmet/{id}` - Dohvatanje po ID-u
+- **READ**: ✅ `GET /slusapredmet/all` - Lista svih SlusaPredmet veza
+- **UPDATE**: ✅ `PUT /slusapredmet/{id}` - Ažuriranje
+- **DELETE**: ✅ `DELETE /slusapredmet/{id}` - Brisanje
+

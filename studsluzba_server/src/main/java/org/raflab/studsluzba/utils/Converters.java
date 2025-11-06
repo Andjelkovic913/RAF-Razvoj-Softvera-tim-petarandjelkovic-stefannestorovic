@@ -6,7 +6,6 @@ import org.raflab.studsluzba.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class Converters {
 
@@ -77,6 +76,41 @@ public class Converters {
         return studentPodaci;
     }
 
+    public static void updateStudentPodaci(StudentPodaci postojeci, StudentPodaciRequest request){
+        postojeci.setIme(request.getIme());
+        postojeci.setPrezime(request.getPrezime());
+        postojeci.setSrednjeIme(request.getSrednjeIme());
+        postojeci.setJmbg(request.getJmbg());
+        postojeci.setDatumRodjenja(request.getDatumRodjenja());
+        postojeci.setMestoRodjenja(request.getMestoRodjenja());
+        postojeci.setMestoPrebivalista(request.getMestoPrebivalista());
+        postojeci.setDrzavaRodjenja(request.getDrzavaRodjenja());
+        postojeci.setDrzavljanstvo(request.getDrzavljanstvo());
+        postojeci.setNacionalnost(request.getNacionalnost());
+        postojeci.setPol(request.getPol());
+        postojeci.setBrojTelefonaMobilni(request.getBrojTelefonaMobilni());
+        postojeci.setBrojTelefonaFiksni(request.getBrojTelefonaFiksni());
+        postojeci.setEmailPrivatni(request.getEmailPrivatni());
+        postojeci.setEmailFakultetski(request.getEmailFakultetski());
+        postojeci.setBrojLicneKarte(request.getBrojLicneKarte());
+        postojeci.setLicnuKartuIzdao(request.getLicnuKartuIzdao());
+        postojeci.setMestoStanovanja(request.getMestoStanovanja());
+        postojeci.setAdresaStanovanja(request.getAdresaStanovanja());
+    }
+
+    public static void updateNastavnik(Nastavnik postojeci, NastavnikRequest request){
+        postojeci.setIme(request.getIme());
+        postojeci.setPrezime(request.getPrezime());
+        postojeci.setSrednjeIme(request.getSrednjeIme());
+        postojeci.setEmail(request.getEmail());
+        postojeci.setBrojTelefona(request.getBrojTelefona());
+        postojeci.setAdresa(request.getAdresa());
+        postojeci.setZvanja(request.getZvanja());
+        postojeci.setDatumRodjenja(request.getDatumRodjenja());
+        postojeci.setPol(request.getPol());
+        postojeci.setJmbg(request.getJmbg());
+    }
+
     public static StudentIndeks toStudentIndeks(StudentIndeksRequest studentIndeksRequest) {
         StudentIndeks studentIndeks = new StudentIndeks();
         studentIndeks.setGodina(studentIndeksRequest.getGodina());
@@ -86,4 +120,60 @@ public class Converters {
         studentIndeks.setVaziOd(studentIndeksRequest.getVaziOd());
         return studentIndeks;
     }
+
+    public static StudijskiProgram toStudijskiProgram(StudijskiProgramRequest zahtev){
+        StudijskiProgram sp = new StudijskiProgram();
+        sp.setOznaka(zahtev.getOznaka());
+        sp.setNaziv(zahtev.getNaziv());
+        sp.setGodinaAkreditacije(zahtev.getGodinaAkreditacije());
+        sp.setZvanje(zahtev.getZvanje());
+        sp.setTrajanjeGodina(zahtev.getTrajanjeGodina());
+        sp.setTrajanjeSemestara(zahtev.getTrajanjeSemestara());
+        sp.setVrstaStudija(zahtev.getVrstaStudija());
+        sp.setUkupnoEspb(zahtev.getUkupnoEspb());
+        return sp;
+    }
+
+    public static StudijskiProgram updateStudijskiProgram(StudijskiProgram sp, StudijskiProgramRequest zahtev){
+        sp.setOznaka(zahtev.getOznaka());
+        sp.setNaziv(zahtev.getNaziv());
+        sp.setGodinaAkreditacije(zahtev.getGodinaAkreditacije());
+        sp.setZvanje(zahtev.getZvanje());
+        sp.setTrajanjeGodina(zahtev.getTrajanjeGodina());
+        sp.setTrajanjeSemestara(zahtev.getTrajanjeSemestara());
+        sp.setVrstaStudija(zahtev.getVrstaStudija());
+        sp.setUkupnoEspb(zahtev.getUkupnoEspb());
+        return sp;
+    }
+
+    public static SlusaPredmet toSlusaPredmet(SlusaPredmetRequest zahtev){
+        SlusaPredmet sp = new SlusaPredmet();
+        
+        // postavi vezu sa StudentIndeks
+        StudentIndeks studentIndeks = new StudentIndeks();
+        studentIndeks.setId(zahtev.getStudentIndeksId());
+        sp.setStudentIndeks(studentIndeks);
+        
+        // postavi vezu sa DrziPredmet
+        DrziPredmet drziPredmet = new DrziPredmet();
+        drziPredmet.setId(zahtev.getDrziPredmetId());
+        sp.setDrziPredmet(drziPredmet);
+        
+        // postavi vezu sa UpisGodine ako moguce
+        if (zahtev.getUpisGodineId() != null) {
+            UpisGodine upisGodine = new UpisGodine();
+            upisGodine.setId(zahtev.getUpisGodineId());
+            sp.setUpisGodine(upisGodine);
+        }
+        
+        // postavi vezu sa StudentVisokaUstanova ako moguce
+        if (zahtev.getStudentVisokaUstanovaId() != null) {
+            StudentVisokaUstanova studentVisokaUstanova = new StudentVisokaUstanova();
+            studentVisokaUstanova.setId(zahtev.getStudentVisokaUstanovaId());
+            sp.setStudentVisokaUstanova(studentVisokaUstanova);
+        }
+        
+        return sp;
+    }
+
 }
