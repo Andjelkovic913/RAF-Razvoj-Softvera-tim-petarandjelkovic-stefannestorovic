@@ -40,6 +40,19 @@ public class Converters {
         return predmet;
     }
 
+    public static Ispit toIspit(IspitRequest ispitRequest) {
+        Ispit ispit = new Ispit();
+        ispit.setDatumOdrzavanja(ispitRequest.getDatumOdrzavanja());
+        ispit.setVremePocetka(ispitRequest.getVremePocetka());
+        ispit.setVremeZavrsetka(ispitRequest.getVremeZavrsetka());
+        ispit.setDrziPredmet(ispitRequest.getDrziPredmet());
+        ispit.setPredmet(ispitRequest.getPredmet());
+        ispit.setIspitniRok(ispitRequest.getIspitniRok());
+        ispit.setSkolskaGodina(ispitRequest.getSkolskaGodina());
+        ispit.setZakljucen(ispit.isZakljucen());
+        return ispit;
+    }
+
     public static NastavnikResponse toNastavnikResponse(Nastavnik nastavnik)
     {
         NastavnikResponse response = new NastavnikResponse();

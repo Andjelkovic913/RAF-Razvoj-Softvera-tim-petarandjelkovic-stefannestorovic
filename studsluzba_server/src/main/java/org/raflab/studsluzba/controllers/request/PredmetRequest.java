@@ -5,16 +5,17 @@ import lombok.NonNull;
 import org.raflab.studsluzba.model.StudijskiProgram;
 
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class PredmetRequest {
-    @NonNull
+    @NotNull
     private String sifra;
-    @NonNull
+    @NotNull
     private String naziv;
-    @NonNull
+    @NotNull
     private String opis;
-    @NonNull
+    @NotNull
     private Integer espb;
     private Integer semestar;
     private Integer fondCasovaVezbe;
