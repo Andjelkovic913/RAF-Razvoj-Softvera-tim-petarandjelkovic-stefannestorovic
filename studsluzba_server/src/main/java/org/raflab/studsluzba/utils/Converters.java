@@ -49,7 +49,7 @@ public class Converters {
         ispit.setPredmet(ispitRequest.getPredmet());
         ispit.setIspitniRok(ispitRequest.getIspitniRok());
         ispit.setSkolskaGodina(ispitRequest.getSkolskaGodina());
-        ispit.setZakljucen(ispit.isZakljucen());
+        ispit.setZakljucen(ispitRequest.isZakljucen());
         return ispit;
     }
 
