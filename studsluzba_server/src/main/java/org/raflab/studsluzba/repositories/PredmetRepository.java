@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PredmetRepository extends CrudRepository<Predmet, Long> {
-	
-	@Query("select p from Predmet p where p.studProgram.godinaAkreditacije = :godinaAkreditacije")
+
+    @Query("select p from Predmet p where p.studProgram.godinaAkreditacije = :godinaAkreditacije")
 	List<Predmet> getPredmetForGodinaAkreditacije(Integer godinaAkreditacije);
 
 	List<Predmet> getPredmetsByStudProgramAndObavezan(StudijskiProgram studProgram, boolean obavezan);
