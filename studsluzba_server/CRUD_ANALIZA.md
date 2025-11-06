@@ -49,7 +49,7 @@
 - **CREATE**: ✅ `POST /api/professor/raspodelanastave/drzipredmet/add` - Kreiranje
 - **READ**: ✅ `GET /api/professor/raspodelanastave/drzipredmet/aktivna/nastavnik/{idNastavnika}` - Predmeti za nastavnika
 - **DELETE**: ✅ `DELETE /api/professor/raspodelanastave/drzipredmet/{id}` - Brisanje
-- **READ**: ❌ Nedostaje dohvatanje po ID-u
+- **READ**: ❌ `GET /api/drzipredmet/{id}`
 - **READ**: ❌ Nedostaje lista svih
 - **UPDATE**: ❌ Nedostaje
 

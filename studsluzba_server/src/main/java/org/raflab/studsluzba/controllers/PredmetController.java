@@ -24,5 +24,4 @@ public class PredmetController {
         Predmet predmet = predmetService.save(Converters.toPredmet(predmetRequest));
         return predmet.getId();
     }
-
 }

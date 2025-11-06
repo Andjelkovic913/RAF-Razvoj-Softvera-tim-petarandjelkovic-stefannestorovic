@@ -80,4 +80,8 @@ public class DrziPredmetService {
 
         drziPredmetRepository.saveAll(drziPredmetEntities);
     }
+    @Transactional(readOnly = true)
+    public Optional<DrziPredmet> findById(Long id) {
+        return drziPredmetRepository.findById(id);
+    }
 }

@@ -1,6 +1,7 @@
 package org.raflab.studsluzba.utils;
 
 import org.raflab.studsluzba.controllers.request.*;
+import org.raflab.studsluzba.controllers.response.DrziPredmetResponse;
 import org.raflab.studsluzba.controllers.response.NastavnikResponse;
 import org.raflab.studsluzba.model.*;
 
@@ -57,6 +58,8 @@ public class Converters {
         return response;
     }
 
+
+
     public static List<NastavnikResponse> toNastavnikResponseList(Iterable<Nastavnik> nastavnikIterable) {
         List<NastavnikResponse> nastavnikResponses = new ArrayList<>();
 
@@ -99,5 +102,27 @@ public class Converters {
         studentIndeks.setAktivan(studentIndeksRequest.isAktivan());
         studentIndeks.setVaziOd(studentIndeksRequest.getVaziOd());
         return studentIndeks;
+    }
+
+    public static DrziPredmetResponse toDrziPredmetResponse(DrziPredmet dp) {
+        DrziPredmetResponse r = new DrziPredmetResponse();
+        r.setId(dp.getId());
+
+        if (dp.getNastavnik() != null) {
+            r.setNastavnikId(dp.getNastavnik().getId());
+            r.setNastavnikIme(dp.getNastavnik().getIme());
+            r.setNastavnikPrezime(dp.getNastavnik().getPrezime());
+            r.setNastavnikEmail(dp.getNastavnik().getEmail());
+        }
+        if (dp.getPredmet() != null) {
+            r.setPredmetId(dp.getPredmet().getId());
+            r.setPredmetNaziv(dp.getPredmet().getNaziv());
+            r.setPredmetSifra(dp.getPredmet().getSifra());
+        }
+        if (dp.getSkolskaGodina() != null) {
+            r.setSkolskaGodinaId(dp.getSkolskaGodina().getId());
+            r.setSkolskaGodinaNaziv(dp.getSkolskaGodina().getNaziv());
+        }
+        return r;
     }
 }
