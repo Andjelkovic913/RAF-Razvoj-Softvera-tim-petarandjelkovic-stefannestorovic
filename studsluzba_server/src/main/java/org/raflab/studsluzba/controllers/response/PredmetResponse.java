@@ -1,5 +1,15 @@
 package org.raflab.studsluzba.controllers.response;
 
-public class PredmetResponse {
+import lombok.Data;
 
+@Data
+public class PredmetResponse {
+    private String sifra;
+    private String naziv;
+    private Integer espb;
+    private Integer semestar;
+    private Integer fondCasovaVezbe;
+    private Integer fondCasovaPredavanja;
+    private boolean obavezan;
+    private String opis;
 }

@@ -1,9 +1,6 @@
 package org.raflab.studsluzba.utils;
 
-import org.raflab.studsluzba.controllers.response.NastavnikResponse;
-import org.raflab.studsluzba.controllers.response.StudentIndeksResponse;
-import org.raflab.studsluzba.controllers.response.StudentPodaciResponse;
-import org.raflab.studsluzba.controllers.response.StudijskiProgramResponse;
+import org.raflab.studsluzba.controllers.response.*;
 import org.raflab.studsluzba.model.*;
 import org.raflab.studsluzba.model.dtos.PredmetDTO;
 import org.raflab.studsluzba.model.dtos.StudentDTO;
@@ -142,5 +139,19 @@ public class EntityMappers {
         return predmeti.stream()
                 .map(this::fromPredmetToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public PredmetResponse fromPredmetToResponse(Predmet p) {
+        if (p == null) return null;
+        PredmetResponse r = new PredmetResponse();
+        r.setSifra(p.getSifra());
+        r.setNaziv(p.getNaziv());
+        r.setEspb(p.getEspb());
+        r.setSemestar(p.getSemestar());
+        r.setFondCasovaVezbe(p.getFondCasovaVezbe());
+        r.setFondCasovaPredavanja(p.getFondCasovaPredavanja());
+        r.setObavezan(p.isObavezan());
+        r.setOpis(p.getOpis());
+        return r;
     }
 }

@@ -1,6 +1,7 @@
 package org.raflab.studsluzba.controllers;
 
 import org.raflab.studsluzba.controllers.request.PredmetRequest;
+import org.raflab.studsluzba.controllers.response.PredmetResponse;
 import org.raflab.studsluzba.model.Predmet;
 import org.raflab.studsluzba.model.dtos.PredmetDTO;
 import org.raflab.studsluzba.services.PredmetService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -42,5 +44,12 @@ public class PredmetController {
             @RequestParam(required = false ) Boolean obavezan
     ) {
         return entityMappers.fromPredmetiToDTO(predmetService.getByStudProgram(programId, obavezan));
+    }
+
+    @GetMapping(path = "/svi")
+    public List<PredmetResponse> getAllPredmeti(){
+        return predmetService.getAll().stream()
+                .map(entityMappers::fromPredmetToResponse)
+                .collect(Collectors.toList());
     }
 }

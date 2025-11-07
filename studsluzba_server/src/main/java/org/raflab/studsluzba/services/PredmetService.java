@@ -37,5 +37,9 @@ public class PredmetService {
 
         return predmetRepository.getPredmetsByStudProgramAndObavezan(sp, obavezan);
     }
-
+    public List<Predmet> getAll() {
+        List<Predmet> result = new ArrayList<>();
+        predmetRepository.findAll().forEach(result::add);
+        return result;
+    }
 }
