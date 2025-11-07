@@ -4,12 +4,13 @@ import org.raflab.studsluzba.controllers.response.NastavnikResponse;
 import org.raflab.studsluzba.controllers.response.StudentIndeksResponse;
 import org.raflab.studsluzba.controllers.response.StudentPodaciResponse;
 import org.raflab.studsluzba.controllers.response.StudijskiProgramResponse;
-import org.raflab.studsluzba.model.Nastavnik;
-import org.raflab.studsluzba.model.StudentIndeks;
-import org.raflab.studsluzba.model.StudentPodaci;
-import org.raflab.studsluzba.model.StudijskiProgram;
+import org.raflab.studsluzba.model.*;
+import org.raflab.studsluzba.model.dtos.PredmetDTO;
 import org.raflab.studsluzba.model.dtos.StudentDTO;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class EntityMappers {
@@ -118,5 +119,28 @@ public class EntityMappers {
         resp.setUkupnoEspb(sp.getUkupnoEspb());
         resp.setSkolskaGodina(sp.getSkolskaGodina());
         return resp;
+    }
+
+    public PredmetDTO fromPredmetToDTO(Predmet p){
+        if (p == null) {
+            return null;
+        }
+        PredmetDTO dto = new PredmetDTO();
+        dto.setId(p.getId());
+        dto.setSifra(p.getSifra());
+        dto.setNaziv(p.getNaziv());
+        dto.setSemestar(p.getSemestar());
+        dto.setEspb(p.getEspb());
+        dto.setObavezan(p.isObavezan());
+        dto.setStudProgramId(p.getStudProgram() != null ? p.getStudProgram().getId() : null);
+        return dto;
+    }
+    public List<PredmetDTO> fromPredmetiToDTO(List<Predmet> predmeti){
+        if (predmeti == null) {
+            return null;
+        }
+        return predmeti.stream()
+                .map(this::fromPredmetToDTO)
+                .collect(Collectors.toList());
     }
 }
