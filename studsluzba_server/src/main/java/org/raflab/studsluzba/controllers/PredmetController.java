@@ -24,10 +24,9 @@ public class PredmetController {
     @Autowired
     private EntityMappers entityMappers;
 
-    @PostMapping(path = "/add")
-    public Long addNewPredmet(@RequestBody @Valid PredmetRequest predmetRequest) {
-        Predmet predmet = predmetService.save(Converters.toPredmet(predmetRequest));
-        return predmet.getId();
+    @PostMapping("/add")
+    public Long addNewPredmet(@RequestBody @Valid PredmetRequest req) {
+        return predmetService.create(req).getId();
     }
 
     @GetMapping(path = "/by-program/{programId}")

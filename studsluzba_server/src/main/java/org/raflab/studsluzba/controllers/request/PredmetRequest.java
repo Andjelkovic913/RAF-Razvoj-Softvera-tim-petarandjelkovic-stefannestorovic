@@ -21,6 +21,8 @@ public class PredmetRequest {
     private Integer fondCasovaVezbe;
     private Integer fondCasovaPredavanja;
 
-    private StudijskiProgram studProgram;
+    @NotNull
+    private Long studProgramId;
+
     private boolean obavezan;
 }

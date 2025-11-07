@@ -221,7 +221,6 @@ public class Converters {
         predmet.setSemestar(predmetRequest.getSemestar());
         predmet.setFondCasovaVezbe(predmetRequest.getFondCasovaVezbe());
         predmet.setFondCasovaPredavanja(predmetRequest.getFondCasovaPredavanja());
-        predmet.setStudProgram(predmetRequest.getStudProgram());
         predmet.setObavezan(predmetRequest.isObavezan());
         return predmet;
     }

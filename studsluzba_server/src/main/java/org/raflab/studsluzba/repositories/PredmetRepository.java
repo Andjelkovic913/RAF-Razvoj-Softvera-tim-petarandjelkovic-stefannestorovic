@@ -18,4 +18,5 @@ public interface PredmetRepository extends CrudRepository<Predmet, Long> {
 
 	List<Predmet> findByIdIn(List<Long> ids);
 	List<Predmet> findByNazivIn(List<String> nazivi);
+    boolean existsBySifra(String sifra);
 }
