@@ -1,9 +1,13 @@
 package org.raflab.studsluzba.utils;
 
+import org.raflab.studsluzba.controllers.response.NastavnikResponse;
 import org.raflab.studsluzba.controllers.response.StudentIndeksResponse;
 import org.raflab.studsluzba.controllers.response.StudentPodaciResponse;
+import org.raflab.studsluzba.controllers.response.StudijskiProgramResponse;
+import org.raflab.studsluzba.model.Nastavnik;
 import org.raflab.studsluzba.model.StudentIndeks;
 import org.raflab.studsluzba.model.StudentPodaci;
+import org.raflab.studsluzba.model.StudijskiProgram;
 import org.raflab.studsluzba.model.dtos.StudentDTO;
 import org.springframework.stereotype.Component;
 
@@ -77,5 +81,43 @@ public class EntityMappers {
         response.setAdresaStanovanja(sp.getAdresaStanovanja());
 
         return response;
+    }
+
+    public NastavnikResponse fromNastavnikToResponse(Nastavnik nastavnik){
+        if(nastavnik == null){
+            return null;
+        }
+
+        NastavnikResponse response = new NastavnikResponse();
+        response.setId(nastavnik.getId());
+        response.setIme(nastavnik.getIme());
+        response.setPrezime(nastavnik.getPrezime());
+        response.setSrednjeIme(nastavnik.getSrednjeIme());
+        response.setEmail(nastavnik.getEmail());
+        response.setBrojTelefona(nastavnik.getBrojTelefona());
+        response.setAdresa(nastavnik.getAdresa());
+        response.setZvanja(nastavnik.getZvanja());
+        response.setDatumRodjenja(nastavnik.getDatumRodjenja());
+        response.setPol(nastavnik.getPol());
+        response.setJmbg(nastavnik.getJmbg());
+        return response;
+    }
+
+    public StudijskiProgramResponse fromStudijskiProgramToResponse(StudijskiProgram sp){
+        if (sp == null) {
+            return null;
+        }
+        StudijskiProgramResponse resp = new StudijskiProgramResponse();
+        resp.setId(sp.getId());
+        resp.setOznaka(sp.getOznaka());
+        resp.setNaziv(sp.getNaziv());
+        resp.setGodinaAkreditacije(sp.getGodinaAkreditacije());
+        resp.setZvanje(sp.getZvanje());
+        resp.setTrajanjeGodina(sp.getTrajanjeGodina());
+        resp.setTrajanjeSemestara(sp.getTrajanjeSemestara());
+        resp.setVrstaStudija(sp.getVrstaStudija());
+        resp.setUkupnoEspb(sp.getUkupnoEspb());
+        resp.setSkolskaGodina(sp.getSkolskaGodina());
+        return resp;
     }
 }

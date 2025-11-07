@@ -31,7 +31,6 @@ public class StudentPodaciRequest {
     private String brojTelefonaMobilni;
     private String brojTelefonaFiksni;
     @NotNull
-    @NotNull
     private String emailPrivatni;  // not null
     @NotNull
     private String emailFakultetski;  // not null
