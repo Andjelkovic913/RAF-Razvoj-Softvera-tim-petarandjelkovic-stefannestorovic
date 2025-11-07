@@ -193,25 +193,25 @@ public class StudentController {
     }
 
 	// profil studenta
-    @GetMapping(path="/profile/{studentIndeksId}")  
+    @GetMapping(path="/profile/{studentIndeksId}")
     public StudentProfileDTO getStudentProfile(@PathVariable  Long studentIndeksId) {
-    	return studentProfileService.getStudentProfile(studentIndeksId);   	
+    	return studentProfileService.getStudentProfile(studentIndeksId);
     }
 
 	// web profil
-    @GetMapping(path="/webprofile/{studentIndeksId}")  
+    @GetMapping(path="/webprofile/{studentIndeksId}")
     public StudentWebProfileDTO getStudentWebProfile(@PathVariable  Long studentIndeksId) {
-    	return studentProfileService.getStudentWebProfile(studentIndeksId);   	
+    	return studentProfileService.getStudentWebProfile(studentIndeksId);
     }
 
 	// dobijanje web profila na osnovu mejla
-    @GetMapping(path="/webprofile/email")  
+    @GetMapping(path="/webprofile/email")
     public StudentWebProfileDTO getStudentWebProfileForEmail(@RequestParam String studEmail) {
     	 String[] parsedData = ParseUtils.parseEmail(studEmail);
          if(parsedData!=null) {
        	  StudentIndeks si = studentIndeksRepository.findStudentIndeks(parsedData[0], 2000+Integer.parseInt(parsedData[1]),Integer.parseInt(parsedData[2]));
        	  if(si!=null)
-       		  return studentProfileService.getStudentWebProfile(si.getId());   	
+       		  return studentProfileService.getStudentWebProfile(si.getId());
          }
          return null;
     }
@@ -257,6 +257,30 @@ public class StudentController {
         target.setLicnuKartuIzdao(source.getLicnuKartuIzdao());
         target.setMestoStanovanja(source.getMestoStanovanja());
         target.setAdresaStanovanja(source.getAdresaStanovanja());
+    }
+    @GetMapping(path="/podaci/prekoindeksa/broj/{broj}")
+    public StudentPodaciResponse getStudentPodaciByBroj(@PathVariable int broj,
+                                                        @RequestParam(required = false) String studProgramOznaka,
+                                                        @RequestParam(required = false) Integer godina) {
+        if (studProgramOznaka != null && godina != null) {
+            StudentIndeks si = studentIndeksRepository.findStudentIndeks(studProgramOznaka.toUpperCase(), godina, broj);
+            if (si == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Student sa indeksom %s %d/%d ne postoji", studProgramOznaka, broj, godina));
+            }
+            return entityMappers.fromStudentPodaciToResponse(si.getStudent());
+        }
+
+        List<StudentIndeks> matches = studentIndeksRepository.findByBrojAndAktivanTrue(broj);
+        if (matches.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("Nije pronadjen aktivan indeks sa brojem %d", broj));
+        }
+        if (matches.size() > 1) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    String.format("Više aktivnih indeksa sa brojem %d. Preciziraj 'studProgramOznaka' i 'godina'.", broj));
+        }
+        return entityMappers.fromStudentPodaciToResponse(matches.get(0).getStudent());
     }
 
 

@@ -58,7 +58,6 @@ public class EntityMappers {
         }
 
         StudentPodaciResponse response = new StudentPodaciResponse();
-        response.setId(sp.getId());
         response.setIme(sp.getIme());
         response.setPrezime(sp.getPrezime());
         response.setSrednjeIme(sp.getSrednjeIme());
