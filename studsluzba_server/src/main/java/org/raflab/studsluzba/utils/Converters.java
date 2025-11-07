@@ -1,6 +1,7 @@
 package org.raflab.studsluzba.utils;
 
 import org.raflab.studsluzba.controllers.request.*;
+import org.raflab.studsluzba.controllers.response.DrziPredmetResponse;
 import org.raflab.studsluzba.controllers.response.NastavnikResponse;
 import org.raflab.studsluzba.model.*;
 
@@ -174,6 +175,55 @@ public class Converters {
         }
         
         return sp;
+    }
+
+    public static DrziPredmetResponse toDrziPredmetResponse(DrziPredmet dp) {
+        DrziPredmetResponse r = new DrziPredmetResponse();
+        r.setId(dp.getId());
+
+        if (dp.getNastavnik() != null) {
+            r.setNastavnikId(dp.getNastavnik().getId());
+            r.setNastavnikIme(dp.getNastavnik().getIme());
+            r.setNastavnikPrezime(dp.getNastavnik().getPrezime());
+            r.setNastavnikEmail(dp.getNastavnik().getEmail());
+        }
+        if (dp.getPredmet() != null) {
+            r.setPredmetId(dp.getPredmet().getId());
+            r.setPredmetNaziv(dp.getPredmet().getNaziv());
+            r.setPredmetSifra(dp.getPredmet().getSifra());
+        }
+        if (dp.getSkolskaGodina() != null) {
+            r.setSkolskaGodinaId(dp.getSkolskaGodina().getId());
+            r.setSkolskaGodinaNaziv(dp.getSkolskaGodina().getNaziv());
+        }
+        return r;
+    }
+
+    public static Ispit toIspit(IspitRequest ispitRequest) {
+        Ispit ispit = new Ispit();
+        ispit.setDatumOdrzavanja(ispitRequest.getDatumOdrzavanja());
+        ispit.setVremePocetka(ispitRequest.getVremePocetka());
+        ispit.setVremeZavrsetka(ispitRequest.getVremeZavrsetka());
+        ispit.setDrziPredmet(ispitRequest.getDrziPredmet());
+        ispit.setPredmet(ispitRequest.getPredmet());
+        ispit.setIspitniRok(ispitRequest.getIspitniRok());
+        ispit.setSkolskaGodina(ispitRequest.getSkolskaGodina());
+        ispit.setZakljucen(ispitRequest.isZakljucen());
+        return ispit;
+    }
+
+    public static Predmet toPredmet(PredmetRequest predmetRequest) {
+        Predmet predmet = new Predmet();
+        predmet.setSifra(predmetRequest.getSifra());
+        predmet.setNaziv(predmetRequest.getNaziv());
+        predmet.setOpis(predmetRequest.getOpis());
+        predmet.setEspb(predmetRequest.getEspb());
+        predmet.setSemestar(predmetRequest.getSemestar());
+        predmet.setFondCasovaVezbe(predmetRequest.getFondCasovaVezbe());
+        predmet.setFondCasovaPredavanja(predmetRequest.getFondCasovaPredavanja());
+        predmet.setStudProgram(predmetRequest.getStudProgram());
+        predmet.setObavezan(predmetRequest.isObavezan());
+        return predmet;
     }
 
 }
