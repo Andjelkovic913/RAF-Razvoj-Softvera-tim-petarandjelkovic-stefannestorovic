@@ -1,8 +1,8 @@
 package org.raflab.studsluzba.services;
 
+import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.model.StudentIndeks;
 import org.raflab.studsluzba.repositories.StudentIndeksRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class StudentIndeksService {
     
-    @Autowired
-    private StudentIndeksRepository studentIndeksRepository;
+    private final StudentIndeksRepository studentIndeksRepository;
 
     @Transactional(readOnly = true)
     public int findBroj(int godina, String studProgramOznaka) {

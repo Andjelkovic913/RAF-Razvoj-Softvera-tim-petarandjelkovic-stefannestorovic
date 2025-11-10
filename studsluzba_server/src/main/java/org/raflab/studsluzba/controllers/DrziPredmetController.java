@@ -15,6 +15,6 @@ public class DrziPredmetController {
 
     @GetMapping("/{id}")
     public DrziPredmetResponse getById(@PathVariable Long id) {
-        return drziPredmetService.findById(id).orElse(null);
+        return drziPredmetService.findById(id);
     }
 }

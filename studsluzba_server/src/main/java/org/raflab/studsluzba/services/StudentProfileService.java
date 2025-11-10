@@ -23,7 +23,7 @@ public class StudentProfileService {
 
 	public StudentProfileDTO getStudentProfile(Long indeksId) {
 		StudentIndeks studIndeks = studentIndeksRepository.findById(indeksId)
-				.orElseThrow(() -> new EntityNotFoundException("Student indeks sa ID " + indeksId + " ne postoji"));
+				.orElseThrow(() -> new EntityNotFoundException("Student indeks sa ID jem " + indeksId + " ne postoji"));
 		
 		StudentProfileDTO retVal = new StudentProfileDTO();
 		retVal.setIndeks(entityMappers.fromStudentIndeksToIndeksDTO(studIndeks));

@@ -3,7 +3,6 @@ package org.raflab.studsluzba.controllers;
 import lombok.AllArgsConstructor;
 import org.raflab.studsluzba.controllers.request.SlusaPredmetRequest;
 import org.raflab.studsluzba.controllers.response.SlusaPredmetResponse;
-import org.raflab.studsluzba.model.SlusaPredmet;
 import org.raflab.studsluzba.services.SlusaPredmetService;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +32,8 @@ public class SlusaPredmetController {
     }
 
     @PutMapping(path="/slusapredmet/{id}")
-    public SlusaPredmetResponse updateSlusaPredmet(@PathVariable Long id, @RequestBody SlusaPredmet slusaPredmet) {
-        return slusaPredmetService.updateSlusaPredmet(id, slusaPredmet);
+    public SlusaPredmetResponse updateSlusaPredmet(@PathVariable Long id, @RequestBody SlusaPredmetRequest zahtev) {
+        return slusaPredmetService.updateSlusaPredmet(id, zahtev);
     }
 
     @DeleteMapping(path="/slusapredmet/{id}")

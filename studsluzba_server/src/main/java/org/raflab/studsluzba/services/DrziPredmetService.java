@@ -79,13 +79,13 @@ public class DrziPredmetService {
                 drziPredmetEntities.add(drziPredmet);
             }
         }
-        System.out.println("BROJ DrziPredmet za cuvanje: " + drziPredmetEntities.size());
-
         drziPredmetRepository.saveAll(drziPredmetEntities);
     }
+    
     @Transactional(readOnly = true)
-    public Optional<DrziPredmetResponse> findById(Long id) {
+    public DrziPredmetResponse findById(Long id) {
         return drziPredmetRepository.findById(id)
-                .map(converters::toDrziPredmetResponse);
+                .map(converters::toDrziPredmetResponse)
+                .orElseThrow(() -> new javax.persistence.EntityNotFoundException("DrziPredmet sa ID " + id + " ne postoji"));
     }
 }
