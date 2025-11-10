@@ -4,13 +4,15 @@ import org.raflab.studsluzba.controllers.request.*;
 import org.raflab.studsluzba.controllers.response.DrziPredmetResponse;
 import org.raflab.studsluzba.controllers.response.NastavnikResponse;
 import org.raflab.studsluzba.model.*;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class Converters {
 
-    public static Nastavnik toNastavnik(NastavnikRequest nastavnikRequest) {
+    public Nastavnik toNastavnik(NastavnikRequest nastavnikRequest) {
         Nastavnik nastavnik = new Nastavnik();
         nastavnik.setIme(nastavnikRequest.getIme());
         nastavnik.setPrezime(nastavnikRequest.getPrezime());
@@ -25,7 +27,7 @@ public class Converters {
         return nastavnik;
     }
 
-    public static NastavnikResponse toNastavnikResponse(Nastavnik nastavnik)
+    public NastavnikResponse toNastavnikResponse(Nastavnik nastavnik)
     {
         NastavnikResponse response = new NastavnikResponse();
         response.setId(nastavnik.getId());
@@ -43,7 +45,7 @@ public class Converters {
         return response;
     }
 
-    public static List<NastavnikResponse> toNastavnikResponseList(Iterable<Nastavnik> nastavnikIterable) {
+    public List<NastavnikResponse> toNastavnikResponseList(Iterable<Nastavnik> nastavnikIterable) {
         List<NastavnikResponse> nastavnikResponses = new ArrayList<>();
 
         nastavnikIterable.forEach((nastavnik) -> {
@@ -52,7 +54,7 @@ public class Converters {
         return nastavnikResponses;
     }
 
-    public static StudentPodaci toStudentPodaci(StudentPodaciRequest request) {
+    public StudentPodaci toStudentPodaci(StudentPodaciRequest request) {
         StudentPodaci studentPodaci = new StudentPodaci();
         studentPodaci.setIme(request.getIme());
         studentPodaci.setPrezime(request.getPrezime());
@@ -77,7 +79,7 @@ public class Converters {
         return studentPodaci;
     }
 
-    public static void updateStudentPodaci(StudentPodaci postojeci, StudentPodaciRequest request){
+    public void updateStudentPodaci(StudentPodaci postojeci, StudentPodaciRequest request){
         postojeci.setIme(request.getIme());
         postojeci.setPrezime(request.getPrezime());
         postojeci.setSrednjeIme(request.getSrednjeIme());
@@ -99,7 +101,7 @@ public class Converters {
         postojeci.setAdresaStanovanja(request.getAdresaStanovanja());
     }
 
-    public static void updateNastavnik(Nastavnik postojeci, NastavnikRequest request){
+    public void updateNastavnik(Nastavnik postojeci, NastavnikRequest request){
         postojeci.setIme(request.getIme());
         postojeci.setPrezime(request.getPrezime());
         postojeci.setSrednjeIme(request.getSrednjeIme());
@@ -112,7 +114,7 @@ public class Converters {
         postojeci.setJmbg(request.getJmbg());
     }
 
-    public static StudentIndeks toStudentIndeks(StudentIndeksRequest studentIndeksRequest) {
+    public StudentIndeks toStudentIndeks(StudentIndeksRequest studentIndeksRequest) {
         StudentIndeks studentIndeks = new StudentIndeks();
         studentIndeks.setGodina(studentIndeksRequest.getGodina());
         studentIndeks.setStudProgramOznaka(studentIndeksRequest.getStudProgramOznaka());
@@ -122,7 +124,7 @@ public class Converters {
         return studentIndeks;
     }
 
-    public static StudijskiProgram toStudijskiProgram(StudijskiProgramRequest zahtev){
+    public StudijskiProgram toStudijskiProgram(StudijskiProgramRequest zahtev){
         StudijskiProgram sp = new StudijskiProgram();
         sp.setOznaka(zahtev.getOznaka());
         sp.setNaziv(zahtev.getNaziv());
@@ -135,7 +137,7 @@ public class Converters {
         return sp;
     }
 
-    public static StudijskiProgram updateStudijskiProgram(StudijskiProgram sp, StudijskiProgramRequest zahtev){
+    public StudijskiProgram updateStudijskiProgram(StudijskiProgram sp, StudijskiProgramRequest zahtev){
         sp.setOznaka(zahtev.getOznaka());
         sp.setNaziv(zahtev.getNaziv());
         sp.setGodinaAkreditacije(zahtev.getGodinaAkreditacije());
@@ -147,7 +149,7 @@ public class Converters {
         return sp;
     }
 
-    public static SlusaPredmet toSlusaPredmet(SlusaPredmetRequest zahtev){
+    public SlusaPredmet toSlusaPredmet(SlusaPredmetRequest zahtev){
         SlusaPredmet sp = new SlusaPredmet();
         
         // postavi vezu sa StudentIndeks
@@ -177,7 +179,7 @@ public class Converters {
         return sp;
     }
 
-    public static DrziPredmetResponse toDrziPredmetResponse(DrziPredmet dp) {
+    public DrziPredmetResponse toDrziPredmetResponse(DrziPredmet dp) {
         DrziPredmetResponse r = new DrziPredmetResponse();
         r.setId(dp.getId());
 
@@ -199,7 +201,7 @@ public class Converters {
         return r;
     }
 
-    public static Ispit toIspit(IspitRequest ispitRequest) {
+    public Ispit toIspit(IspitRequest ispitRequest) {
         Ispit ispit = new Ispit();
         ispit.setDatumOdrzavanja(ispitRequest.getDatumOdrzavanja());
         ispit.setVremePocetka(ispitRequest.getVremePocetka());
@@ -212,7 +214,7 @@ public class Converters {
         return ispit;
     }
 
-    public static Predmet toPredmet(PredmetRequest predmetRequest) {
+    public Predmet toPredmet(PredmetRequest predmetRequest) {
         Predmet predmet = new Predmet();
         predmet.setSifra(predmetRequest.getSifra());
         predmet.setNaziv(predmetRequest.getNaziv());

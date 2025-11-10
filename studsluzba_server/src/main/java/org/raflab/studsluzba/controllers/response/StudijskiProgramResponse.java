@@ -1,7 +1,7 @@
 package org.raflab.studsluzba.controllers.response;
 
 import lombok.Data;
-import org.raflab.studsluzba.model.SkolskaGodina;
+import org.raflab.studsluzba.model.dtos.SkolskaGodinaDTO;
 
 @Data
 public class StudijskiProgramResponse {
@@ -14,6 +14,6 @@ public class StudijskiProgramResponse {
     private Integer trajanjeSemestara;
     private String vrstaStudija;
     private Integer ukupnoEspb;
-    private SkolskaGodina skolskaGodina; // referenca na skolsku godinu
+    private SkolskaGodinaDTO skolskaGodina;
 }
 

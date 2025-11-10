@@ -1,25 +1,20 @@
 package org.raflab.studsluzba.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.controllers.response.DrziPredmetResponse;
 import org.raflab.studsluzba.services.DrziPredmetService;
-import org.raflab.studsluzba.utils.Converters;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/drzipredmet")
+@RequiredArgsConstructor
 public class DrziPredmetController {
-    @Autowired
-    private DrziPredmetService drziPredmetService;
+    
+    private final DrziPredmetService drziPredmetService;
 
     @GetMapping("/{id}")
     public DrziPredmetResponse getById(@PathVariable Long id) {
-        return drziPredmetService
-                .findById(id)
-                .map(Converters::toDrziPredmetResponse)
-                .orElse(null);
+        return drziPredmetService.findById(id).orElse(null);
     }
 }

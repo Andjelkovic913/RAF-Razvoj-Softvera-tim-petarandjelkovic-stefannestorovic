@@ -3,34 +3,17 @@ package org.raflab.studsluzba.model.dtos;
 import java.util.List;
 
 import lombok.Data;
-import org.raflab.studsluzba.model.Predmet;
-import org.raflab.studsluzba.model.SlusaPredmet;
-import org.raflab.studsluzba.model.StudentIndeks;
-
-/*
- * objekat ove kalse sadrzi sve podatke o studentu koji
- * se prikazuju u njegovom profilu  
- * 
- * - polozeni predmeti
- * - tok studija (upisi, obnove godina)
- * - predmete koje slusa
- * - prijavljeni ispiti
- * - uplate
- * 
- * - selektujemo preko indeksa, potrebno prikupiti podatke i o drugim indeksima
- * 
- */
+import org.raflab.studsluzba.model.dtos.PredmetDTO;
 
 @Data
 public class StudentProfileDTO {
 	
-	private StudentIndeks indeks;	
+	private StudentIndeksDTO indeks;	
 
-	
 	// za aktivnu skolsku godinu
+	// zasto List<SlusaPredmetDTO> umesto SlusaPredmetDTO?
+	private List<SlusaPredmetDTO> slusaPredmete;
 	
-	private List<SlusaPredmet> slusaPredmete;
-	
-	private List<Predmet> nepolozeniPredmeti;
+	private List<PredmetDTO> nepolozeniPredmeti;
 	
 }

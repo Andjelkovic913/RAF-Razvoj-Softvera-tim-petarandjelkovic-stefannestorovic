@@ -1,13 +1,11 @@
 package org.raflab.studsluzba.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.controllers.request.PredmetRequest;
 import org.raflab.studsluzba.controllers.response.PredmetResponse;
-import org.raflab.studsluzba.model.Predmet;
 import org.raflab.studsluzba.model.dtos.PredmetDTO;
 import org.raflab.studsluzba.services.PredmetService;
-import org.raflab.studsluzba.utils.Converters;
 import org.raflab.studsluzba.utils.EntityMappers;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,12 +15,11 @@ import java.util.stream.Collectors;
 @CrossOrigin
 @RestController
 @RequestMapping(path = "/api/predmet")
+@RequiredArgsConstructor
 public class PredmetController {
 
-    @Autowired
-    private PredmetService predmetService;
-    @Autowired
-    private EntityMappers entityMappers;
+    private final PredmetService predmetService;
+    private final EntityMappers entityMappers;
 
     @PostMapping("/add")
     public Long addNewPredmet(@RequestBody @Valid PredmetRequest req) {
@@ -30,11 +27,13 @@ public class PredmetController {
     }
 
     @GetMapping(path = "/by-program/{programId}")
-    public List<Predmet> getPredmetiByProgram(
+    public List<PredmetResponse> getPredmetiByProgram(
             @PathVariable Long programId,
             @RequestParam(required = false) Boolean obavezan
     ) {
-        return predmetService.getByStudProgram(programId, obavezan);
+        return predmetService.getByStudProgram(programId, obavezan).stream()
+                .map(entityMappers::fromPredmetToResponse)
+                .collect(Collectors.toList());
     }
 
     @GetMapping(path = "/all/{programId}")

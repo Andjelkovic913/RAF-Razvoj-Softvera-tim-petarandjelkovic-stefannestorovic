@@ -23,22 +23,23 @@ import javax.validation.Valid;
 @RequestMapping(path = "/api/nastavnik")
 public class NastavnikController {
 
-	NastavnikService nastavnikService;
-    private NastavnikRepository nastavnikRepository;
-    private EntityMappers entityMappers;
+	private final NastavnikService nastavnikService;
+    private final NastavnikRepository nastavnikRepository;
+    private final EntityMappers entityMappers;
+    private final Converters converters;
 
 
 	// kreiranje novog nastavnika
 	@PostMapping(path = "/add")
 	public Long addNewNastavnik(@RequestBody @Valid NastavnikRequest nastavnikRequest) {
-		Nastavnik nastavnik = nastavnikService.save(Converters.toNastavnik(nastavnikRequest));
+		Nastavnik nastavnik = nastavnikService.save(converters.toNastavnik(nastavnikRequest));
 		return nastavnik.getId();
 	}
 
 	// lsita svih nastavnika
 	@GetMapping(path = "/all")
 	public List<NastavnikResponse> getAllNastavnik() {
-		return Converters.toNastavnikResponseList(nastavnikService.findAll());
+		return converters.toNastavnikResponseList(nastavnikService.findAll());
 	}
 
 	// dobavljanje nastavnika po id-u
@@ -47,7 +48,7 @@ public class NastavnikController {
 	{
 		Optional<Nastavnik> rez = nastavnikService.findById(id);
 
-		return rez.map(Converters::toNastavnikResponse).orElse(null);
+		return rez.map(converters::toNastavnikResponse).orElse(null);
 	}
 
 	// pretraga po imenu i prezimenu
@@ -56,7 +57,7 @@ public class NastavnikController {
 			@RequestParam(required = false) String ime,
 			@RequestParam(required = false) String prezime){
 
-        return Converters.toNastavnikResponseList(nastavnikService.findByImeAndPrezime(ime, prezime));
+        return converters.toNastavnikResponseList(nastavnikService.findByImeAndPrezime(ime, prezime));
 	}
 
 	//azuriranje nastavnika na osnovu id-a
@@ -64,7 +65,7 @@ public class NastavnikController {
 	public NastavnikResponse updateNastavnik(@PathVariable Long id, @RequestBody NastavnikRequest zahtev){
 		Nastavnik nastavnik = nastavnikRepository.findById(id).orElseThrow(
 				() -> new EntityExistsException("Nastavnik ne postoji"));
-		Converters.updateNastavnik(nastavnik, zahtev);
+		converters.updateNastavnik(nastavnik, zahtev);
 		Nastavnik promenjen = nastavnikRepository.save(nastavnik);
 		return entityMappers.fromNastavnikToResponse(promenjen);
 	}

@@ -3,12 +3,14 @@ package org.raflab.studsluzba.services;
 import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.controllers.request.DrziPredmetNewRequest;
 import org.raflab.studsluzba.controllers.request.DrziPredmetRequest;
+import org.raflab.studsluzba.controllers.response.DrziPredmetResponse;
 import org.raflab.studsluzba.model.DrziPredmet;
 import org.raflab.studsluzba.model.Nastavnik;
 import org.raflab.studsluzba.model.Predmet;
 import org.raflab.studsluzba.repositories.DrziPredmetRepository;
 import org.raflab.studsluzba.repositories.NastavnikRepository;
 import org.raflab.studsluzba.repositories.PredmetRepository;
+import org.raflab.studsluzba.utils.Converters;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +23,10 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class DrziPredmetService {
 
-    final DrziPredmetRepository drziPredmetRepository;
-    final PredmetRepository predmetRepository;
-    final NastavnikRepository nastavnikRepository;
+    private final DrziPredmetRepository drziPredmetRepository;
+    private final PredmetRepository predmetRepository;
+    private final NastavnikRepository nastavnikRepository;
+    private final Converters converters;
 
     @Transactional
     public void saveDrziPredmet(DrziPredmetRequest request) {
@@ -81,7 +84,8 @@ public class DrziPredmetService {
         drziPredmetRepository.saveAll(drziPredmetEntities);
     }
     @Transactional(readOnly = true)
-    public Optional<DrziPredmet> findById(Long id) {
-        return drziPredmetRepository.findById(id);
+    public Optional<DrziPredmetResponse> findById(Long id) {
+        return drziPredmetRepository.findById(id)
+                .map(converters::toDrziPredmetResponse);
     }
 }

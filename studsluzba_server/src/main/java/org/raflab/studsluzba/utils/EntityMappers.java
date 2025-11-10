@@ -2,8 +2,8 @@ package org.raflab.studsluzba.utils;
 
 import org.raflab.studsluzba.controllers.response.*;
 import org.raflab.studsluzba.model.*;
-import org.raflab.studsluzba.model.dtos.PredmetDTO;
-import org.raflab.studsluzba.model.dtos.StudentDTO;
+import org.raflab.studsluzba.model.dtos.*;
+import org.raflab.studsluzba.utils.Converters;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,6 +11,12 @@ import java.util.stream.Collectors;
 
 @Component
 public class EntityMappers {
+
+    private final Converters converters;
+
+    public EntityMappers(Converters converters) {
+        this.converters = converters;
+    }
 	
 	public static StudentDTO fromStudentPodaciToDTO(StudentPodaci sp) {
 		StudentDTO s = new StudentDTO();
@@ -45,9 +51,27 @@ public class EntityMappers {
         response.setAktivan(si.isAktivan());
         response.setVaziOd(si.getVaziOd());
         response.setOstvarenoEspb(si.getOstvarenoEspb());
-        response.setStudijskiProgram(si.getStudijskiProgram());
-        response.setStudent(si.getStudent());
+        response.setStudent(fromStudentPodaciToResponse(si.getStudent()));
+        response.setStudijskiProgram(fromStudijskiProgramToBasicDTO(si.getStudijskiProgram()));
         return response;
+    }
+
+    public StudentIndeksDTO fromStudentIndeksToIndeksDTO(StudentIndeks si) {
+        if (si == null) {
+            return null;
+        }
+        StudentIndeksDTO dto = new StudentIndeksDTO();
+        dto.setId(si.getId());
+        dto.setBroj(si.getBroj());
+        dto.setGodina(si.getGodina());
+        dto.setStudProgramOznaka(si.getStudProgramOznaka());
+        dto.setNacinFinansiranja(si.getNacinFinansiranja());
+        dto.setAktivan(si.isAktivan());
+        dto.setVaziOd(si.getVaziOd());
+        dto.setOstvarenoEspb(si.getOstvarenoEspb());
+        dto.setStudent(fromStudentPodaciToResponse(si.getStudent()));
+        dto.setStudijskiProgram(fromStudijskiProgramToBasicDTO(si.getStudijskiProgram()));
+        return dto;
     }
 
     public StudentPodaciResponse fromStudentPodaciToResponse(StudentPodaci sp) {
@@ -114,8 +138,58 @@ public class EntityMappers {
         resp.setTrajanjeSemestara(sp.getTrajanjeSemestara());
         resp.setVrstaStudija(sp.getVrstaStudija());
         resp.setUkupnoEspb(sp.getUkupnoEspb());
-        resp.setSkolskaGodina(sp.getSkolskaGodina());
+        resp.setSkolskaGodina(fromSkolskaGodinaToDTO(sp.getSkolskaGodina()));
         return resp;
+    }
+
+    public StudijskiProgramBasicDTO fromStudijskiProgramToBasicDTO(StudijskiProgram sp) {
+        if (sp == null) {
+            return null;
+        }
+        StudijskiProgramBasicDTO dto = new StudijskiProgramBasicDTO();
+        dto.setId(sp.getId());
+        dto.setOznaka(sp.getOznaka());
+        dto.setNaziv(sp.getNaziv());
+        dto.setGodinaAkreditacije(sp.getGodinaAkreditacije());
+        dto.setZvanje(sp.getZvanje());
+        dto.setTrajanjeGodina(sp.getTrajanjeGodina());
+        dto.setTrajanjeSemestara(sp.getTrajanjeSemestara());
+        dto.setVrstaStudija(sp.getVrstaStudija());
+        dto.setUkupnoEspb(sp.getUkupnoEspb());
+        return dto;
+    }
+
+    public SkolskaGodinaDTO fromSkolskaGodinaToDTO(SkolskaGodina sg) {
+        if (sg == null) {
+            return null;
+        }
+        SkolskaGodinaDTO dto = new SkolskaGodinaDTO();
+        dto.setId(sg.getId());
+        dto.setNaziv(sg.getNaziv());
+        dto.setAktivna(sg.isAktivna());
+        return dto;
+    }
+
+    public SlusaPredmetDTO fromSlusaPredmetToDTO(SlusaPredmet sp) {
+        if (sp == null) {
+            return null;
+        }
+        SlusaPredmetDTO dto = new SlusaPredmetDTO();
+        dto.setId(sp.getId());
+        dto.setStudentIndeksId(sp.getStudentIndeks() != null ? sp.getStudentIndeks().getId() : null);
+        dto.setDrziPredmet(sp.getDrziPredmet() != null ? converters.toDrziPredmetResponse(sp.getDrziPredmet()) : null);
+        dto.setUpisGodineId(sp.getUpisGodine() != null ? sp.getUpisGodine().getId() : null);
+        dto.setStudentVisokaUstanovaId(sp.getStudentVisokaUstanova() != null ? sp.getStudentVisokaUstanova().getId() : null);
+        return dto;
+    }
+
+    public List<SlusaPredmetDTO> fromSlusaPredmetiToDTO(List<SlusaPredmet> slusaPredmeti) {
+        if (slusaPredmeti == null) {
+            return null;
+        }
+        return slusaPredmeti.stream()
+                .map(this::fromSlusaPredmetToDTO)
+                .collect(Collectors.toList());
     }
 
     public PredmetDTO fromPredmetToDTO(Predmet p){

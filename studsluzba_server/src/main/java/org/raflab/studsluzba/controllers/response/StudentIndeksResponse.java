@@ -1,9 +1,7 @@
 package org.raflab.studsluzba.controllers.response;
 
 import lombok.Data;
-import lombok.Getter;
-import org.raflab.studsluzba.model.StudentPodaci;
-import org.raflab.studsluzba.model.StudijskiProgram;
+import org.raflab.studsluzba.model.dtos.StudijskiProgramBasicDTO;
 
 import java.time.LocalDate;
 
@@ -16,7 +14,7 @@ public class StudentIndeksResponse {
     private String nacinFinansiranja;
     private boolean aktivan;
     private LocalDate vaziOd;
-    private StudentPodaci student;
-    private StudijskiProgram studijskiProgram;   // na koji studijski program je upisan
+    private StudentPodaciResponse student;
+    private StudijskiProgramBasicDTO studijskiProgram;
     private Integer ostvarenoEspb;
 }
