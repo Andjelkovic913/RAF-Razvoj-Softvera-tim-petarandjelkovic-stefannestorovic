@@ -8,6 +8,7 @@ import org.raflab.studsluzba.model.StudentIndeks;
 import org.raflab.studsluzba.model.dtos.PrijavljeniStudentDTO;
 import org.raflab.studsluzba.repositories.IspitRepository;
 import org.raflab.studsluzba.repositories.PrijavaIspitaRepository;
+import org.raflab.studsluzba.repositories.SlusaPredmetRepository;
 import org.raflab.studsluzba.repositories.StudentIndeksRepository;
 import org.raflab.studsluzba.utils.Converters;
 import org.raflab.studsluzba.utils.EntityMappers;
@@ -25,6 +26,7 @@ public class PrijavaIspitaService {
     private final PrijavaIspitaRepository prijavaIspitaRepository;
     private final StudentIndeksRepository studentIndeksRepository;
     private final IspitRepository ispitRepository;
+    private final SlusaPredmetRepository slusaPredmetRepository;
     private final Converters converters;
     private final EntityMappers entityMappers;
 
@@ -43,6 +45,12 @@ public class PrijavaIspitaService {
         Ispit ispit = ispitRepository.findById(ispitId)
                 .orElseThrow(() -> new EntityNotFoundException("Ispit sa ID " + ispitId + " ne postoji"));
 
+        //TODO NOVO - Provera da li student slusa predmet
+        if (!slusaPredmetRepository.existsByStudentIndeksIdAndPredmetId(studentIndeksId, ispit.getPredmet().getId())) {
+            throw new IllegalStateException("Student nije upisan na predmet i ne može se prijaviti za ispit.");
+        }
+
+        //TODO NOVO - Kreiranje i snimanje prijave na ispit
         PrijavaIspita prijava = converters.toPrijavaIspita(request);
         if (prijava.getDatumPrijave() == null) {
             prijava.setDatumPrijave(LocalDate.now());

@@ -13,6 +13,12 @@ public interface SlusaPredmetRepository extends CrudRepository<SlusaPredmet, Lon
 	
 	@Query("select sp from SlusaPredmet sp where sp.studentIndeks.id = :indeksId1")
 	List<SlusaPredmet> getSlusaPredmetForIndeksAktivnaGodina(Long indeksId);
+
+	// Proverava da li student slusa predmet
+	@Query("select count(sp) > 0 from SlusaPredmet sp " +
+	       "where sp.studentIndeks.id = :studentIndeksId " +
+	       "and sp.drziPredmet.predmet.id = :predmetId")
+	boolean existsByStudentIndeksIdAndPredmetId(Long studentIndeksId, Long predmetId);
 	
 	
 	@Query("select sp.studentIndeks from SlusaPredmet sp where sp.drziPredmet.predmet.id = :idPredmeta "

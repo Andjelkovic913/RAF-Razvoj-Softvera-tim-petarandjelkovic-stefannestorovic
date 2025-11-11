@@ -28,9 +28,13 @@ Pored osnovnih CRUD operacija (snimanje, preuzimanje po ključu, brisanje), potr
 - [ ] prosečna ocena studenata na predmetu za raspon godina (npr. 2015–2018)
 
 ### Ispit
-- [ ] svi prijavljeni studenti za ispit
+- [x] svi prijavljeni studenti za ispit
+  - Endpoint: `GET /api/prijava-ispita/{ispitId}/students`
 - [ ] prosečna ocena na ispitu
-- [ ] prijava ispita za izabrani ispitni rok i predmet koji student sluša
+- [x] prijava ispita za izabrani ispitni rok i predmet koji student sluša
+  - Endpoint: `POST /api/prijava-ispita/add`
+  - Validacija: Proverava se da li student sluša predmet pre prijave ispita
+  - Greška: `400 Bad Request` sa porukom "Student nije upisan na predmet i ne može se prijaviti za ispit" ukoliko student nije upisan na predmet
 - [ ] dodavanje izlaska na ispit sa osvojenim poenima i upis u položenima ako je ukupno ≥ 51
 - [ ] rezultati ispita: sortirani spisak (stud. program → godina upisa → broj) sa ukupnim poenima
 - [ ] selekcija ostvarenih poena na predispitnim obavezama za studenta na predmetu u šk. godini
@@ -39,3 +43,6 @@ Pored osnovnih CRUD operacija (snimanje, preuzimanje po ključu, brisanje), potr
 Napomene:
 - Mnogi modeli i repozitorijumi postoje (`UpisGodine`, `ObnovaGodine`, `Uplata`, `PrijavaIspita`, `IzlazakNaIspit`, `PredispitneObaveze`), ali za gore neoznačene stavke trenutno ne postoje javni endpointi u kontrolerima.
 - Postoje profil endpointi za studenta (`GET /api/student/profile/{studentIndeksId}`, `GET /api/student/webprofile/{studentIndeksId}`) koji vraćaju pregled slušanih predmeta u aktivnoj školskoj godini, ali ne pokrivaju liste položenih/nepoloženih ispita niti uplate.
+- **Nove implementirane operacije:**
+  - `PrijavaIspitaController` - prijava ispita i pregled prijavljenih studenata
+  - Model `IzlazakNaIspit` postoji, ali nema kontrolera/servisa za dodavanje izlaska na ispit
