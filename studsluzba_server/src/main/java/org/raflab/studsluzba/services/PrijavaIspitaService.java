@@ -8,6 +8,7 @@ import org.raflab.studsluzba.model.StudentIndeks;
 import org.raflab.studsluzba.model.dtos.PrijavljeniStudentDTO;
 import org.raflab.studsluzba.repositories.IspitRepository;
 import org.raflab.studsluzba.repositories.PrijavaIspitaRepository;
+import org.raflab.studsluzba.repositories.SlusaPredmetRepository;
 import org.raflab.studsluzba.repositories.StudentIndeksRepository;
 import org.raflab.studsluzba.utils.Converters;
 import org.raflab.studsluzba.utils.EntityMappers;
@@ -25,6 +26,7 @@ public class PrijavaIspitaService {
     private final PrijavaIspitaRepository prijavaIspitaRepository;
     private final StudentIndeksRepository studentIndeksRepository;
     private final IspitRepository ispitRepository;
+    private final SlusaPredmetRepository slusaPredmetRepository;
     private final Converters converters;
     private final EntityMappers entityMappers;
 
@@ -34,14 +36,32 @@ public class PrijavaIspitaService {
         Long ispitId = request.getIspitId();
 
         if (prijavaIspitaRepository.existsByStudentIndeksIdAndIspitId(studentIndeksId, ispitId)) {
-            throw new IllegalStateException("Prijava za zadati ispit već postoji za ovog studenta.");
+            throw new IllegalStateException("Prijava za zadati ispit vec postoji za ovog studenta.");
         }
 
         StudentIndeks studentIndeks = studentIndeksRepository.findById(studentIndeksId)
                 .orElseThrow(() -> new EntityNotFoundException("Student indeks sa ID " + studentIndeksId + " ne postoji"));
 
-        Ispit ispit = ispitRepository.findById(ispitId)
+        Ispit ispit = ispitRepository.findByIdWithRelations(ispitId)
                 .orElseThrow(() -> new EntityNotFoundException("Ispit sa ID " + ispitId + " ne postoji"));
+
+        // Validacija: proveri da li student slusa predmet
+        // Prvo proveri preko DrziPredmet (preciznije), pa ako ne postoji, proveri preko Predmet
+        Long drziPredmetId = ispit.getDrziPredmet() != null ? ispit.getDrziPredmet().getId() : null;
+        Long predmetId = ispit.getPredmet() != null ? ispit.getPredmet().getId() : null;
+        
+        boolean studentSlusaPredmet = false;
+        if (drziPredmetId != null) {
+            studentSlusaPredmet = slusaPredmetRepository.existsByStudentIndeksIdAndDrziPredmetId(studentIndeksId, drziPredmetId);
+        }
+        
+        if (!studentSlusaPredmet && predmetId != null) {
+            studentSlusaPredmet = slusaPredmetRepository.existsByStudentIndeksIdAndPredmetId(studentIndeksId, predmetId);
+        }
+        
+        if (!studentSlusaPredmet) {
+            throw new IllegalStateException("Student ne slusa predmet koji je vezan za ovaj ispit.");
+        }
 
         PrijavaIspita prijava = converters.toPrijavaIspita(request);
         if (prijava.getDatumPrijave() == null) {
