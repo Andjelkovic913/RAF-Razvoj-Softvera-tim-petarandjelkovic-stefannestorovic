@@ -12,6 +12,8 @@ public class PrijavljeniStudentDTO {
     private Integer godina;
     private Integer broj;
     private String indeks;
+    private String predmetNaziv;
+    private String ispitniRokNaziv;
 }
 
 

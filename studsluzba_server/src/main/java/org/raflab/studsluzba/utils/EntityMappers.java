@@ -235,6 +235,7 @@ public class EntityMappers {
         }
         StudentIndeks studentIndeks = prijavaIspita.getStudentIndeks();
         StudentPodaci studentPodaci = studentIndeks.getStudent();
+        Ispit ispit = prijavaIspita.getIspit();
 
         PrijavljeniStudentDTO dto = new PrijavljeniStudentDTO();
         dto.setStudentIndeksId(studentIndeks.getId());
@@ -246,6 +247,19 @@ public class EntityMappers {
         dto.setGodina(studentIndeks.getGodina());
         dto.setBroj(studentIndeks.getBroj());
         dto.setIndeks(formatIndeks(studentIndeks));
+        
+        // Dodaj nazive predmeta i ispitnog roka
+        if (ispit != null) {
+            if (ispit.getPredmet() != null) {
+                dto.setPredmetNaziv(ispit.getPredmet().getNaziv());
+            }
+            if (ispit.getIspitniRok() != null) {
+                dto.setIspitniRokNaziv(ispit.getIspitniRok().getTipRoka() != null 
+                    ? ispit.getIspitniRok().getTipRoka().name() 
+                    : null);
+            }
+        }
+        
         return dto;
     }
 
