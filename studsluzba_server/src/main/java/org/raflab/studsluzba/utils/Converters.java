@@ -221,4 +221,10 @@ public class Converters {
         return predmet;
     }
 
+    public PrijavaIspita toPrijavaIspita(PrijavaIspitaRequest request) {
+        PrijavaIspita prijavaIspita = new PrijavaIspita();
+        prijavaIspita.setDatumPrijave(request.getDatumPrijave());
+        return prijavaIspita;
+    }
+
 }

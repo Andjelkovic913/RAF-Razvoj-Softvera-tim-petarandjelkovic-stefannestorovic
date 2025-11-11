@@ -228,4 +228,41 @@ public class EntityMappers {
         r.setOpis(p.getOpis());
         return r;
     }
+
+    public PrijavljeniStudentDTO fromPrijavaIspitaToPrijavljeniStudentDTO(PrijavaIspita prijavaIspita) {
+        if (prijavaIspita == null || prijavaIspita.getStudentIndeks() == null) {
+            return null;
+        }
+        StudentIndeks studentIndeks = prijavaIspita.getStudentIndeks();
+        StudentPodaci studentPodaci = studentIndeks.getStudent();
+
+        PrijavljeniStudentDTO dto = new PrijavljeniStudentDTO();
+        dto.setStudentIndeksId(studentIndeks.getId());
+        if (studentPodaci != null) {
+            dto.setIme(studentPodaci.getIme());
+            dto.setPrezime(studentPodaci.getPrezime());
+        }
+        dto.setStudProgramOznaka(studentIndeks.getStudProgramOznaka());
+        dto.setGodina(studentIndeks.getGodina());
+        dto.setBroj(studentIndeks.getBroj());
+        dto.setIndeks(formatIndeks(studentIndeks));
+        return dto;
+    }
+
+    public List<PrijavljeniStudentDTO> fromPrijaveIspitaToPrijavljeniStudentiDTO(List<PrijavaIspita> prijave) {
+        if (prijave == null) {
+            return null;
+        }
+        return prijave.stream()
+                .map(this::fromPrijavaIspitaToPrijavljeniStudentDTO)
+                .collect(Collectors.toList());
+    }
+
+    private String formatIndeks(StudentIndeks indeks) {
+        if (indeks == null || indeks.getStudProgramOznaka() == null) {
+            return null;
+        }
+        int shortYear = indeks.getGodina() % 100;
+        return String.format("%s%d/%02d", indeks.getStudProgramOznaka(), indeks.getBroj(), shortYear);
+    }
 }
