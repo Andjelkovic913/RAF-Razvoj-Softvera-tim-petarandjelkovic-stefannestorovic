@@ -1,10 +1,6 @@
 package org.raflab.studsluzba.controllers.request;
 
 import lombok.Data;
-import org.raflab.studsluzba.model.DrziPredmet;
-import org.raflab.studsluzba.model.IspitniRok;
-import org.raflab.studsluzba.model.Predmet;
-import org.raflab.studsluzba.model.SkolskaGodina;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -19,13 +15,14 @@ public class IspitRequest {
     @NotNull
     private LocalTime vremeZavrsetka;
 
-    private DrziPredmet drziPredmet;
     @NotNull
-    private Predmet predmet;
-
-    private IspitniRok ispitniRok;
-
-    private SkolskaGodina skolskaGodina;
+    private Long drziPredmetId;
+    @NotNull
+    private Long predmetId;
+    @NotNull
+    private Long ispitniRokId;
+    @NotNull
+    private Long skolskaGodinaId;
 
     private boolean zakljucen;
 }

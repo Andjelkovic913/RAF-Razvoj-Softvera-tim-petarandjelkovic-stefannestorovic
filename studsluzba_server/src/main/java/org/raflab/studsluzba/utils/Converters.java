@@ -20,7 +20,6 @@ public class Converters {
         nastavnik.setEmail(nastavnikRequest.getEmail());
         nastavnik.setBrojTelefona(nastavnikRequest.getBrojTelefona());
         nastavnik.setAdresa(nastavnikRequest.getAdresa());
-        nastavnik.setZvanja(nastavnikRequest.getZvanja());
         nastavnik.setDatumRodjenja(nastavnikRequest.getDatumRodjenja());
         nastavnik.setPol(nastavnikRequest.getPol());
         nastavnik.setJmbg(nastavnikRequest.getJmbg());
@@ -108,7 +107,6 @@ public class Converters {
         postojeci.setEmail(request.getEmail());
         postojeci.setBrojTelefona(request.getBrojTelefona());
         postojeci.setAdresa(request.getAdresa());
-        postojeci.setZvanja(request.getZvanja());
         postojeci.setDatumRodjenja(request.getDatumRodjenja());
         postojeci.setPol(request.getPol());
         postojeci.setJmbg(request.getJmbg());
@@ -206,10 +204,6 @@ public class Converters {
         ispit.setDatumOdrzavanja(ispitRequest.getDatumOdrzavanja());
         ispit.setVremePocetka(ispitRequest.getVremePocetka());
         ispit.setVremeZavrsetka(ispitRequest.getVremeZavrsetka());
-        ispit.setDrziPredmet(ispitRequest.getDrziPredmet());
-        ispit.setPredmet(ispitRequest.getPredmet());
-        ispit.setIspitniRok(ispitRequest.getIspitniRok());
-        ispit.setSkolskaGodina(ispitRequest.getSkolskaGodina());
         ispit.setZakljucen(ispitRequest.isZakljucen());
         return ispit;
     }

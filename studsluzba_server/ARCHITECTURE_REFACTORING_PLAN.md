@@ -275,7 +275,7 @@ org.raflab.studsluzba/
    - ✅ `NastavnikService.findByImeAndPrezime` - Now returns `List<NastavnikResponse>` instead of `List<Nastavnik>`
    - ✅ `NastavnikService.updateNastavnik` - Now accepts `NastavnikRequest` and returns `NastavnikResponse`
    - ✅ `SlusaPredmetService.updateSlusaPredmet` - Now accepts `SlusaPredmetRequest` instead of entity
-   - ✅ `DrziPredmetService.findById` - Now returns `DrziPredmetResponse` instead of `Optional<DrziPredmetResponse>`
+   - ✅ `DrziPredmetService.findById` - Now returns `DrziPredmetResponse` iPnstead of `Optional<DrziPredmetResponse>`
 
 4. **Fixed null returns with proper exception handling:**
    - ✅ `StudentService.getStudentPodaciById` - Now throws `EntityNotFoundException` instead of returning null
