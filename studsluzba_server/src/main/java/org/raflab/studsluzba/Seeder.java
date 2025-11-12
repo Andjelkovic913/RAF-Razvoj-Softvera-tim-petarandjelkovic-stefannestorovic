@@ -52,8 +52,8 @@ public class Seeder implements CommandLineRunner {
         System.out.println("Starting database seeding...");
 
         List<SkolskaGodina> skolskaGodinaList = new ArrayList<>();
-        String[] godine = {"2020/2021", "2021/2022", "2022/2023", "2023/2024", "2024/2025"};
-        boolean[] aktivne = {false, false, false, false, true};
+        String[] godine = {"2020/2021", "2021/2022", "2022/2023", "2023/2024", "2024/2025", "2025/2026"};
+        boolean[] aktivne = {false, false, false, false, false, true};
 
         for (int i = 0; i < godine.length; i++) {
             SkolskaGodina sg = new SkolskaGodina();
@@ -61,7 +61,7 @@ public class Seeder implements CommandLineRunner {
             sg.setAktivna(aktivne[i]);
             skolskaGodinaList.add(skolskaGodinaRepository.save(sg));
         }
-        SkolskaGodina aktivnaGodina = skolskaGodinaList.get(3); // 2023/2024
+        SkolskaGodina aktivnaGodina = skolskaGodinaList.get(5); // 2025/2026
 
         List<StudijskiProgram> spList = new ArrayList<>();
         String[] oznake = {"RN", "RM", "SI", "IT", "EE"};
@@ -177,7 +177,6 @@ public class Seeder implements CommandLineRunner {
             visokaUstanovaList.add(visokoskolskaUstanovaRepository.save(vu));
         }
 
-        // 9. KREIRANJE STUDENATA
         List<StudentPodaci> studentPodaciList = new ArrayList<>();
         String[] studentImena = {"Milan", "Jovana", "Stefan", "Ana", "Marko", "Jelena", "Nikola", "Marija",
                 "Petar", "Sara", "Luka", "Milica", "Đorđe", "Tijana", "Filip"};
@@ -265,23 +264,41 @@ public class Seeder implements CommandLineRunner {
 
         List<UpisGodine> upisGodineList = new ArrayList<>();
         for (int i = 0; i < indeksList.size(); i++) {
+
+            int skolskaGodinaIndex = i % skolskaGodinaList.size();
+            SkolskaGodina skolskaGodina = skolskaGodinaList.get(skolskaGodinaIndex);
+            int godinaUpisa = Math.min(skolskaGodinaIndex + 1, 4);
+
+            String[] godineParts = skolskaGodina.getNaziv().split("/");
+            int prvaGodina = Integer.parseInt(godineParts[0]);
+            
             UpisGodine ug = new UpisGodine();
-            ug.setDatumUpisa(LocalDate.of(2023, 10, (i % 28) + 1));
-            ug.setGodina(1 + (i % 4));
-            ug.setPrenetiESPB(i > 0 ? (i * 6) : 0);
+            ug.setDatumUpisa(LocalDate.of(prvaGodina, 10, (i % 28) + 1));
+            ug.setGodina(godinaUpisa);
+            ug.setPrenetiESPB(skolskaGodinaIndex > 0 ? (skolskaGodinaIndex * 30) : 0);
             ug.setStudentIndeks(indeksList.get(i));
-            ug.setSkolskaGodina(aktivnaGodina);
+            ug.setSkolskaGodina(skolskaGodina);
             upisGodineList.add(upisGodineRepository.save(ug));
         }
 
         for (int i = 0; i < 3 && i < upisGodineList.size(); i++) {
+            UpisGodine prethodniUpis = upisGodineList.get(i);
+            SkolskaGodina prethodnaSkolskaGodina = prethodniUpis.getSkolskaGodina();
+            
+            int prethodnaIndex = skolskaGodinaList.indexOf(prethodnaSkolskaGodina);
+            int novaIndex = Math.min(prethodnaIndex + 1, skolskaGodinaList.size() - 1);
+            SkolskaGodina novaSkolskaGodina = skolskaGodinaList.get(novaIndex);
+            
+            String[] godineParts = novaSkolskaGodina.getNaziv().split("/");
+            int prvaGodina = Integer.parseInt(godineParts[0]);
+            
             ObnovaGodine og = new ObnovaGodine();
-            og.setDatumUpisa(LocalDate.of(2024, 10, (i % 28) + 1));
-            og.setGodina(upisGodineList.get(i).getGodina());
-            og.setPrenetiESPB(upisGodineList.get(i).getPrenetiESPB());
+            og.setDatumUpisa(LocalDate.of(prvaGodina, 10, (i % 28) + 1));
+            og.setGodina(prethodniUpis.getGodina());
+            og.setPrenetiESPB(prethodniUpis.getPrenetiESPB());
             og.setStudentIndeks(indeksList.get(i));
-            og.setSkolskaGodina(aktivnaGodina);
-            og.setPrethodniUpis(upisGodineList.get(i));
+            og.setSkolskaGodina(novaSkolskaGodina);
+            og.setPrethodniUpis(prethodniUpis);
             og.setRazlogObnove("Nedovoljno ESPB bodova");
             obnovaGodineRepository.save(og);
         }
@@ -346,7 +363,6 @@ public class Seeder implements CommandLineRunner {
             ispitList.add(ispitRepository.save(ispit));
         }
 
-        // 21. KREIRANJE PRIJAVA ISPITA
         List<PrijavaIspita> prijavaList = new ArrayList<>();
         for (int i = 0; i < Math.min(indeksList.size(), ispitList.size()); i++) {
             PrijavaIspita pi = new PrijavaIspita();

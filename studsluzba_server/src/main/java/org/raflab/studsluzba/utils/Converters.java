@@ -227,4 +227,21 @@ public class Converters {
         return prijavaIspita;
     }
 
+    public UpisGodine toUpisGodine(UpisGodineRequest request) {
+        UpisGodine upisGodine = new UpisGodine();
+        upisGodine.setDatumUpisa(request.getDatumUpisa());
+        upisGodine.setGodina(request.getGodina());
+        upisGodine.setPrenetiESPB(request.getPrenetiESPB());
+        
+        StudentIndeks studentIndeks = new StudentIndeks();
+        studentIndeks.setId(request.getStudentIndeksId());
+        upisGodine.setStudentIndeks(studentIndeks);
+        
+        SkolskaGodina skolskaGodina = new SkolskaGodina();
+        skolskaGodina.setId(request.getSkolskaGodinaId());
+        upisGodine.setSkolskaGodina(skolskaGodina);
+        
+        return upisGodine;
+    }
+
 }

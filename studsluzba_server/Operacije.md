@@ -8,8 +8,11 @@ Pored osnovnih CRUD operacija (snimanje, preuzimanje po ključu, brisanje), potr
   - Napomena: Postoji i servisna metoda za precizno traženje po `studProgramOznaka/godina/broj`.
 - [ ] selekcija svih položenih ispita za broj indeksa studenta, paginirano
 - [ ] selekcija svih nepoloženih ispita za broj indeksa studenta, paginirano
-- [ ] pregled svih upisanih godina za broj indeksa
-- [ ] upis studenta na godinu (dodati upis i predmete koje sluša; inicijalno nepoloženi)
+- [x] pregled svih upisanih godina za broj indeksa
+  - Endpoint: `GET /api/upis-godine/student/{brojIndeksa}`
+- [x] upis studenta na godinu (dodati upis i predmete koje sluša; inicijalno nepoloženi)
+  - Endpoint: `POST /api/upis-godine/add`
+  - Validacija: provera postojanja StudentIndeks, SkolskaGodina, provera duplikata (isti student ne može imati istu godinu upisanu u istoj školskoj godini)
 - [ ] pregled obnovljenih godina za broj indeksa
 - [ ] obnova godine (uz izbor nepoloženih i predmeta iz naredne godine, maksimalno 60 ESPB)
 - [ ] dodavanje nove uplate (datum, iznos RSD, srednji kurs EUR)
@@ -45,4 +48,5 @@ Napomene:
 - Postoje profil endpointi za studenta (`GET /api/student/profile/{studentIndeksId}`, `GET /api/student/webprofile/{studentIndeksId}`) koji vraćaju pregled slušanih predmeta u aktivnoj školskoj godini, ali ne pokrivaju liste položenih/nepoloženih ispita niti uplate.
 - **Nove implementirane operacije:**
   - `PrijavaIspitaController` - prijava ispita i pregled prijavljenih studenata
+  - `UpisGodineController` - kreiranje upisa godine i pregled svih upisanih godina za broj indeksa
   - Model `IzlazakNaIspit` postoji, ali nema kontrolera/servisa za dodavanje izlaska na ispit

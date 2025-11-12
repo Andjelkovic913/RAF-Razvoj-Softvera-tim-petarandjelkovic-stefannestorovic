@@ -248,7 +248,6 @@ public class EntityMappers {
         dto.setBroj(studentIndeks.getBroj());
         dto.setIndeks(formatIndeks(studentIndeks));
         
-        // Dodaj nazive predmeta i ispitnog roka
         if (ispit != null) {
             if (ispit.getPredmet() != null) {
                 dto.setPredmetNaziv(ispit.getPredmet().getNaziv());
@@ -278,5 +277,35 @@ public class EntityMappers {
         }
         int shortYear = indeks.getGodina() % 100;
         return String.format("%s%d/%02d", indeks.getStudProgramOznaka(), indeks.getBroj(), shortYear);
+    }
+
+    public UpisGodineResponse fromUpisGodineToResponse(UpisGodine ug) {
+        if (ug == null) {
+            return null;
+        }
+        UpisGodineResponse response = new UpisGodineResponse();
+        response.setId(ug.getId());
+        response.setDatumUpisa(ug.getDatumUpisa());
+        response.setGodina(ug.getGodina());
+        response.setPrenetiESPB(ug.getPrenetiESPB());
+        
+        if (ug.getStudentIndeks() != null) {
+            response.setStudentIndeks(fromStudentIndeksToIndeksDTO(ug.getStudentIndeks()));
+        }
+        
+        if (ug.getSkolskaGodina() != null) {
+            response.setSkolskaGodina(fromSkolskaGodinaToDTO(ug.getSkolskaGodina()));
+        }
+        
+        return response;
+    }
+
+    public List<UpisGodineResponse> fromUpisGodineListToResponse(List<UpisGodine> upisGodineList) {
+        if (upisGodineList == null) {
+            return null;
+        }
+        return upisGodineList.stream()
+                .map(this::fromUpisGodineToResponse)
+                .collect(Collectors.toList());
     }
 }
