@@ -91,12 +91,16 @@ public class Seeder implements CommandLineRunner {
                 "Algoritmi", "Sistemski softver", "Web razvoj"};
         int[] espb = {6, 6, 6, 6, 6, 6, 6, 6, 6, 6};
 
+        // Semestri za predmete: RN101, RN102 su 1. godina (semestar 1, 2), RN201 je 2. godina (semestar 3), itd.
+        int[] semestri = {1, 2, 3, 1, 1, 1, 1, 5, 3, 3};
+        
         for (int i = 0; i < sifre.length; i++) {
             Predmet p = new Predmet();
             p.setSifra(sifre[i]);
             p.setNaziv(predmetNazivi[i]);
             p.setOpis("Opis predmeta: " + predmetNazivi[i]);
             p.setEspb(espb[i]);
+            p.setSemestar(semestri[i]);
             p.setStudProgram(spList.get(i % spList.size()));
             p.setObavezan(i % 2 == 0);
             predmetList.add(predmetRepository.save(p));

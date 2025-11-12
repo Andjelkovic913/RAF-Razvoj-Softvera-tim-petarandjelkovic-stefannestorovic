@@ -16,6 +16,9 @@ public interface PredmetRepository extends CrudRepository<Predmet, Long> {
 
 	List<Predmet> getPredmetsByStudProgramAndObavezan(StudijskiProgram studProgram, boolean obavezan);
 
+	@Query("select p from Predmet p where p.studProgram = :studProgram and p.semestar in :semestri")
+	List<Predmet> findByStudProgramAndSemestarIn(StudijskiProgram studProgram, List<Integer> semestri);
+
 	List<Predmet> findByIdIn(List<Long> ids);
 	List<Predmet> findByNazivIn(List<String> nazivi);
     boolean existsBySifra(String sifra);

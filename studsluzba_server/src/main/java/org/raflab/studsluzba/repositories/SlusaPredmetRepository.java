@@ -42,4 +42,7 @@ public interface SlusaPredmetRepository extends CrudRepository<SlusaPredmet, Lon
 			"and sp.drziPredmet.id = :drziPredmetId")
 	boolean existsByStudentIndeksIdAndDrziPredmetId(Long studentIndeksId, Long drziPredmetId);
 
+	@Query("select sp from SlusaPredmet sp where sp.upisGodine.id = :upisGodineId")
+	List<SlusaPredmet> findByUpisGodineId(Long upisGodineId);
+
 }
