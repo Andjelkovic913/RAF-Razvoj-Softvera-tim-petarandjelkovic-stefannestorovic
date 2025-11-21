@@ -36,7 +36,7 @@ public class PrijavaIspitaService {
         Long ispitId = request.getIspitId();
 
         if (prijavaIspitaRepository.existsByStudentIndeksIdAndIspitId(studentIndeksId, ispitId)) {
-            throw new IllegalStateException("Prijava za zadati ispit već postoji za ovog studenta.");
+            throw new IllegalStateException("Prijava za zadati ispit vec postoji za ovog studenta.");
         }
 
         StudentIndeks studentIndeks = studentIndeksRepository.findById(studentIndeksId)
@@ -47,7 +47,7 @@ public class PrijavaIspitaService {
 
         //TODO NOVO - Provera da li student slusa predmet
         if (!slusaPredmetRepository.existsByStudentIndeksIdAndPredmetId(studentIndeksId, ispit.getPredmet().getId())) {
-            throw new IllegalStateException("Student nije upisan na predmet i ne može se prijaviti za ispit.");
+            throw new IllegalStateException("Student nije upisan na predmet i ne moze se prijaviti za ispit.");
         }
 
         //TODO NOVO - Kreiranje i snimanje prijave na ispit

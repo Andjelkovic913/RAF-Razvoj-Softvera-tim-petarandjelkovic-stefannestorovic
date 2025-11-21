@@ -1,12 +1,14 @@
 package org.raflab.studsluzba.controllers;
 
 import lombok.AllArgsConstructor;
+import org.raflab.studsluzba.controllers.request.DrziPredmetAddRequest;
+import org.raflab.studsluzba.controllers.request.SlusaPredmetRequest;
 import org.raflab.studsluzba.controllers.response.PredmetResponse;
-import org.raflab.studsluzba.model.DrziPredmet;
-import org.raflab.studsluzba.model.SlusaPredmet;
 import org.raflab.studsluzba.model.dtos.StudentIndeksDTO;
 import org.raflab.studsluzba.services.RaspodelaNastaveService;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import java.util.List;
 
@@ -39,13 +41,13 @@ public class RaspodelaNastaveController {
     }
 
     @PostMapping(path="/drzipredmet/add")
-    public Long addDrziPredmet (@RequestBody DrziPredmet drziPredmet) {
-        return raspodelaNastaveService.addDrziPredmet(drziPredmet);
+    public Long addDrziPredmet(@RequestBody @Valid DrziPredmetAddRequest request) {
+        return raspodelaNastaveService.addDrziPredmet(request);
     }
 
     @PostMapping(path="/slusapredmet/add")
-    public Long addSlusaPredmet (@RequestBody SlusaPredmet slusaPredmet) {
-        return raspodelaNastaveService.addSlusaPredmet(slusaPredmet);
+    public Long addSlusaPredmet(@RequestBody @Valid SlusaPredmetRequest request) {
+        return raspodelaNastaveService.addSlusaPredmet(request);
     }
 
     @DeleteMapping(path="/drzipredmet/{id}")

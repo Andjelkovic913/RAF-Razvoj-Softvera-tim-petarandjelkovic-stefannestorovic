@@ -5,12 +5,14 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.raflab.studsluzba.controllers.request.StudentIndeksRequest;
 import org.raflab.studsluzba.controllers.request.StudentPodaciRequest;
+import org.raflab.studsluzba.controllers.response.StudentBySrednjaSkolaResponse;
 import org.raflab.studsluzba.controllers.response.StudentIndeksResponse;
 import org.raflab.studsluzba.controllers.response.StudentPodaciResponse;
 import org.raflab.studsluzba.model.dtos.StudentDTO;
 import org.raflab.studsluzba.model.dtos.StudentProfileDTO;
 import org.raflab.studsluzba.model.dtos.StudentWebProfileDTO;
 import org.raflab.studsluzba.services.StudentProfileService;
+import org.raflab.studsluzba.services.StudentSrednjaSkolaService;
 import org.raflab.studsluzba.services.StudentService;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,7 @@ public class StudentController {
 
 	private final StudentService studentService;
 	private final StudentProfileService studentProfileService;
+	private final StudentSrednjaSkolaService studentSrednjaSkolaService;
 
 	// todo StudentPodaci
 
@@ -132,6 +135,9 @@ public class StudentController {
         return studentService.getStudentPodaciByBroj(broj, studProgramOznaka, godina);
     }
 
-
+    @GetMapping(path="/srednja-skola/{srednjaSkolaId}")
+    public List<StudentBySrednjaSkolaResponse> getEnrolledStudentsBySrednjaSkola(@PathVariable Long srednjaSkolaId) {
+        return studentSrednjaSkolaService.findEnrolledStudentsBySrednjaSkola(srednjaSkolaId);
+    }
 
 }

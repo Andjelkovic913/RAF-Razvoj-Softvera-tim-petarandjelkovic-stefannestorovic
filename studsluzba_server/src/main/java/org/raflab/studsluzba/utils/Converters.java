@@ -3,11 +3,13 @@ package org.raflab.studsluzba.utils;
 import org.raflab.studsluzba.controllers.request.*;
 import org.raflab.studsluzba.controllers.response.DrziPredmetResponse;
 import org.raflab.studsluzba.controllers.response.NastavnikResponse;
+import org.raflab.studsluzba.controllers.response.NastavnikZvanjeResponse;
 import org.raflab.studsluzba.model.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class Converters {
@@ -36,11 +38,28 @@ public class Converters {
         response.setEmail(nastavnik.getEmail());
         response.setBrojTelefona(nastavnik.getBrojTelefona());
         response.setAdresa(nastavnik.getAdresa());
-        response.setZvanja(nastavnik.getZvanja());
+        response.setZvanja(nastavnik.getZvanja() != null ? 
+            nastavnik.getZvanja().stream()
+                .map(this::toNastavnikZvanjeResponse)
+                .collect(Collectors.toSet()) : null);
 
         response.setDatumRodjenja(nastavnik.getDatumRodjenja());
         response.setPol(nastavnik.getPol());
         response.setJmbg(nastavnik.getJmbg());
+        return response;
+    }
+
+    private NastavnikZvanjeResponse toNastavnikZvanjeResponse(NastavnikZvanje zvanje) {
+        if (zvanje == null) {
+            return null;
+        }
+        NastavnikZvanjeResponse response = new NastavnikZvanjeResponse();
+        response.setId(zvanje.getId());
+        response.setDatumIzbora(zvanje.getDatumIzbora());
+        response.setNaucnaOblast(zvanje.getNaucnaOblast());
+        response.setUzaNaucnaOblast(zvanje.getUzaNaucnaOblast());
+        response.setZvanje(zvanje.getZvanje());
+        response.setAktivno(zvanje.isAktivno());
         return response;
     }
 
@@ -145,6 +164,21 @@ public class Converters {
         sp.setVrstaStudija(zahtev.getVrstaStudija());
         sp.setUkupnoEspb(zahtev.getUkupnoEspb());
         return sp;
+    }
+
+    public DrziPredmet toDrziPredmet(DrziPredmetAddRequest request) {
+        DrziPredmet dp = new DrziPredmet();
+        
+        // Set associations using IDs - service will resolve full entities
+        Predmet predmet = new Predmet();
+        predmet.setId(request.getPredmetId());
+        dp.setPredmet(predmet);
+        
+        Nastavnik nastavnik = new Nastavnik();
+        nastavnik.setId(request.getNastavnikId());
+        dp.setNastavnik(nastavnik);
+        
+        return dp;
     }
 
     public SlusaPredmet toSlusaPredmet(SlusaPredmetRequest zahtev){

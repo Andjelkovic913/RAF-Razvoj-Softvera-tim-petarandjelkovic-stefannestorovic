@@ -27,7 +27,7 @@ public class IspitService {
     private final IspitniRokRepository ispitniRokRepository;
     private final SkolskaGodinaRepository skolskaGodinaRepository;
 
-    public Ispit save(IspitRequest request) {
+    public Long save(IspitRequest request) {
         Ispit ispit = converters.toIspit(request);
         DrziPredmet dp = drziPredmetRepository.findById(request.getDrziPredmetId())
                 .orElseThrow(() -> new EntityNotFoundException("DrziPredmet not found: " + request.getDrziPredmetId()));
@@ -42,6 +42,7 @@ public class IspitService {
         ispit.setPredmet(predmet);
         ispit.setIspitniRok(rok);
         ispit.setSkolskaGodina(godina);
-        return ispitRepository.save(ispit);
+        Ispit saved = ispitRepository.save(ispit);
+        return saved.getId();
     }
 }

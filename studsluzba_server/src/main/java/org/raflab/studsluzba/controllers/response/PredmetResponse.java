@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class PredmetResponse {
+    private Long id;
     private String sifra;
     private String naziv;
     private Integer espb;

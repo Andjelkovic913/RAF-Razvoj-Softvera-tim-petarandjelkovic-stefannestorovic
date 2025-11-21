@@ -3,7 +3,6 @@ package org.raflab.studsluzba.controllers.response;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.raflab.studsluzba.model.NastavnikZvanje;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -21,7 +20,7 @@ public class NastavnikResponse {
     private String email;
     private String brojTelefona;
     private String adresa;
-    private Set<NastavnikZvanje> zvanja;
+    private Set<NastavnikZvanjeResponse> zvanja;
 
     private LocalDate datumRodjenja;
     private Character pol;

@@ -3,7 +3,6 @@ package org.raflab.studsluzba.utils;
 import org.raflab.studsluzba.controllers.response.*;
 import org.raflab.studsluzba.model.*;
 import org.raflab.studsluzba.model.dtos.*;
-import org.raflab.studsluzba.utils.Converters;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,11 +11,6 @@ import java.util.stream.Collectors;
 @Component
 public class EntityMappers {
 
-    private final Converters converters;
-
-    public EntityMappers(Converters converters) {
-        this.converters = converters;
-    }
 	
 	public static StudentDTO fromStudentPodaciToDTO(StudentPodaci sp) {
 		StudentDTO s = new StudentDTO();
@@ -117,10 +111,27 @@ public class EntityMappers {
         response.setEmail(nastavnik.getEmail());
         response.setBrojTelefona(nastavnik.getBrojTelefona());
         response.setAdresa(nastavnik.getAdresa());
-        response.setZvanja(nastavnik.getZvanja());
+        response.setZvanja(nastavnik.getZvanja() != null ? 
+            nastavnik.getZvanja().stream()
+                .map(this::fromNastavnikZvanjeToResponse)
+                .collect(Collectors.toSet()) : null);
         response.setDatumRodjenja(nastavnik.getDatumRodjenja());
         response.setPol(nastavnik.getPol());
         response.setJmbg(nastavnik.getJmbg());
+        return response;
+    }
+
+    private NastavnikZvanjeResponse fromNastavnikZvanjeToResponse(NastavnikZvanje zvanje) {
+        if (zvanje == null) {
+            return null;
+        }
+        NastavnikZvanjeResponse response = new NastavnikZvanjeResponse();
+        response.setId(zvanje.getId());
+        response.setDatumIzbora(zvanje.getDatumIzbora());
+        response.setNaucnaOblast(zvanje.getNaucnaOblast());
+        response.setUzaNaucnaOblast(zvanje.getUzaNaucnaOblast());
+        response.setZvanje(zvanje.getZvanje());
+        response.setAktivno(zvanje.isAktivno());
         return response;
     }
 
@@ -177,10 +188,31 @@ public class EntityMappers {
         SlusaPredmetDTO dto = new SlusaPredmetDTO();
         dto.setId(sp.getId());
         dto.setStudentIndeksId(sp.getStudentIndeks() != null ? sp.getStudentIndeks().getId() : null);
-        dto.setDrziPredmet(sp.getDrziPredmet() != null ? converters.toDrziPredmetResponse(sp.getDrziPredmet()) : null);
+        dto.setDrziPredmet(sp.getDrziPredmet() != null ? fromDrziPredmetToResponse(sp.getDrziPredmet()) : null);
         dto.setUpisGodineId(sp.getUpisGodine() != null ? sp.getUpisGodine().getId() : null);
         dto.setStudentVisokaUstanovaId(sp.getStudentVisokaUstanova() != null ? sp.getStudentVisokaUstanova().getId() : null);
         return dto;
+    }
+
+    private DrziPredmetResponse fromDrziPredmetToResponse(DrziPredmet dp) {
+        if (dp == null) {
+            return null;
+        }
+        DrziPredmetResponse r = new DrziPredmetResponse();
+        r.setId(dp.getId());
+
+        if (dp.getNastavnik() != null) {
+            r.setNastavnikId(dp.getNastavnik().getId());
+            r.setNastavnikIme(dp.getNastavnik().getIme());
+            r.setNastavnikPrezime(dp.getNastavnik().getPrezime());
+            r.setNastavnikEmail(dp.getNastavnik().getEmail());
+        }
+        if (dp.getPredmet() != null) {
+            r.setPredmetId(dp.getPredmet().getId());
+            r.setPredmetNaziv(dp.getPredmet().getNaziv());
+            r.setPredmetSifra(dp.getPredmet().getSifra());
+        }
+        return r;
     }
 
     public List<SlusaPredmetDTO> fromSlusaPredmetiToDTO(List<SlusaPredmet> slusaPredmeti) {
@@ -306,6 +338,95 @@ public class EntityMappers {
         }
         return upisGodineList.stream()
                 .map(this::fromUpisGodineToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public StudentBySrednjaSkolaResponse fromStudentSrednjaSkolaToResponse(StudentSrednjaSkola sss, StudentIndeks studentIndeks) {
+        if (sss == null) {
+            return null;
+        }
+        StudentBySrednjaSkolaResponse response = new StudentBySrednjaSkolaResponse();
+        
+        // StudentPodaci data
+        if (sss.getStudent() != null) {
+            response.setStudentPodaciId(sss.getStudent().getId());
+            response.setIme(sss.getStudent().getIme());
+            response.setPrezime(sss.getStudent().getPrezime());
+            response.setSrednjeIme(sss.getStudent().getSrednjeIme());
+            response.setJmbg(sss.getStudent().getJmbg());
+            response.setDatumRodjenja(sss.getStudent().getDatumRodjenja());
+        }
+        
+        // SrednjaSkola data
+        if (sss.getSrednjaSkola() != null) {
+            response.setSrednjaSkolaId(sss.getSrednjaSkola().getId());
+            response.setSrednjaSkolaNaziv(sss.getSrednjaSkola().getNaziv());
+            response.setSrednjaSkolaMesto(sss.getSrednjaSkola().getMesto());
+        }
+        
+        // StudentSrednjaSkola data
+        response.setDatumZavrsetka(sss.getDatumZavrsetka());
+        response.setUspehIzSrednjeSkole(sss.getUspehIzSrednjeSkole());
+        
+        return response;
+    }
+
+    public SrednjaSkolaResponse fromSrednjaSkolaToResponse(SrednjaSkola ss) {
+        if (ss == null) {
+            return null;
+        }
+        SrednjaSkolaResponse response = new SrednjaSkolaResponse();
+        response.setId(ss.getId());
+        response.setNaziv(ss.getNaziv());
+        response.setVrsta(ss.getVrsta() != null ? ss.getVrsta().toString() : null);
+        response.setMesto(ss.getMesto());
+        response.setNapomena(ss.getNapomena());
+        response.setSifarnik(ss.getSifarnik());
+        return response;
+    }
+
+    public List<SrednjaSkolaResponse> fromSrednjaSkolaListToResponse(List<SrednjaSkola> srednjeSKole) {
+        if (srednjeSKole == null) {
+            return null;
+        }
+        return srednjeSKole.stream()
+                .map(this::fromSrednjaSkolaToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public StudentSrednjaSkolaResponse fromStudentSrednjaSkolaToDetailResponse(StudentSrednjaSkola sss) {
+        if (sss == null) {
+            return null;
+        }
+        StudentSrednjaSkolaResponse response = new StudentSrednjaSkolaResponse();
+        response.setId(sss.getId());
+        
+        if (sss.getStudent() != null) {
+            response.setStudentPodaciId(sss.getStudent().getId());
+            response.setStudentIme(sss.getStudent().getIme());
+            response.setStudentPrezime(sss.getStudent().getPrezime());
+        }
+        
+        if (sss.getSrednjaSkola() != null) {
+            response.setSrednjaSkolaId(sss.getSrednjaSkola().getId());
+            response.setSrednjaSkolaNaziv(sss.getSrednjaSkola().getNaziv());
+            response.setSrednjaSkolaMesto(sss.getSrednjaSkola().getMesto());
+        }
+        
+        response.setDatumUpisa(sss.getDatumUpisa());
+        response.setDatumZavrsetka(sss.getDatumZavrsetka());
+        response.setUspehSaPrijemnog(sss.getUspehSaPrijemnog());
+        response.setUspehIzSrednjeSkole(sss.getUspehIzSrednjeSkole());
+        
+        return response;
+    }
+
+    public List<StudentSrednjaSkolaResponse> fromStudentSrednjaSkolaListToDetailResponse(List<StudentSrednjaSkola> studentSrednjaSkolas) {
+        if (studentSrednjaSkolas == null) {
+            return null;
+        }
+        return studentSrednjaSkolas.stream()
+                .map(this::fromStudentSrednjaSkolaToDetailResponse)
                 .collect(Collectors.toList());
     }
 }
