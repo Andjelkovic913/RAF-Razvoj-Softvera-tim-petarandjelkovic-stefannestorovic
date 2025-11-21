@@ -89,7 +89,7 @@ public class Seeder implements CommandLineRunner {
         String[] predmetNazivi = {"Osnove programiranja", "Strukture podataka", "Baze podataka",
                 "Arhitektura računara", "Softverski paterni", "Mreže", "Elektronika",
                 "Algoritmi", "Sistemski softver", "Web razvoj"};
-        int[] espb = {6, 6, 6, 6, 6, 6, 6, 6, 6, 6};
+        int[] espb = {8, 6, 6, 4, 8, 6, 4, 6, 8, 6};
 
         // Semestri za predmete: RN101, RN102 su 1. godina (semestar 1, 2), RN201 je 2. godina (semestar 3), itd.
         int[] semestri = {1, 2, 3, 1, 1, 1, 1, 5, 3, 3};
@@ -336,84 +336,132 @@ public class Seeder implements CommandLineRunner {
             }
         }
 
+        // Create exam sessions for multiple years
         List<IspitniRok> ispitniRokList = new ArrayList<>();
         IspitniRok.TipRoka[] tipoviRoka = {IspitniRok.TipRoka.JANUAR, IspitniRok.TipRoka.JUN,
                 IspitniRok.TipRoka.SEPTEMBAR};
-        LocalDate[] pocetci = {LocalDate.of(2024, 1, 15), LocalDate.of(2024, 6, 15),
-                LocalDate.of(2024, 9, 1)};
-        LocalDate[] zavrsetci = {LocalDate.of(2024, 2, 15), LocalDate.of(2024, 7, 15),
-                LocalDate.of(2024, 9, 30)};
-
-        for (int i = 0; i < tipoviRoka.length; i++) {
-            IspitniRok ir = new IspitniRok();
-            ir.setDatumPocetka(pocetci[i]);
-            ir.setDatumZavrsetka(zavrsetci[i]);
-            ir.setTipRoka(tipoviRoka[i]);
-            ir.setSkolskaGodina(aktivnaGodina);
-            ispitniRokList.add(ispitniRokRepository.save(ir));
+        
+        // Create exam sessions for each school year
+        for (SkolskaGodina sg : skolskaGodinaList) {
+            String[] godineParts = sg.getNaziv().split("/");
+            int prvaGodina = Integer.parseInt(godineParts[0]);
+            
+            for (int i = 0; i < tipoviRoka.length; i++) {
+                IspitniRok ir = new IspitniRok();
+                ir.setDatumPocetka(LocalDate.of(prvaGodina, (i == 0 ? 1 : (i == 1 ? 6 : 9)), 15));
+                ir.setDatumZavrsetka(LocalDate.of(prvaGodina, (i == 0 ? 2 : (i == 1 ? 7 : 9)), 28));
+                ir.setTipRoka(tipoviRoka[i]);
+                ir.setSkolskaGodina(sg);
+                ispitniRokList.add(ispitniRokRepository.save(ir));
+            }
         }
 
+        // Create exams for each DrziPredmet and exam session
         List<Ispit> ispitList = new ArrayList<>();
-        for (int i = 0; i < drziPredmetList.size() && i < ispitniRokList.size(); i++) {
-            Ispit ispit = new Ispit();
-            ispit.setDatumOdrzavanja(LocalDate.of(2024, 1, 20 + i));
-            ispit.setVremePocetka(LocalTime.of(10, 0));
-            ispit.setVremeZavrsetka(LocalTime.of(12, 0));
-            ispit.setDrziPredmet(drziPredmetList.get(i));
-            ispit.setPredmet(drziPredmetList.get(i).getPredmet());
-            ispit.setIspitniRok(ispitniRokList.get(i % ispitniRokList.size()));
-            ispit.setSkolskaGodina(aktivnaGodina);
-            ispit.setZakljucen(i % 3 == 0);
-            ispitList.add(ispitRepository.save(ispit));
+        for (IspitniRok ispitniRok : ispitniRokList) {
+            for (int i = 0; i < drziPredmetList.size(); i++) {
+                DrziPredmet drziPredmet = drziPredmetList.get(i);
+                if (drziPredmet.getSkolskaGodina().getId().equals(ispitniRok.getSkolskaGodina().getId())) {
+                    Ispit ispit = new Ispit();
+                    String[] datumParts = ispitniRok.getDatumPocetka().toString().split("-");
+                    int dan = Integer.parseInt(datumParts[2]) + (i % 10);
+                    ispit.setDatumOdrzavanja(LocalDate.of(Integer.parseInt(datumParts[0]), 
+                            Integer.parseInt(datumParts[1]), Math.min(dan, 28)));
+                    ispit.setVremePocetka(LocalTime.of(9 + (i % 3), 0));
+                    ispit.setVremeZavrsetka(LocalTime.of(11 + (i % 3), 0));
+                    ispit.setDrziPredmet(drziPredmet);
+                    ispit.setPredmet(drziPredmet.getPredmet());
+                    ispit.setIspitniRok(ispitniRok);
+                    ispit.setSkolskaGodina(ispitniRok.getSkolskaGodina());
+                    ispit.setZakljucen(i % 2 == 0);
+                    ispitList.add(ispitRepository.save(ispit));
+                }
+            }
         }
 
+        // Create exam registrations and results for each student across multiple years
         List<PrijavaIspita> prijavaList = new ArrayList<>();
-        for (int i = 0; i < Math.min(indeksList.size(), ispitList.size()); i++) {
-            PrijavaIspita pi = new PrijavaIspita();
-            pi.setStudentIndeks(indeksList.get(i));
-            pi.setIspit(ispitList.get(i));
-            pi.setDatumPrijave(LocalDate.of(2024, 1, 10 + i));
-            prijavaList.add(prijavaIspitaRepository.save(pi));
+        Random random = new Random(42); // Fixed seed for reproducibility
+        
+        for (StudentIndeks student : indeksList) {
+            // Each student takes 4-6 exams across different years
+            int numExams = 4 + random.nextInt(3);
+            
+            for (int examIdx = 0; examIdx < numExams; examIdx++) {
+                // Select random exam from different years
+                Ispit randomIspit = ispitList.get(random.nextInt(ispitList.size()));
+                
+                PrijavaIspita pi = new PrijavaIspita();
+                pi.setStudentIndeks(student);
+                pi.setIspit(randomIspit);
+                
+                // Set registration date before exam date
+                LocalDate examDate = randomIspit.getDatumOdrzavanja();
+                pi.setDatumPrijave(examDate.minusDays(5 + random.nextInt(10)));
+                
+                prijavaList.add(prijavaIspitaRepository.save(pi));
+            }
         }
 
-        for (int i = 0; i < prijavaList.size(); i++) {
-            PrijavaIspita prijava = prijavaList.get(i);
+        // Create exam results with mix of passed and failed
+        for (PrijavaIspita prijava : prijavaList) {
             Ispit ispit = prijava.getIspit();
-            Predmet predmetIzIspita = ispit.getPredmet();
+            Predmet predmet = ispit.getPredmet();
+            StudentIndeks student = prijava.getStudentIndeks();
 
-            SlusaPredmet odgovarajuciSlusaPredmet = null;
+            // Find or create SlusaPredmet for this student-predmet combination
+            SlusaPredmet slusaPredmet = null;
             for (SlusaPredmet sp : slusaPredmetList) {
-                if (sp.getStudentIndeks().getId().equals(prijava.getStudentIndeks().getId()) &&
-                        sp.getDrziPredmet().getPredmet().getId().equals(predmetIzIspita.getId())) {
-                    odgovarajuciSlusaPredmet = sp;
+                if (sp.getStudentIndeks().getId().equals(student.getId()) &&
+                        sp.getDrziPredmet().getPredmet().getId().equals(predmet.getId())) {
+                    slusaPredmet = sp;
                     break;
                 }
             }
 
-            if (odgovarajuciSlusaPredmet == null) {
-                for (SlusaPredmet sp : slusaPredmetList) {
-                    if (sp.getStudentIndeks().getId().equals(prijava.getStudentIndeks().getId())) {
-                        odgovarajuciSlusaPredmet = sp;
-                        break;
-                    }
+            // If not found, create new SlusaPredmet
+            if (slusaPredmet == null) {
+                slusaPredmet = new SlusaPredmet();
+                slusaPredmet.setStudentIndeks(student);
+                slusaPredmet.setDrziPredmet(ispit.getDrziPredmet());
+                slusaPredmet.setUpisGodine(upisGodineList.get(random.nextInt(upisGodineList.size())));
+                if (!svuList.isEmpty()) {
+                    slusaPredmet.setStudentVisokaUstanova(svuList.get(random.nextInt(svuList.size())));
                 }
+                slusaPredmet = slusaPredmetRepository.save(slusaPredmet);
             }
 
-            if (odgovarajuciSlusaPredmet != null) {
-                IzlazakNaIspit izlazak = new IzlazakNaIspit();
-                izlazak.setPrijava(prijava);
-                izlazak.setSlusaPredmet(odgovarajuciSlusaPredmet);
-                izlazak.setOsvojeniPredispitniPoeni(25 + (i % 5));
-                izlazak.setOsvojeniIspitniPoeni(40 + (i % 20));
-                izlazak.setUkupnoPoena(izlazak.getOsvojeniPredispitniPoeni() + izlazak.getOsvojeniIspitniPoeni());
-                izlazak.setOcena(izlazak.getUkupnoPoena() >= 51 ? 6 :
-                        (izlazak.getUkupnoPoena() >= 41 ? 7 :
-                                (izlazak.getUkupnoPoena() >= 31 ? 8 :
-                                        (izlazak.getUkupnoPoena() >= 21 ? 9 : 10))));
-                izlazak.setPonistio(false);
-                izlazak.setNapomena("Ispit položio");
-                izlazakNaIspitRepository.save(izlazak);
+            // Create exam result with random pass/fail
+            IzlazakNaIspit izlazak = new IzlazakNaIspit();
+            izlazak.setPrijava(prijava);
+            izlazak.setSlusaPredmet(slusaPredmet);
+            
+            // Generate random points: 30% fail, 70% pass
+            int predispitniPoeni = 10 + random.nextInt(25);
+            int ispitniPoeni;
+            boolean passed = random.nextDouble() < 0.7;
+            
+            if (passed) {
+                ispitniPoeni = 30 + random.nextInt(40); // 30-70 points on exam
+            } else {
+                ispitniPoeni = random.nextInt(20); // 0-20 points on exam (fail)
             }
+            
+            izlazak.setOsvojeniPredispitniPoeni(predispitniPoeni);
+            izlazak.setOsvojeniIspitniPoeni(ispitniPoeni);
+            izlazak.setUkupnoPoena(predispitniPoeni + ispitniPoeni);
+            
+            // Grade: 6 (passed) or 5 (failed)
+            if (izlazak.getUkupnoPoena() >= 51) {
+                izlazak.setOcena(6 + random.nextInt(5)); // 6-10 for passed
+                izlazak.setNapomena("Ispit položio sa " + izlazak.getUkupnoPoena() + " poena");
+            } else {
+                izlazak.setOcena(5); // 5 for failed
+                izlazak.setNapomena("Ispit nepoložio sa " + izlazak.getUkupnoPoena() + " poena");
+            }
+            
+            izlazak.setPonistio(false);
+            izlazakNaIspitRepository.save(izlazak);
         }
 
         for (int i = 0; i < indeksList.size(); i++) {

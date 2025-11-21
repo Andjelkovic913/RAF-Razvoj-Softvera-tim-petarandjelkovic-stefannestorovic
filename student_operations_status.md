@@ -30,10 +30,6 @@
 - **Status**: ✅ Implementirano
 - **Lokacija**: `StudentController.java`, `StudentSrednjaSkolaService.java`
 
----
-
-## ❌ NIJE IMPLEMENTIRANO
-
 ### 6. Pregled svih upisanih godina za broj indeksa
 - **Endpoint**: `GET /api/upis-godine/student/{brojIndeksa}`
 - **Status**: ✅ Implementirano
@@ -48,24 +44,31 @@
 - **Metod**: `createUpisGodine()`
 - **Request DTO**: `UpisGodineRequest` sa `studentIndeksId`, `godinaStudija`, `skolskaGodinaId`, `listaPremetaIds[]`
 
+
 ### 8. Pregled obnovljenih godina za broj indeksa
-- **Potreban Endpoint**: `GET /api/obnova-godine/student-indeks/{studentIndeksId}`
-- **Status**: ❌ Nije implementirano
-- **Potrebno**:
-  - Dodati metod u `ObnovaGodineRepository`
-  - Dodati metod u `ObnovaGodineService`
-  - Dodati endpoint u `ObnovaGodineController`
+- **Endpoint**: `GET /api/obnova-godine/student/{studentIndeksId}`
+- **Status**: ✅ Implementirano
+- **Lokacija**: `ObnovaGodineController.java`, `ObnovaGodineService.java`
+- **Metod**: `getObnovaGodineByStudentIndeks()`
+- **Vraća**: Lista svih obnovljenih godina sa detaljima (datum, godina, ESPB, razlog, školska godina)
 
 ### 9. Obnova godine za studenta
-- **Potreban Endpoint**: `POST /api/obnova-godine/obnovi`
-- **Status**: ❌ Nije implementirano
-- **Opis**: Omogućiti izbor nepoloženih + predmeta iz naredne godine (max 60 ESPB)
-- **Potrebno**:
-  - Request DTO sa `studentIndeksId`, `godinaStudija`, `listaPremetaIds[]`
-  - Validacija: zbir ESPB ≤ 60
-  - Kreiranje `ObnovaGodine` zapisa
-  - Kreiranje `SlusaPredmet` zapisa za izabrane predmete
-  - Transakciona obrada
+- **Endpoint**: `POST /api/obnova-godine/obnovi`
+- **Status**: ✅ Implementirano
+- **Opis**: Omogućava obnovu godine sa automatskom detekcijom nepoloženih predmeta + izbor dodatnih predmeta (max 60 ESPB)
+- **Lokacija**: `ObnovaGodineController.java`, `ObnovaGodineService.java`
+- **Metod**: `createObnovaGodine()`
+- **Request DTO**: `ObnovaGodineRequest` sa `studentIndeksId`, `godina`, `skolskaGodinaId`, `nextYearDrziPredmetIds[]`, `prenetiESPB`, `razlogObnove`
+- **Implementirano**:
+  - ✅ Automatska detekcija nepoloženih predmeta iz istorije studenta
+  - ✅ Validacija: zbir ESPB ≤ 60
+  - ✅ Validacija: može obnoviti samo trenutnu godinu
+  - ✅ Validacija: ne može obnoviti istu godinu u istoj školskoj godini
+  - ✅ Dozvoljava obnovu iste godine u različitim školskim godinama
+  - ✅ Kreiranje `ObnovaGodine` zapisa
+  - ✅ Kreiranje `SlusaPredmet` zapisa za sve predmete (nepoložene + dodatne)
+  - ✅ Transakciona obrada
+- **Dodatni Endpoint**: `GET /api/obnova-godine/failed-subjects/{studentIndeksId}` - pronalazi nepoložene predmete sa ESPB detaljima
 
 ### 10. Dodavanje nove uplate
 - **Potreban Endpoint**: `POST /api/uplata/dodaj`
@@ -93,8 +96,21 @@
 
 ## 📊 STATISTIKA
 
-- **Implementirano**: 7 / 11 (64%)
-- **Nije implementirano**: 4 / 11 (36%)
+- **Implementirano**: 12 / 22 (55%)
+- **Nije implementirano**: 10 / 22 (45%)
+
+### Razrada po Kategorijama:
+
+**Student (9/11 - 82%)**
+- ✅ 9 operacija implementirano
+- ❌ 2 operacije (uplate)
+
+**Studijski program i predmet (3/4 - 75%)**
+- ✅ 3 operacije implementirano
+- ❌ 1 operacija (prosečna ocena za raspon godina)
+
+**Ispit (0/7 - 0%)**
+- ❌ 7 operacija nije implementirano
 
 ---
 
@@ -104,11 +120,80 @@
 1. **Dodavanje nove uplate** - finansijska funkcionalnost
 2. **Selekcija preostalog iznosa za uplatu** - finansijska funkcionalnost
 
-### Srednji prioritet:
-3. **Obnova godine za studenta** - akademska funkcionalnost (max 60 ESPB)
+---
 
-### Niži prioritet:
-4. **Pregled obnovljenih godina** - informativna funkcionalnost
+## ❌ NIJE IMPLEMENTIRANO
+
+### 10. Dodavanje nove uplate
+- **Endpoint**: `POST /api/uplata/dodaj`
+- **Status**: ❌ Nije implementirano
+- **Opis**: Čuva datum uplate, iznos u dinarima i srednji kurs (dohvaćen sa API-ja)
+- **Potrebno**:
+  - Request DTO sa `studentIndeksId`, `iznosDinara`
+  - Integracija sa eksternim API-jem: `https://kurs.resenje.org/api/v1/currencies/eur/rates/today`
+  - Automatsko dohvatanje srednjeg kursa
+  - Kreiranje `Uplata` zapisa
+
+### 11. Selekcija preostalog iznosa za uplatu
+- **Endpoint**: `GET /api/uplata/preostalo/{studentIndeksId}`
+- **Status**: ❌ Nije implementirano
+- **Opis**: Prikazuje preostali iznos u EUR i RSD (školarina = 3000 EUR)
+- **Potrebno**:
+  - Response DTO sa `preostaloEUR`, `preostaloRSD`, `ukupnoUplacenoEUR`, `ukupnoUplacenoRSD`
+  - Konstanta: `SKOLARINA = 3000 EUR`
+  - Agregacija svih uplata za studenta
+  - Konverzija EUR ↔ RSD
+
+### 12. Spisak predmeta na studijskom programu
+- **Endpoint**: `GET /api/predmet/by-program/{programId}`
+- **Status**: ✅ Implementirano
+- **Lokacija**: `PredmetController.java`, `PredmetService.java`
+- **Dodatno**: Opcioni parametar `obavezan` za filtriranje
+
+### 13. Spisak svih predmeta sa svim podacima
+- **Endpoint**: `GET /api/predmet/svi`
+- **Status**: ✅ Implementirano
+- **Lokacija**: `PredmetController.java`, `PredmetService.java`
+
+### 14. Dodavanje novog predmeta na studijski program
+- **Endpoint**: `POST /api/predmet/add`
+- **Status**: ✅ Implementirano
+- **Lokacija**: `PredmetController.java`, `PredmetService.java`
+- **Request DTO**: `PredmetRequest`
+
+### 15. Prosečna ocena studenata na predmetu za raspon godina
+- **Endpoint**: `GET /api/predmet/{predmetId}/prosecna-ocena?od={godina}&do={godina}`
+- **Status**: ❌ Nije implementirano
+
+### 16. Svi prijavljeni studenti za ispit
+- **Endpoint**: `GET /api/ispit/{ispitId}/prijavljeni-studenti`
+- **Status**: ❌ Nije implementirano
+
+### 17. Prosečna ocena na ispitu
+- **Endpoint**: `GET /api/ispit/{ispitId}/prosecna-ocena`
+- **Status**: ❌ Nije implementirano
+
+### 18. Prijava ispita
+- **Endpoint**: `POST /api/prijava-ispita/add`
+- **Status**: ❌ Nije implementirano
+
+### 19. Dodavanje izlaska na ispit
+- **Endpoint**: `POST /api/izlazak-na-ispit/add`
+- **Status**: ❌ Nije implementirano
+- **Logika**: Ako zbir predispitnih obaveza + poeni sa ispita ≥ 51 → predmet se čuva kao položen
+
+### 20. Rezultati ispita (sortirani spisak)
+- **Endpoint**: `GET /api/ispit/{ispitId}/rezultati`
+- **Status**: ❌ Nije implementirano
+- **Sortiranje**: 1. studijski program, 2. godina upisa, 3. broj indeksa
+
+### 21. Selekcija ostvarenih poena na predispitnim obavezama
+- **Endpoint**: `GET /api/predispitne-obaveze/student/{studentIndeksId}/predmet/{predmetId}`
+- **Status**: ❌ Nije implementirano
+
+### 22. Broj puta koliko je student polagao predmet
+- **Endpoint**: `GET /api/student/{studentIndeksId}/predmet/{predmetId}/broj-pokusaja`
+- **Status**: ❌ Nije implementirano
 
 ---
 
@@ -118,3 +203,4 @@
 - Implementirane su Response DTO klase za čiste API odgovore
 - Koristi se layered architecture: Controller → Service → Repository
 - Sve operacije su transakcione gde je potrebno
+- Specifikacija zahteva testove za svaku operaciju (Postman ili sličan alat)

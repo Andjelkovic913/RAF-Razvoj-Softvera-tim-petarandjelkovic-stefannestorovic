@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface IzlazakNaIspitRepository extends JpaRepository<IzlazakNaIspit, Long> {
     
@@ -16,4 +18,7 @@ public interface IzlazakNaIspitRepository extends JpaRepository<IzlazakNaIspit, 
     
     @Query("SELECT i FROM IzlazakNaIspit i WHERE i.prijava.studentIndeks.id = :studentIndeksId AND (i.ocena < 6 OR i.ocena IS NULL)")
     Page<IzlazakNaIspit> findFailedExamsByStudentIndeks(@Param("studentIndeksId") Long studentIndeksId, Pageable pageable);
+    
+    @Query("SELECT i FROM IzlazakNaIspit i WHERE i.slusaPredmet.id = :slusaPredmetId")
+    List<IzlazakNaIspit> findBySlusaPredmetId(@Param("slusaPredmetId") Long slusaPredmetId);
 }

@@ -6,13 +6,14 @@ import org.raflab.studsluzba.model.SlusaPredmet;
 import org.raflab.studsluzba.model.StudentIndeks;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SlusaPredmetRepository extends CrudRepository<SlusaPredmet, Long> {
 	
 	@Query("select sp from SlusaPredmet sp where sp.studentIndeks.id = :indeksId1")
-	List<SlusaPredmet> getSlusaPredmetForIndeksAktivnaGodina(Long indeksId);
+	List<SlusaPredmet> getSlusaPredmetForIndeksAktivnaGodina(@Param("indeksId1") Long indeksId);
 
 	// Proverava da li student slusa predmet
 	@Query("select count(sp) > 0 from SlusaPredmet sp " +
