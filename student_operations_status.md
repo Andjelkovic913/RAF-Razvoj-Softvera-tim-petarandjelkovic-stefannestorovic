@@ -71,39 +71,45 @@
 - **Dodatni Endpoint**: `GET /api/obnova-godine/failed-subjects/{studentIndeksId}` - pronalazi nepoložene predmete sa ESPB detaljima
 
 ### 10. Dodavanje nove uplate
-- **Potreban Endpoint**: `POST /api/uplata/dodaj`
-- **Status**: ❌ Nije implementirano
+- **Endpoint**: `POST /api/uplata/add`
+- **Status**: ✅ Implementirano
+- **Lokacija**: `UplataController.java`, `UplataService.java`
 - **Opis**: Čuva datum uplate, iznos u dinarima i srednji kurs (dohvaćen sa API-ja)
-- **Potrebno**:
-  - Request DTO sa `studentIndeksId`, `iznosDinara`
-  - Integracija sa eksternim API-jem: `https://kurs.resenje.org/api/v1/currencies/eur/rates/today`
-  - Automatsko dohvatanje srednjeg kursa
-  - Kreiranje `Uplata` zapisa
-  - Service metod za poziv eksternog API-ja
+- **Implementirano**:
+  - ✅ Request DTO: `UplataRequest` sa `studentIndeksId`, `skolskaGodinaId`, `iznosRsd`, `tip`, `opis`
+  - ✅ Integracija sa eksternim API-jem: `https://kurs.resenje.org/api/v1/currencies/eur/rates/today`
+  - ✅ Automatsko dohvatanje srednjeg kursa (`exchange_middle`)
+  - ✅ Automatsko postavljanje datuma uplate
+  - ✅ Kreiranje `Uplata` zapisa
+  - ✅ `RestTemplate` konfiguracija sa timeout-om
+  - ✅ Error handling za API poziv
+  - ✅ Dodatni endpointi: `GET /api/uplata/all`, `GET /api/uplata/{id}`, `GET /api/uplata/student/{studentIndeksId}`
 
 ### 11. Selekcija preostalog iznosa za uplatu
-- **Potreban Endpoint**: `GET /api/uplata/preostalo/{studentIndeksId}`
-- **Status**: ❌ Nije implementirano
+- **Endpoint**: `GET /api/uplata/preostalo/{studentIndeksId}`
+- **Status**: ✅ Implementirano
+- **Lokacija**: `UplataController.java`, `UplataService.java`
 - **Opis**: Prikazuje preostali iznos u EUR i RSD (školarina = 3000 EUR)
-- **Potrebno**:
-  - Response DTO sa `preostaloEUR`, `preostaloRSD`, `ukupnoUplacenoEUR`, `ukupnoUplacenoRSD`
-  - Konstanta: `SKOLARINA = 3000 EUR`
-  - Agregacija svih uplata za studenta
-  - Konverzija EUR ↔ RSD
-  - Kalkulacija preostalog iznosa
+- **Implementirano**:
+  - ✅ Response DTO: `PreostaliIznosResponse` sa `preostaloEUR`, `preostaloRSD`, `ukupnoUplacenoEUR`, `ukupnoUplacenoRSD`
+  - ✅ Konstanta: `SKOLARINA = 3000 EUR`
+  - ✅ Agregacija svih uplata za studenta
+  - ✅ Konverzija EUR ↔ RSD (svaka uplata se konvertuje po svom kursu)
+  - ✅ Automatsko postavljanje na 0 ako je više uplaćeno
+  - ✅ Zaokruživanje na 2 decimale
 
 ---
 
 ## 📊 STATISTIKA
 
-- **Implementirano**: 16 / 22 (73%)
-- **Nije implementirano**: 6 / 22 (27%)
+- **Implementirano**: 18 / 22 (82%)
+- **Nije implementirano**: 4 / 22 (18%)
 
 ### Razrada po Kategorijama:
 
-**Student (9/11 - 82%)**
-- ✅ 9 operacija implementirano
-- ❌ 2 operacije (uplate) 
+**Student (11/11 - 100%)** 🎉
+- ✅ 11 operacija implementirano
+- ❌ 0 operacija 
 
 **Studijski program i predmet (3/4 - 75%)**
 - ✅ 3 operacije implementirano
@@ -118,32 +124,12 @@
 ## 🔧 PRIORITET IMPLEMENTACIJE
 
 ### Visok prioritet:
-1. **Dodavanje nove uplate** - finansijska funkcionalnost
-2. **Selekcija preostalog iznosa za uplatu** - finansijska funkcionalnost
+1. **Prosečna ocena na ispitu** - Ispit operacija
+2. **Rezultati ispita (sortirani)** - Ispit operacija
 
 ---
 
 ## ❌ NIJE IMPLEMENTIRANO
-
-### 10. Dodavanje nove uplate
-- **Endpoint**: `POST /api/uplata/dodaj`
-- **Status**: ❌ Nije implementirano
-- **Opis**: Čuva datum uplate, iznos u dinarima i srednji kurs (dohvaćen sa API-ja)
-- **Potrebno**:
-  - Request DTO sa `studentIndeksId`, `iznosDinara`
-  - Integracija sa eksternim API-jem: `https://kurs.resenje.org/api/v1/currencies/eur/rates/today`
-  - Automatsko dohvatanje srednjeg kursa
-  - Kreiranje `Uplata` zapisa
-
-### 11. Selekcija preostalog iznosa za uplatu
-- **Endpoint**: `GET /api/uplata/preostalo/{studentIndeksId}`
-- **Status**: ❌ Nije implementirano
-- **Opis**: Prikazuje preostali iznos u EUR i RSD (školarina = 3000 EUR)
-- **Potrebno**:
-  - Response DTO sa `preostaloEUR`, `preostaloRSD`, `ukupnoUplacenoEUR`, `ukupnoUplacenoRSD`
-  - Konstanta: `SKOLARINA = 3000 EUR`
-  - Agregacija svih uplata za studenta
-  - Konverzija EUR ↔ RSD
 
 ### 12. Spisak predmeta na studijskom programu
 - **Endpoint**: `GET /api/predmet/by-program/{programId}`
