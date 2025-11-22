@@ -249,6 +249,7 @@ public class EntityMappers {
     public PredmetResponse fromPredmetToResponse(Predmet p) {
         if (p == null) return null;
         PredmetResponse r = new PredmetResponse();
+        r.setId(p.getId());
         r.setSifra(p.getSifra());
         r.setNaziv(p.getNaziv());
         r.setEspb(p.getEspb());

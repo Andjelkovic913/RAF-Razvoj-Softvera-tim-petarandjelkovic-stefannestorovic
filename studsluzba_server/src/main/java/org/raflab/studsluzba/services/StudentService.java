@@ -203,10 +203,6 @@ public class StudentService {
     }
 
     public Page<StudentDTO> search(String ime, String prezime, String studProgram, Integer godina, Integer broj, Integer page, Integer size) {
-        if (studProgram == null && godina == null && broj == null) {
-            Page<StudentPodaci> spList = studentPodaciRepository.findStudent(ime, prezime, PageRequest.of(page, size, Sort.by("id").descending()));
-            return spList.map(EntityMappers::fromStudentPodaciToDTO);
-        }
         Page<StudentIndeks> siList = studentIndeksRepository.findStudentIndeks(ime, prezime, studProgram, godina, broj, PageRequest.of(page, size, Sort.by("id").descending()));
         return siList.map(EntityMappers::fromStudentIndeksToDTO);
     }

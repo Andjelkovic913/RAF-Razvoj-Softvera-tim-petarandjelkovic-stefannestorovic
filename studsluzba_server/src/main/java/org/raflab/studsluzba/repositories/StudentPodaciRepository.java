@@ -16,9 +16,8 @@ import org.springframework.stereotype.Repository;
 public interface StudentPodaciRepository extends JpaRepository<StudentPodaci, Long> {	//	nasljedjene implementacije poput findById i findByAll
 	
 	@Query("select sp from StudentPodaci sp where "
-			+ "(:ime is null or lower(sp.ime) like :ime) and "
-			+ "(:prezime is null or lower(sp.prezime) like :prezime) and "
-			+ "not exists (select indeks from StudentIndeks indeks where indeks.student = sp)")
+			+ "(:ime is null or lower(sp.ime) like concat('%', lower(:ime), '%')) and "
+			+ "(:prezime is null or lower(sp.prezime) like concat('%', lower(:prezime), '%'))")
 	Page<StudentPodaci> findStudent(String ime, String prezime, Pageable pageable);
 	
 	@Query("select si from StudentIndeks si where si.aktivan=true and si.student.id = :studPodaciId")
