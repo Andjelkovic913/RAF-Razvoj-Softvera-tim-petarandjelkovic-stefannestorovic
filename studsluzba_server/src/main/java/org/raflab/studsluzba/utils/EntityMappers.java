@@ -499,4 +499,23 @@ public class EntityMappers {
         
         return response;
     }
+
+    public UplataResponse fromUplataToResponse(Uplata uplata) {
+        if (uplata == null) {
+            return null;
+        }
+        UplataResponse response = new UplataResponse();
+        response.setId(uplata.getId());
+        response.setStudentIndeksId(uplata.getStudentIndeks().getId());
+        response.setSkolskaGodinaId(uplata.getSkolskaGodina().getId());
+        response.setDatumUplate(uplata.getDatumUplate());
+        response.setIznosRsd(uplata.getIznosRsd());
+        response.setSrednjiKurs(uplata.getSrednjiKurs());
+        response.setSkolarinaUEur(uplata.getSkolarinaUEur());
+        response.setTip(uplata.getTip());
+        response.setStatus(uplata.getStatus());
+        response.setPozivNaBroj(uplata.getPozivNaBroj());
+        response.setOpis(uplata.getOpis());
+        return response;
+    }
 }
