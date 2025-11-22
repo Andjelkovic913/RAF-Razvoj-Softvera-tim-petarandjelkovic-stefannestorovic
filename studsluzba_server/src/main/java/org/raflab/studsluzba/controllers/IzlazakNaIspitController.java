@@ -16,7 +16,7 @@ public class IzlazakNaIspitController {
 
     private final IzlazakNaIspitService izlazakNaIspitService;
 
-    // 1.2 - selekcija svih položenih ispita za broj indeksa studenta, paginirano
+    // selekcija svih položenih ispita za broj indeksa studenta, paginirano
     @GetMapping("/student-indeks/{id}/passed")
     public Page<IzlazakNaIspitResponse> getPassedExams(
             @PathVariable Long id,
@@ -25,7 +25,7 @@ public class IzlazakNaIspitController {
         return izlazakNaIspitService.getPassedExams(id, page, size);
     }
 
-    // 1.3 - selekcija svih nepoloženih ispita za broj indeksa studenta, paginirano
+    // selekcija svih nepoloženih ispita za broj indeksa studenta, paginirano
     @GetMapping("/student-indeks/{id}/failed")
     public Page<IzlazakNaIspitResponse> getFailedExams(
             @PathVariable Long id,
@@ -41,13 +41,13 @@ public class IzlazakNaIspitController {
         return izlazakNaIspitService.getAllExamResults(page, size);
     }
 
+    // 3.4 dodavanje izlaska na ispit sa osvojenim poenima (predispitni i ispitni poeni, ukupno poena i ocena)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Long createExamResult(@RequestBody IzlazakNaIspitRequest request) {
         return izlazakNaIspitService.createExamResult(request);
     }
-    // za datog studenta i predmet vratiti koliko je puta student polagao predmet
-    // (izašao na ispit)
+    // 3.7 za datog studenta i predmet vratiti koliko je puta student polagao predmet (izašao na ispit)
     @GetMapping("/student/{studentIndeksId}/predmet/{predmetId}/broj-pokusaja")
     public Long getExamAttemptCount(
             @PathVariable Long studentIndeksId,

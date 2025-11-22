@@ -17,12 +17,13 @@ public class PrijavaIspitaController {
 
     private final PrijavaIspitaService prijavaIspitaService;
 
+    // 3.3 prijava ispita za izabrani ispitni rok i predmet koji student sluša
     @PostMapping("/add")
     public Long addPrijavaIspita(@RequestBody @Valid PrijavaIspitaRequest request) {
         return prijavaIspitaService.create(request);
     }
 
-    //svi prijavljeni studenti za ispit
+    // 3.1 svi prijavljeni studenti za ispit
     @GetMapping("/{ispitId}/students")
     public List<PrijavljeniStudentDTO> getPrijavljeniStudenti(@PathVariable Long ispitId) {
         return prijavaIspitaService.getPrijavljeniStudenti(ispitId);

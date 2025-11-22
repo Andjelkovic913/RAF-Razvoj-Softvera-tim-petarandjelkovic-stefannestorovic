@@ -37,7 +37,7 @@ public class PredmetController {
         return predmetService.getAll();
     }
 
-    // 2.4 - selekcija predmeta preko ID-a
+    // - selekcija predmeta preko ID-a
     @GetMapping(path = "/{id}")
     public PredmetResponse getPredmetById(@PathVariable Long id) {
         return predmetService.getById(id);
