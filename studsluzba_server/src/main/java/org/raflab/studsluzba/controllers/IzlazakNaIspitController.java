@@ -44,4 +44,11 @@ public class IzlazakNaIspitController {
     public Long createExamResult(@RequestBody IzlazakNaIspitRequest request) {
         return izlazakNaIspitService.createExamResult(request);
     }
+    
+    @GetMapping("/student/{studentIndeksId}/predmet/{predmetId}/broj-pokusaja")
+    public Long getExamAttemptCount(
+            @PathVariable Long studentIndeksId,
+            @PathVariable Long predmetId) {
+        return izlazakNaIspitService.getExamAttemptCount(studentIndeksId, predmetId);
+    }
 }
