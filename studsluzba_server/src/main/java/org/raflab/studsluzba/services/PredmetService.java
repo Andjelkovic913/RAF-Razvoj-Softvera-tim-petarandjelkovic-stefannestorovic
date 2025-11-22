@@ -64,4 +64,43 @@ public class PredmetService {
                 .map(entityMappers::fromPredmetToResponse)
                 .collect(Collectors.toList());
     }
+
+    public PredmetResponse getById(Long id) {
+        Predmet predmet = predmetRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Predmet sa ID " + id + " ne postoji"));
+        return entityMappers.fromPredmetToResponse(predmet);
+    }
+
+    public PredmetResponse update(Long id, PredmetRequest req) {
+        Predmet existing = predmetRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Predmet sa ID " + id + " ne postoji"));
+
+        // Provera da li nova šifra već postoji (ako se menja)
+        if (!existing.getSifra().equals(req.getSifra()) && predmetRepository.existsBySifra(req.getSifra())) {
+            throw new IllegalArgumentException("Šifra predmeta već postoji");
+        }
+
+        StudijskiProgram sp = studijskiProgramRepository.findById(req.getStudProgramId())
+                .orElseThrow(() -> new EntityNotFoundException("Studijski program ne postoji"));
+
+        existing.setSifra(req.getSifra());
+        existing.setNaziv(req.getNaziv());
+        existing.setOpis(req.getOpis());
+        existing.setEspb(req.getEspb());
+        existing.setSemestar(req.getSemestar());
+        existing.setFondCasovaVezbe(req.getFondCasovaVezbe());
+        existing.setFondCasovaPredavanja(req.getFondCasovaPredavanja());
+        existing.setObavezan(req.isObavezan());
+        existing.setStudProgram(sp);
+
+        Predmet updated = predmetRepository.save(existing);
+        return entityMappers.fromPredmetToResponse(updated);
+    }
+
+    public void delete(Long id) {
+        if (!predmetRepository.existsById(id)) {
+            throw new EntityNotFoundException("Predmet sa ID " + id + " ne postoji");
+        }
+        predmetRepository.deleteById(id);
+    }
 }

@@ -42,4 +42,19 @@ public class PredmetController {
     public List<PredmetResponse> getAllPredmeti(){
         return predmetService.getAll();
     }
+
+    @GetMapping(path = "/{id}")
+    public PredmetResponse getPredmetById(@PathVariable Long id) {
+        return predmetService.getById(id);
+    }
+
+    @PutMapping(path = "/{id}")
+    public PredmetResponse updatePredmet(@PathVariable Long id, @RequestBody @Valid PredmetRequest req) {
+        return predmetService.update(id, req);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public void deletePredmet(@PathVariable Long id) {
+        predmetService.delete(id);
+    }
 }
