@@ -46,7 +46,7 @@ public class StudentController {
 		return studentService.getAllStudentPodaciPaginated(page, size);
 	}
 
-//selekcija studenta (njegovih ličnih podataka) preko broja indeksa  85/24 SI == id = 4
+// 1.1 selekcija studenta (njegovih ličnih podataka) preko broja indeksa
 	@GetMapping(path="/podaci/{id}")
 	public StudentPodaciResponse getStudentPodaci(@PathVariable Long id){
 		return studentService.getStudentPodaciById(id);
@@ -89,6 +89,7 @@ public class StudentController {
       return studentService.emailSearch(studEmail);
     }
 
+    // 1.10 - selekcija studenata na osnovu imena i/ili prezimena (može samo ime, ili samo prezime ili oba da se unesu), paginirano
     @GetMapping(path="/search")
     public Page<StudentDTO> search(@RequestParam (required = false) String ime,
 								   @RequestParam (required = false) String prezime,
@@ -136,9 +137,9 @@ public class StudentController {
         return studentService.getStudentPodaciByBroj(broj, studProgramOznaka, godina);
     }
 
+    // 1.11 - selekcija svih upisanih studenata koji su završili određenu srednju školu
     @GetMapping(path="/srednja-skola/{srednjaSkolaId}")
     public List<StudentBySrednjaSkolaResponse> getEnrolledStudentsBySrednjaSkola(@PathVariable Long srednjaSkolaId) {
         return studentSrednjaSkolaService.findEnrolledStudentsBySrednjaSkola(srednjaSkolaId);
     }
-
 }

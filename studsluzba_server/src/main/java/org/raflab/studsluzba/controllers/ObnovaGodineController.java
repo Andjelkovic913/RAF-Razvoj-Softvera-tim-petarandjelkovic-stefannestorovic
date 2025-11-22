@@ -19,16 +19,20 @@ public class ObnovaGodineController {
 
     private final ObnovaGodineService obnovaGodineService;
 
+    // 1.6 - pregled obnovljenih godina za broj indeksa
     @GetMapping("/student-indeks/{studentIndeksId}")
     public List<ObnovaGodineResponse> getObnovaGodineByStudentIndeks(@PathVariable Long studentIndeksId) {
         return obnovaGodineService.getObnovaGodineByStudentIndeks(studentIndeksId);
     }
 
+    // 1.7 - obnova godine za studenta gde je potrebno omogućiti da se, pored nepoloženih, izaberu predmeti iz naredne godine.
+    // Maksimalni zbir ESPB poena može biti 60.
     @GetMapping("/failed-subjects/{studentIndeksId}")
     public FailedSubjectsResponse getFailedSubjects(@PathVariable Long studentIndeksId) {
         return obnovaGodineService.getFailedSubjectsForStudent(studentIndeksId);
     }
 
+    // "dodavanje nove obnove godine za studenta i predmeti koje sluša, a koji će inicijalno biti nepoloženi"
     @PostMapping("/obnovi")
     @ResponseStatus(HttpStatus.CREATED)
     public Long createObnovaGodine(@RequestBody @Valid ObnovaGodineRequest request) {

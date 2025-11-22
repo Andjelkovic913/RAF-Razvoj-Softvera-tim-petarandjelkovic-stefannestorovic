@@ -16,6 +16,7 @@ public class IzlazakNaIspitController {
 
     private final IzlazakNaIspitService izlazakNaIspitService;
 
+    // 1.2 - selekcija svih položenih ispita za broj indeksa studenta, paginirano
     @GetMapping("/student-indeks/{id}/passed")
     public Page<IzlazakNaIspitResponse> getPassedExams(
             @PathVariable Long id,
@@ -24,6 +25,7 @@ public class IzlazakNaIspitController {
         return izlazakNaIspitService.getPassedExams(id, page, size);
     }
 
+    // 1.3 - selekcija svih nepoloženih ispita za broj indeksa studenta, paginirano
     @GetMapping("/student-indeks/{id}/failed")
     public Page<IzlazakNaIspitResponse> getFailedExams(
             @PathVariable Long id,
