@@ -21,8 +21,4 @@ public class SlusaPredmet {
 	@JoinColumn(name = "upis_godine_id")
 	private UpisGodine upisGodine;
 
-	@ManyToOne
-	@JoinColumn(name = "student_visoka_ustanova_id")
-	private StudentVisokaUstanova studentVisokaUstanova;
-
 }

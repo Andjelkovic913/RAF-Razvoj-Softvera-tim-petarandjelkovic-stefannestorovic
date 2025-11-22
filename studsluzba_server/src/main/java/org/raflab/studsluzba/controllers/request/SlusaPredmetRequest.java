@@ -15,6 +15,5 @@ public class SlusaPredmetRequest {
     private Long drziPredmetId;
 
     private Long upisGodineId;
-    private Long studentVisokaUstanovaId;
 
 }

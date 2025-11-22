@@ -4,8 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -24,7 +22,4 @@ public class StudentVisokaUstanova {
     private LocalDate datumUpisa;
     private LocalDate datumZavrsetka;
     private String napomena;
-
-    @OneToMany(mappedBy = "studentVisokaUstanova")
-    private List<SlusaPredmet> priznatiPredmeti = new ArrayList<>();
 }

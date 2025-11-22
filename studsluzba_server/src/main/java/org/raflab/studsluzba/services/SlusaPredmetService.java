@@ -51,7 +51,6 @@ public class SlusaPredmetService {
         existing.setStudentIndeks(updatedEntity.getStudentIndeks());
         existing.setDrziPredmet(updatedEntity.getDrziPredmet());
         existing.setUpisGodine(updatedEntity.getUpisGodine());
-        existing.setStudentVisokaUstanova(updatedEntity.getStudentVisokaUstanova());
         
         SlusaPredmet updated = slusaPredmetRepository.save(existing);
         return fromSlusaPredmetToResponse(updated);
@@ -71,7 +70,6 @@ public class SlusaPredmetService {
         response.setStudentIndeksId(dto.getStudentIndeksId());
         response.setDrziPredmet(dto.getDrziPredmet());
         response.setUpisGodineId(dto.getUpisGodineId());
-        response.setStudentVisokaUstanovaId(dto.getStudentVisokaUstanovaId());
         return response;
     }
 }

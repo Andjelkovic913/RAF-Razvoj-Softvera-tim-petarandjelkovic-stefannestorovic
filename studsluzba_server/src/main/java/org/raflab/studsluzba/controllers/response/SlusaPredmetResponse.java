@@ -9,6 +9,5 @@ public class SlusaPredmetResponse {
     private Long studentIndeksId;
     private DrziPredmetResponse drziPredmet;
     private Long upisGodineId;
-    private Long studentVisokaUstanovaId;
 }
 

@@ -308,17 +308,12 @@ public class Seeder implements CommandLineRunner {
         }
 
         List<SlusaPredmet> slusaPredmetList = new ArrayList<>();
-        List<StudentVisokaUstanova> svuList = new ArrayList<>();
-        studentVisokaUstanovaRepository.findAll().forEach(svuList::add);
 
         for (int i = 0; i < indeksList.size() && i < drziPredmetList.size(); i++) {
             SlusaPredmet sl = new SlusaPredmet();
             sl.setStudentIndeks(indeksList.get(i));
             sl.setDrziPredmet(drziPredmetList.get(i % drziPredmetList.size()));
             sl.setUpisGodine(upisGodineList.get(i));
-            if (i < svuList.size()) {
-                sl.setStudentVisokaUstanova(svuList.get(i));
-            }
             slusaPredmetList.add(slusaPredmetRepository.save(sl));
         }
 
@@ -425,9 +420,6 @@ public class Seeder implements CommandLineRunner {
                 slusaPredmet.setStudentIndeks(student);
                 slusaPredmet.setDrziPredmet(ispit.getDrziPredmet());
                 slusaPredmet.setUpisGodine(upisGodineList.get(random.nextInt(upisGodineList.size())));
-                if (!svuList.isEmpty()) {
-                    slusaPredmet.setStudentVisokaUstanova(svuList.get(random.nextInt(svuList.size())));
-                }
                 slusaPredmet = slusaPredmetRepository.save(slusaPredmet);
             }
 

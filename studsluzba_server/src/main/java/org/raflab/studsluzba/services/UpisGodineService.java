@@ -78,7 +78,6 @@ public class UpisGodineService {
                 slusaPredmet.setStudentIndeks(studentIndeks);
                 slusaPredmet.setDrziPredmet(drziPredmet);
                 slusaPredmet.setUpisGodine(saved);
-                slusaPredmet.setStudentVisokaUstanova(null);
                 
                 slusaPredmetRepository.save(slusaPredmet);
             }
@@ -132,7 +131,6 @@ public class UpisGodineService {
                     response.setId(sp.getId());
                     response.setStudentIndeksId(sp.getStudentIndeks() != null ? sp.getStudentIndeks().getId() : null);
                     response.setUpisGodineId(sp.getUpisGodine() != null ? sp.getUpisGodine().getId() : null);
-                    response.setStudentVisokaUstanovaId(sp.getStudentVisokaUstanova() != null ? sp.getStudentVisokaUstanova().getId() : null);
                     if (sp.getDrziPredmet() != null) {
                         response.setDrziPredmet(converters.toDrziPredmetResponse(sp.getDrziPredmet()));
                     }

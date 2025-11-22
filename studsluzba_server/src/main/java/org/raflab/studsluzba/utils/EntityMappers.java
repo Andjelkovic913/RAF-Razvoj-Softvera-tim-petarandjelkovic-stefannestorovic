@@ -190,7 +190,6 @@ public class EntityMappers {
         dto.setStudentIndeksId(sp.getStudentIndeks() != null ? sp.getStudentIndeks().getId() : null);
         dto.setDrziPredmet(sp.getDrziPredmet() != null ? fromDrziPredmetToResponse(sp.getDrziPredmet()) : null);
         dto.setUpisGodineId(sp.getUpisGodine() != null ? sp.getUpisGodine().getId() : null);
-        dto.setStudentVisokaUstanovaId(sp.getStudentVisokaUstanova() != null ? sp.getStudentVisokaUstanova().getId() : null);
         return dto;
     }
 

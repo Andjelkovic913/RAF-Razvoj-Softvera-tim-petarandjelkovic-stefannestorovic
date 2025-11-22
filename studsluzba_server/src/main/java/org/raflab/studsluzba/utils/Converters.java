@@ -201,13 +201,6 @@ public class Converters {
             sp.setUpisGodine(upisGodine);
         }
         
-        // postavi vezu sa StudentVisokaUstanova ako moguce
-        if (zahtev.getStudentVisokaUstanovaId() != null) {
-            StudentVisokaUstanova studentVisokaUstanova = new StudentVisokaUstanova();
-            studentVisokaUstanova.setId(zahtev.getStudentVisokaUstanovaId());
-            sp.setStudentVisokaUstanova(studentVisokaUstanova);
-        }
-        
         return sp;
     }
 
