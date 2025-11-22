@@ -46,7 +46,7 @@ public class SlusaPredmetService {
         SlusaPredmet existing = slusaPredmetRepository.findById(id)
                 .orElseThrow(() -> new EntityExistsException("SlusaPredmet sa ID " + id + " ne postoji"));
         
-        // Update fields from request
+        // Update polja
         SlusaPredmet updatedEntity = converters.toSlusaPredmet(request);
         existing.setStudentIndeks(updatedEntity.getStudentIndeks());
         existing.setDrziPredmet(updatedEntity.getDrziPredmet());

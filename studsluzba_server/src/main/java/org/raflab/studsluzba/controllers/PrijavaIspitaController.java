@@ -22,6 +22,7 @@ public class PrijavaIspitaController {
         return prijavaIspitaService.create(request);
     }
 
+    //svi prijavljeni studenti za ispit
     @GetMapping("/{ispitId}/students")
     public List<PrijavljeniStudentDTO> getPrijavljeniStudenti(@PathVariable Long ispitId) {
         return prijavaIspitaService.getPrijavljeniStudenti(ispitId);

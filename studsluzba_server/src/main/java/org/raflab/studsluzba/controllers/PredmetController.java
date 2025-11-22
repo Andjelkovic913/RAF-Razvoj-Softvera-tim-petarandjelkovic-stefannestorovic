@@ -18,28 +18,20 @@ public class PredmetController {
     private final PredmetService predmetService;
 
     @PostMapping("/add")
-    public Long addNewPredmet(@RequestBody @Valid PredmetRequest req) {
+    public Long addNewPredmet(@RequestBody @Valid PredmetRequest req) { // dodavanje novog predmetra na studijski program, zadaje se
+        // šifra predmeta koja mora biti jedinstvena
         return predmetService.create(req).getId();
     }
 
     @GetMapping(path = "/by-program/{programId}")
     public List<PredmetResponse> getPredmetiByProgram(
             @PathVariable Long programId,
-            @RequestParam(required = false) Boolean obavezan
-    ) {
-        return predmetService.getByStudProgram(programId, obavezan);
-    }
-
-    @GetMapping(path = "/all/{programId}")
-    public List<PredmetResponse> getAllPredmeti(
-            @PathVariable Long programId,
-            @RequestParam(required = false ) Boolean obavezan
-    ) {
+            @RequestParam(required = false) Boolean obavezan) { // spiak svih predmeta na stuijskom programu
         return predmetService.getByStudProgram(programId, obavezan);
     }
 
     @GetMapping(path = "/svi")
-    public List<PredmetResponse> getAllPredmeti(){
+    public List<PredmetResponse> getAllPredmeti(){// spisak svih predmeta sa svim podacima o predmetu
         return predmetService.getAll();
     }
 

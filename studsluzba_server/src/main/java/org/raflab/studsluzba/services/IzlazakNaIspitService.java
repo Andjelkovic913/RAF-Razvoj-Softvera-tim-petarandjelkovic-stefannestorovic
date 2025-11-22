@@ -76,3 +76,4 @@ public class IzlazakNaIspitService {
         return izlazakNaIspitRepository.countExamAttemptsByStudentAndPredmet(studentIndeksId, predmetId);
     }
 }
+

@@ -105,32 +105,9 @@ public class StudentService {
         }
 
         StudentPodaci studentPodaci = indeks.getStudent();
-        applyStudentPodaciUpdates(studentPodaci, request);
+        converters.updateStudentPodaci(studentPodaci, request);
         StudentPodaci saved = studentPodaciRepository.save(studentPodaci);
         return entityMappers.fromStudentPodaciToResponse(saved);
-    }
-
-    private void applyStudentPodaciUpdates(StudentPodaci target, StudentPodaciRequest source) {
-        target.setIme(source.getIme());
-        target.setPrezime(source.getPrezime());
-        target.setSrednjeIme(source.getSrednjeIme());
-        target.setJmbg(source.getJmbg());
-        target.setDatumRodjenja(source.getDatumRodjenja());
-        target.setMestoRodjenja(source.getMestoRodjenja());
-        target.setMestoPrebivalista(source.getMestoPrebivalista());
-        target.setDrzavaRodjenja(source.getDrzavaRodjenja());
-        target.setDrzavljanstvo(source.getDrzavljanstvo());
-        target.setNacionalnost(source.getNacionalnost());
-        target.setPol(source.getPol());
-        target.setAdresa(source.getAdresa());
-        target.setBrojTelefonaMobilni(source.getBrojTelefonaMobilni());
-        target.setBrojTelefonaFiksni(source.getBrojTelefonaFiksni());
-        target.setEmailPrivatni(source.getEmailPrivatni());
-        target.setEmailFakultetski(source.getEmailFakultetski());
-        target.setBrojLicneKarte(source.getBrojLicneKarte());
-        target.setLicnuKartuIzdao(source.getLicnuKartuIzdao());
-        target.setMestoStanovanja(source.getMestoStanovanja());
-        target.setAdresaStanovanja(source.getAdresaStanovanja());
     }
 
     // StudentIndeks operations
@@ -139,7 +116,7 @@ public class StudentService {
         StudentIndeks studentIndeks = converters.toStudentIndeks(request);
 
         int nextBroj = findNextBroj(request.getGodina(), request.getStudProgramOznaka());
-        studentIndeks.setBroj(nextBroj);
+        studentIndeks.setBroj(nextBroj); // trazi koji sve brojevi indeksa vec postoje i uzima nekorisceni
 
         StudentPodaci studentPodaci = studentPodaciRepository.findById(request.getStudentId())
                 .orElseThrow(() -> new EntityNotFoundException("Student sa ID " + request.getStudentId() + " ne postoji"));
@@ -150,6 +127,7 @@ public class StudentService {
             throw new RuntimeException("No StudijskiProgram found with oznaka: " + request.getStudProgramOznaka());
         }
         studentIndeks.setStudijskiProgram(studijskiProgrami.get(0));
+        // trazi StudentskiProgram entitet na koji ce da ga poveze na osnovu oznake
 
         try {
             StudentIndeks savedStudentIndeks = studentIndeksRepository.save(studentIndeks);

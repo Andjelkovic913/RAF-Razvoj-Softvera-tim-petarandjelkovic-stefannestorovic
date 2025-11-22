@@ -27,7 +27,7 @@ public class PredmetService {
 
     public PredmetResponse create(PredmetRequest req) {
         if (predmetRepository.existsBySifra(req.getSifra())) {
-            throw new IllegalArgumentException("Šifra predmeta već postoji");
+            throw new IllegalArgumentException("Sifra predmeta vec postoji");
         }
         StudijskiProgram sp = studijskiProgramRepository.findById(req.getStudProgramId())
                 .orElseThrow(() -> new EntityNotFoundException("Studijski program ne postoji"));
@@ -42,15 +42,7 @@ public class PredmetService {
         StudijskiProgram sp = studijskiProgramRepository.findById(studProgramId)
                 .orElseThrow(() -> new EntityNotFoundException("Studijski program ne postoji"));
 
-        List<Predmet> predmets;
-        if (obavezan == null) {
-            List<Predmet> svi = new ArrayList<>();
-            svi.addAll(predmetRepository.getPredmetsByStudProgramAndObavezan(sp, true));
-            svi.addAll(predmetRepository.getPredmetsByStudProgramAndObavezan(sp, false));
-            predmets = svi;
-        } else {
-            predmets = predmetRepository.getPredmetsByStudProgramAndObavezan(sp, obavezan);
-        }
+        List<Predmet> predmets = obavezan == null ? predmetRepository.findByStudProgram(sp) : predmetRepository.getPredmetsByStudProgramAndObavezan(sp, obavezan);
         
         return predmets.stream()
                 .map(entityMappers::fromPredmetToResponse)
@@ -58,10 +50,9 @@ public class PredmetService {
     }
     
     public List<PredmetResponse> getAll() {
-        List<Predmet> result = new ArrayList<>();
-        predmetRepository.findAll().forEach(result::add);
-        return result.stream()
-                .map(entityMappers::fromPredmetToResponse)
+        List<Predmet> predmets = new ArrayList<>();
+        predmetRepository.findAll().forEach(predmets::add);
+        return predmets.stream().map(entityMappers::fromPredmetToResponse)
                 .collect(Collectors.toList());
     }
 
@@ -75,9 +66,8 @@ public class PredmetService {
         Predmet existing = predmetRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Predmet sa ID " + id + " ne postoji"));
 
-        // Provera da li nova šifra već postoji (ako se menja)
         if (!existing.getSifra().equals(req.getSifra()) && predmetRepository.existsBySifra(req.getSifra())) {
-            throw new IllegalArgumentException("Šifra predmeta već postoji");
+            throw new IllegalArgumentException("Sifra predmeta vec postoji");
         }
 
         StudijskiProgram sp = studijskiProgramRepository.findById(req.getStudProgramId())

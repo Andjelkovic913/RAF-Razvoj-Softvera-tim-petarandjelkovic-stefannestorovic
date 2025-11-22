@@ -46,6 +46,7 @@ public class StudentController {
 		return studentService.getAllStudentPodaciPaginated(page, size);
 	}
 
+//selekcija studenta (njegovih ličnih podataka) preko broja indeksa  85/24 SI == id = 4
 	@GetMapping(path="/podaci/{id}")
 	public StudentPodaciResponse getStudentPodaci(@PathVariable Long id){
 		return studentService.getStudentPodaciById(id);
