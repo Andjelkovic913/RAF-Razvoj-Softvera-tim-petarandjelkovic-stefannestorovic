@@ -96,21 +96,22 @@
 
 ## 📊 STATISTIKA
 
-- **Implementirano**: 12 / 22 (55%)
-- **Nije implementirano**: 10 / 22 (45%)
+- **Implementirano**: 16 / 22 (73%)
+- **Nije implementirano**: 6 / 22 (27%)
 
 ### Razrada po Kategorijama:
 
 **Student (9/11 - 82%)**
 - ✅ 9 operacija implementirano
-- ❌ 2 operacije (uplate)
+- ❌ 2 operacije (uplate) 
 
 **Studijski program i predmet (3/4 - 75%)**
 - ✅ 3 operacije implementirano
 - ❌ 1 operacija (prosečna ocena za raspon godina)
 
-**Ispit (0/7 - 0%)**
-- ❌ 7 operacija nije implementirano
+**Ispit (4/7 - 57%)**
+- ✅ 4 operacije implementirano (prijavljeni studenti, prijava ispita, izlazak na ispit, broj pokušaja)
+- ❌ 3 operacije (prosečna ocena, rezultati ispita, predispitne obaveze)
 
 ---
 
@@ -166,8 +167,10 @@
 - **Status**: ❌ Nije implementirano
 
 ### 16. Svi prijavljeni studenti za ispit
-- **Endpoint**: `GET /api/ispit/{ispitId}/prijavljeni-studenti`
-- **Status**: ❌ Nije implementirano
+- **Endpoint**: `GET /api/prijava-ispita/{ispitId}/students`
+- **Status**: ✅ Implementirano
+- **Lokacija**: `PrijavaIspitaController.java`, `PrijavaIspitaService.java`
+- **Response**: `List<PrijavljeniStudentDTO>`
 
 ### 17. Prosečna ocena na ispitu
 - **Endpoint**: `GET /api/ispit/{ispitId}/prosecna-ocena`
@@ -175,12 +178,16 @@
 
 ### 18. Prijava ispita
 - **Endpoint**: `POST /api/prijava-ispita/add`
-- **Status**: ❌ Nije implementirano
+- **Status**: ✅ Implementirano
+- **Lokacija**: `PrijavaIspitaController.java`, `PrijavaIspitaService.java`
+- **Request DTO**: `PrijavaIspitaRequest`
 
 ### 19. Dodavanje izlaska na ispit
-- **Endpoint**: `POST /api/izlazak-na-ispit/add`
-- **Status**: ❌ Nije implementirano
-- **Logika**: Ako zbir predispitnih obaveza + poeni sa ispita ≥ 51 → predmet se čuva kao položen
+- **Endpoint**: `POST /api/izlazak-na-ispit`
+- **Status**: ✅ Implementirano
+- **Lokacija**: `IzlazakNaIspitController.java`, `IzlazakNaIspitService.java`
+- **Request DTO**: `IzlazakNaIspitRequest`
+- **Logika**: Implementirana logika za čuvanje položenog predmeta
 
 ### 20. Rezultati ispita (sortirani spisak)
 - **Endpoint**: `GET /api/ispit/{ispitId}/rezultati`
@@ -192,8 +199,10 @@
 - **Status**: ❌ Nije implementirano
 
 ### 22. Broj puta koliko je student polagao predmet
-- **Endpoint**: `GET /api/student/{studentIndeksId}/predmet/{predmetId}/broj-pokusaja`
-- **Status**: ❌ Nije implementirano
+- **Endpoint**: `GET /api/izlazak-na-ispit/student/{studentIndeksId}/predmet/{predmetId}/broj-pokusaja`
+- **Status**: ✅ Implementirano
+- **Lokacija**: `IzlazakNaIspitController.java`, `IzlazakNaIspitService.java`
+- **Response**: Broj pokušaja (Long)
 
 ---
 

@@ -70,4 +70,9 @@ public class IzlazakNaIspitService {
         IzlazakNaIspit saved = izlazakNaIspitRepository.save(izlazak);
         return saved.getId();
     }
+    
+    @Transactional(readOnly = true)
+    public Long getExamAttemptCount(Long studentIndeksId, Long predmetId) {
+        return izlazakNaIspitRepository.countExamAttemptsByStudentAndPredmet(studentIndeksId, predmetId);
+    }
 }
