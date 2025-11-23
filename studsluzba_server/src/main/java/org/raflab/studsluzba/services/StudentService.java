@@ -76,27 +76,14 @@ public class StudentService {
         studentPodaciRepository.deleteById(id);
     }
 
-    // 1.2 - selekcija studenta (njegovih ličnih podataka) preko broja indeksa
+    // 1.2 - selekcija studenta (njegovih ličnih podataka) preko broja indeksa, studProgramOznaka i godine
     public StudentPodaciResponse getStudentPodaciByBroj(int broj, String studProgramOznaka, Integer godina) {
-        if (studProgramOznaka != null && godina != null) {
-            StudentIndeks si = studentIndeksRepository.findStudentIndeks(studProgramOznaka.toUpperCase(), godina, broj);
-            if (si == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        String.format("Student sa indeksom %s %d/%d ne postoji", studProgramOznaka, broj, godina));
-            }
-            return entityMappers.fromStudentPodaciToResponse(si.getStudent());
-        }
-
-        List<StudentIndeks> matches = studentIndeksRepository.findByBrojAndAktivanTrue(broj);
-        if (matches.isEmpty()) {
+        StudentIndeks si = studentIndeksRepository.findStudentIndeks(studProgramOznaka.toUpperCase(), godina, broj);
+        if (si == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    String.format("Nije pronadjen aktivan indeks sa brojem %d", broj));
+                    String.format("Student sa indeksom %s %d/%d ne postoji", studProgramOznaka, broj, godina));
         }
-        if (matches.size() > 1) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("Više aktivnih indeksa sa brojem %d. Preciziraj 'studProgramOznaka' i 'godina'.", broj));
-        }
-        return entityMappers.fromStudentPodaciToResponse(matches.get(0).getStudent());
+        return entityMappers.fromStudentPodaciToResponse(si.getStudent());
     }
 
     public StudentPodaciResponse updateStudentPodaciByIndeks(String studProgramOznaka, int godina, int broj, StudentPodaciRequest request) {

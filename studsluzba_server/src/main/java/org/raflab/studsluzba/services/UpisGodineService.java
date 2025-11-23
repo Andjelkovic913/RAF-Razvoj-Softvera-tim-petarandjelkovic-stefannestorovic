@@ -48,8 +48,21 @@ public class UpisGodineService {
 
         if (!postojeciUpisi.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    String.format("Student već ima upisanu %d. godinu u školskoj godini %s",
-                            request.getGodina(), skolskaGodina.getNaziv()));
+                    String.format("Student (ID: %d) već ima upisanu %d. godinu u školskoj godini '%s' (ID: %d)",
+                            request.getStudentIndeksId(), request.getGodina(), skolskaGodina.getNaziv(), request.getSkolskaGodinaId()));
+        }
+
+        // Validacija: student ne može da upise nižu godinu ako je već u višoj godini
+        List<UpisGodine> sviUpisiStudenta = upisGodineRepository.findByStudentIndeksId(request.getStudentIndeksId());
+        int maksimalnaGodina = sviUpisiStudenta.stream()
+                .mapToInt(UpisGodine::getGodina)
+                .max()
+                .orElse(0);
+
+        if (request.getGodina() < maksimalnaGodina) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    String.format("Student ne može da upise %d. godinu jer je već upisao %d. godinu",
+                            request.getGodina(), maksimalnaGodina));
         }
 
         UpisGodine upisGodine = converters.toUpisGodine(request);

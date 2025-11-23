@@ -46,10 +46,24 @@ public class StudentController {
 		return studentService.getAllStudentPodaciPaginated(page, size);
 	}
 
-// 1.1 selekcija studenta (njegovih ličnih podataka) preko broja indeksa
+//  selekcija studenta (njegovih ličnih podataka) preko id-a indeksa
 	@GetMapping(path="/podaci/{id}")
 	public StudentPodaciResponse getStudentPodaci(@PathVariable Long id){
 		return studentService.getStudentPodaciById(id);
+	}
+
+	// 1.1 - selekcija studenta (njegovih ličnih podataka) preko broja indeksa, studProgramOznaka i godine
+	@GetMapping(path="/podaci/prekoindeksa/broj/{broj}")
+	public StudentPodaciResponse getStudentPodaciByBroj
+	(@PathVariable int broj, @RequestParam String studProgramOznaka,
+	 @RequestParam Integer godina) {
+		// Validacija da godina bude četvorocifrena (2024, 2025, itd.)
+		if (godina < 1000 || godina > 9999) {
+			throw new org.springframework.web.server.ResponseStatusException(
+					org.springframework.http.HttpStatus.BAD_REQUEST,
+					"Godina mora biti četvorocifrena (npr. 2024, 2025)");
+		}
+		return studentService.getStudentPodaciByBroj(broj, studProgramOznaka, godina);
 	}
 
 	@PutMapping(path = "/update/{id}")
@@ -79,17 +93,7 @@ public class StudentController {
         return studentService.getIndeksiForStudentPodaciId(idStudentPodaci);
     }
 
-    @GetMapping(path="/fastsearch")
-    public StudentIndeksResponse fastSearch(@RequestParam String indeksShort) {
-      return studentService.fastSearch(indeksShort);
-    }
-
-    @GetMapping(path="/emailsearch")
-    public StudentIndeksResponse emailSearch(@RequestParam String studEmail) {
-      return studentService.emailSearch(studEmail);
-    }
-
-    // 1.10 - selekcija studenata na osnovu imena i/ili prezimena (može samo ime, ili samo prezime ili oba da se unesu), paginirano
+   
     @GetMapping(path="/search")
     public Page<StudentDTO> search(@RequestParam (required = false) String ime,
 								   @RequestParam (required = false) String prezime,
@@ -130,16 +134,23 @@ public class StudentController {
 		return studentService.updateStudentPodaciByIndeks(studProgramOznaka, godina, broj, request);
 	}
 
-    @GetMapping(path="/podaci/prekoindeksa/broj/{broj}")
-    public StudentPodaciResponse getStudentPodaciByBroj(@PathVariable int broj,
-                                                        @RequestParam(required = false) String studProgramOznaka,
-                                                        @RequestParam(required = false) Integer godina) {
-        return studentService.getStudentPodaciByBroj(broj, studProgramOznaka, godina);
-    }
 
     // 1.11 - selekcija svih upisanih studenata koji su završili određenu srednju školu
     @GetMapping(path="/srednja-skola/{srednjaSkolaId}")
     public List<StudentBySrednjaSkolaResponse> getEnrolledStudentsBySrednjaSkola(@PathVariable Long srednjaSkolaId) {
         return studentSrednjaSkolaService.findEnrolledStudentsBySrednjaSkola(srednjaSkolaId);
     }
+
+ // @GetMapping(path="/fastsearch")
+    // public StudentIndeksResponse fastSearch(@RequestParam String indeksShort) {
+    //   return studentService.fastSearch(indeksShort);
+    // }
+
+    // @GetMapping(path="/emailsearch")
+    // public StudentIndeksResponse emailSearch(@RequestParam String studEmail) {
+    //   return studentService.emailSearch(studEmail);
+    // }
+
+    // 1.10 - selekcija studenata na osnovu imena i/ili prezimena (može samo ime, ili samo prezime ili oba da se unesu), paginirano
+
 }

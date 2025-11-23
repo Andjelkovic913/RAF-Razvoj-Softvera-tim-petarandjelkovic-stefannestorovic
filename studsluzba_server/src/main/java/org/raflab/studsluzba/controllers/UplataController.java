@@ -44,7 +44,7 @@ public class UplataController {
         return uplataService.getUplateByStudentIndeksId(studentIndeksId);
     }
 
-    // Skracena verzija od "/add", samo automatski uzima aktivnu školsku godinu i tip uplate kao SKOLARINA
+    // Skracena verzija od "/add", samo automatski uzima aktivnu skolsku godinu i tip uplate kao SKOLARINA
     @PostMapping(path = "/dodaj")
     public Long dodajUplata(@Valid @RequestBody DodajUplataRequest request) {
         return uplataService.dodajUplata(request);
