@@ -24,4 +24,5 @@ public interface IzlazakNaIspitRepository extends JpaRepository<IzlazakNaIspit, 
     
     @Query("SELECT COUNT(i) FROM IzlazakNaIspit i WHERE i.prijava.studentIndeks.id = :studentIndeksId AND i.slusaPredmet.drziPredmet.predmet.id = :predmetId")
     Long countExamAttemptsByStudentAndPredmet(@Param("studentIndeksId") Long studentIndeksId, @Param("predmetId") Long predmetId);
+
 }

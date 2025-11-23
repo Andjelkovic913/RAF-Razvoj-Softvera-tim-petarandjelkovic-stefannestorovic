@@ -57,16 +57,25 @@ public class IzlazakNaIspitService {
         SlusaPredmet slusaPredmet = slusaPredmetRepository.findById(request.getSlusaPredmetId())
                 .orElseThrow(() -> new EntityNotFoundException("SlusaPredmet sa ID " + request.getSlusaPredmetId() + " ne postoji"));
         
-        IzlazakNaIspit izlazak = new IzlazakNaIspit();
-        izlazak.setPrijava(prijava);
+        // Provera da li već postoji IzlazakNaIspit za ovu PrijavaIspita
+        IzlazakNaIspit izlazak = prijava.getIzlazakNaIspit();
+        
+        if (izlazak == null) {
+            izlazak = new IzlazakNaIspit();
+            izlazak.setPrijava(prijava);
+        }
+        
         izlazak.setSlusaPredmet(slusaPredmet);
         izlazak.setOsvojeniPredispitniPoeni(request.getOsvojeniPredispitniPoeni());
         izlazak.setOsvojeniIspitniPoeni(request.getOsvojeniIspitniPoeni());
         izlazak.setUkupnoPoena(request.getUkupnoPoena());
-        izlazak.setOcena(request.getOcena());
+        izlazak.setOcena(request.getOcena()); // pomocna metoda potrebna
         izlazak.setPonistio(request.isPonistio());
         izlazak.setNapomena(request.getNapomena());
         
+        // if (total >= 51 && !request.isPonistio()) 
+        // u SlusaPredmet dodati polozen - boolean
+
         IzlazakNaIspit saved = izlazakNaIspitRepository.save(izlazak);
         return saved.getId();
     }

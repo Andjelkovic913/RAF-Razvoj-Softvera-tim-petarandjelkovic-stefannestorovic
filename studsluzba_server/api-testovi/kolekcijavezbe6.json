@@ -222,7 +222,7 @@
           "options": {"raw": {"language": "json"}}
         },
         "url": {
-          "raw": "http://localhost:8090/api/upis-godine/add",
+          "raw": "c",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8090",
