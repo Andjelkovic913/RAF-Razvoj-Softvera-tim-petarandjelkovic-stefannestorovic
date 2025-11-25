@@ -91,6 +91,11 @@ public class StudentController {
         return studentService.getIndeksiForStudentPodaciId(idStudentPodaci);
     }
 
+    @DeleteMapping(path="/indeks/{id}")
+    public void deleteStudentIndeks(@PathVariable Long id){
+        studentService.deleteStudentIndeks(id);
+    }
+
 	// 1.10 - selekcija studenata na osnovu imena i/ili prezimena (može samo ime, ili samo prezime ili oba da se unesu), paginirano
 	@GetMapping(path="/search")
     public Page<StudentDTO> search(@RequestParam (required = false) String ime,

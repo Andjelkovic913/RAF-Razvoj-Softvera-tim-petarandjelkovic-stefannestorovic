@@ -512,4 +512,60 @@ public class EntityMappers {
         response.setOpis(uplata.getOpis());
         return response;
     }
+
+    public VisokoskolskaUstanovaResponse fromVisokoskolskaUstanovaToResponse(VisokoskolskaUstanova vu) {
+        if (vu == null) {
+            return null;
+        }
+        VisokoskolskaUstanovaResponse response = new VisokoskolskaUstanovaResponse();
+        response.setId(vu.getId());
+        response.setNaziv(vu.getNaziv());
+        response.setTipSkole(vu.getTipSkole());
+        response.setSifarnik(vu.getSifarnik());
+        return response;
+    }
+
+    public List<VisokoskolskaUstanovaResponse> fromVisokoskolskaUstanovaListToResponse(List<VisokoskolskaUstanova> ustanove) {
+        if (ustanove == null) {
+            return null;
+        }
+        return ustanove.stream()
+                .map(this::fromVisokoskolskaUstanovaToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public StudentVisokaUstanovaResponse fromStudentVisokaUstanovaToResponse(StudentVisokaUstanova svu) {
+        if (svu == null) {
+            return null;
+        }
+        StudentVisokaUstanovaResponse response = new StudentVisokaUstanovaResponse();
+        response.setId(svu.getId());
+        
+        if (svu.getStudent() != null) {
+            response.setStudentPodaciId(svu.getStudent().getId());
+            response.setStudentIme(svu.getStudent().getIme());
+            response.setStudentPrezime(svu.getStudent().getPrezime());
+        }
+        
+        if (svu.getVisokaUstanova() != null) {
+            response.setVisokaUstanovaId(svu.getVisokaUstanova().getId());
+            response.setVisokaUstanovaNaziv(svu.getVisokaUstanova().getNaziv());
+            response.setVisokaUstanovaTipSkole(svu.getVisokaUstanova().getTipSkole());
+        }
+        
+        response.setDatumUpisa(svu.getDatumUpisa());
+        response.setDatumZavrsetka(svu.getDatumZavrsetka());
+        response.setNapomena(svu.getNapomena());
+        
+        return response;
+    }
+
+    public List<StudentVisokaUstanovaResponse> fromStudentVisokaUstanovaListToResponse(List<StudentVisokaUstanova> studentVisokeUstanove) {
+        if (studentVisokeUstanove == null) {
+            return null;
+        }
+        return studentVisokeUstanove.stream()
+                .map(this::fromStudentVisokaUstanovaToResponse)
+                .collect(Collectors.toList());
+    }
 }

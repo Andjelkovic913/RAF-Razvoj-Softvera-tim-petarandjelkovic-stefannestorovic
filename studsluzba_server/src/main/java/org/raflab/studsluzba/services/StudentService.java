@@ -202,5 +202,12 @@ public class StudentService {
     public StudentIndeks findByStudentIdAndAktivan(Long studentPodaciId) {
         return studentIndeksRepository.findAktivanStudentIndeksiByStudentPodaciId(studentPodaciId);
     }
+
+    public void deleteStudentIndeks(Long id) {
+        if (!studentIndeksRepository.existsById(id)) {
+            throw new EntityNotFoundException("StudentIndeks sa ID " + id + " ne postoji");
+        }
+        studentIndeksRepository.deleteById(id);
+    }
 }
 
