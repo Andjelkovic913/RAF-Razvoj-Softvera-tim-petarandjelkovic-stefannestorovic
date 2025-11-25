@@ -5,7 +5,7 @@
     "description": "Postman kolekcija za testiranje svih implementiranih operacija iz specifikacije projekta Studentska Sluzba.\n\n**Status**: Sve operacije iz specifikacije koje su uspešno implementirane.\n\n**Base URL**: http://localhost:8090",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "49679603"
-  },
+  },   
   "item": [
     {
       "name": "1. Selekcija studenta preko broja indeksa",
@@ -13,7 +13,7 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8090/api/student/podaci/prekoindeksa/broj/85?studProgramOznaka=SI&godina=2024",
+          "raw": "http://localhost:8090/api/student/podaci/prekoindeksa/broj/5?studProgramOznaka=SI&godina=2024",
           "protocol": "http",
           "host": ["localhost"],
           "port": "8090",

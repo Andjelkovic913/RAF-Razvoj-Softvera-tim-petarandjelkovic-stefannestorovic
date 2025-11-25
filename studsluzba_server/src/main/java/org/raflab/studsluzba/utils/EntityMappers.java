@@ -436,8 +436,7 @@ public class EntityMappers {
         }
         IzlazakNaIspitResponse response = new IzlazakNaIspitResponse();
         response.setId(izlazak.getId());
-        
-        // Exam info
+        // provere
         if (izlazak.getIspit() != null) {
             response.setIspitId(izlazak.getIspit().getId());
             response.setDatumOdrzavanja(izlazak.getIspit().getDatumOdrzavanja());
@@ -447,16 +446,14 @@ public class EntityMappers {
                 response.setPredmetSifra(izlazak.getIspit().getDrziPredmet().getPredmet().getSifra());
             }
         }
-        
-        // Student info
+
         if (izlazak.getStudentIndeks() != null) {
             response.setStudentIndeksId(izlazak.getStudentIndeks().getId());
             response.setBroj(izlazak.getStudentIndeks().getBroj());
             response.setGodina(izlazak.getStudentIndeks().getGodina());
             response.setStudProgramOznaka(izlazak.getStudentIndeks().getStudProgramOznaka());
         }
-        
-        // Results
+        // rezultati
         response.setOsvojeniPredispitniPoeni(izlazak.getOsvojeniPredispitniPoeni());
         response.setOsvojeniIspitniPoeni(izlazak.getOsvojeniIspitniPoeni());
         response.setUkupnoPoena(izlazak.getUkupnoPoena());
@@ -478,7 +475,6 @@ public class EntityMappers {
         response.setPrenetiESPB(obnovaGodine.getPrenetiESPB());
         response.setRazlogObnove(obnovaGodine.getRazlogObnove());
         
-        // StudentIndeks info
         if (obnovaGodine.getStudentIndeks() != null) {
             response.setStudentIndeksId(obnovaGodine.getStudentIndeks().getId());
             response.setBroj(obnovaGodine.getStudentIndeks().getBroj());
@@ -486,13 +482,11 @@ public class EntityMappers {
             response.setStudProgramOznaka(obnovaGodine.getStudentIndeks().getStudProgramOznaka());
         }
         
-        // SkolskaGodina info
         if (obnovaGodine.getSkolskaGodina() != null) {
             response.setSkolskaGodinaId(obnovaGodine.getSkolskaGodina().getId());
             response.setSkolskaGodinaNaziv(obnovaGodine.getSkolskaGodina().getNaziv());
         }
         
-        // Prethodni upis info
         if (obnovaGodine.getPrethodniUpis() != null) {
             response.setPrethodniUpisId(obnovaGodine.getPrethodniUpis().getId());
         }

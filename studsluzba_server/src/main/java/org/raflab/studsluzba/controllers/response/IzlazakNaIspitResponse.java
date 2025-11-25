@@ -8,19 +8,18 @@ import java.time.LocalDate;
 public class IzlazakNaIspitResponse {
     private Long id;
     
-    // Exam info
     private Long ispitId;
     private String predmetNaziv;
     private String predmetSifra;
     private LocalDate datumOdrzavanja;
     
-    // Student info
+    // Student
     private Long studentIndeksId;
     private int broj;
     private int godina;
     private String studProgramOznaka;
     
-    // Results
+    // rezultati
     private int osvojeniPredispitniPoeni;
     private int osvojeniIspitniPoeni;
     private int ukupnoPoena;

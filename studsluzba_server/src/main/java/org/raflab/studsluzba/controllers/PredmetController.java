@@ -17,7 +17,7 @@ public class PredmetController {
 
     private final PredmetService predmetService;
 
-    // 2.3 -dodavanje novog predmeta na studijski program (šifra predmeta mora biti jedinstvena)
+    // 2.3 - dodavanje novog predmeta na studijski program (šifra predmeta mora biti jedinstvena)
     @PostMapping("/add")
     public Long addNewPredmet(@RequestBody @Valid PredmetRequest req) { 
         return predmetService.create(req).getId();
@@ -43,7 +43,7 @@ public class PredmetController {
         return predmetService.getById(id);
     }
 
-    // ažuriranje podataka o predmetu
+    // azuriranje podataka o predmetu
     @PutMapping(path = "/{id}")
     public PredmetResponse updatePredmet(@PathVariable Long id, @RequestBody @Valid PredmetRequest req) {
         return predmetService.update(id, req);

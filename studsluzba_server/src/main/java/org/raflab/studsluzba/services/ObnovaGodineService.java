@@ -39,7 +39,7 @@ public class ObnovaGodineService {
 
     @Transactional
     public Long createObnovaGodine(ObnovaGodineRequest request) {
-        // Validate entities exist
+        // da li entiteti postoje
         StudentIndeks studentIndeks = studentIndeksRepository.findById(request.getStudentIndeksId())
                 .orElseThrow(() -> new EntityNotFoundException("StudentIndeks sa ID " + request.getStudentIndeksId() + " ne postoji"));
         
@@ -52,16 +52,16 @@ public class ObnovaGodineService {
                     .orElseThrow(() -> new EntityNotFoundException("UpisGodine sa ID " + request.getPrethodniUpisId() + " ne postoji"));
         }
         
-        // Validate that student is not renewing a year they already passed
+         // student ne obnavlja godinu koja je vec prosla
         validateYearRenewal(studentIndeks, request.getGodina(), request.getSkolskaGodinaId());
         
-        // Auto-detect failed subjects from student's enrollment history
+        //automatski racuna predmete koje student nije polozio
         List<SlusaPredmet> allEnrolledSubjects = slusaPredmetRepository.getSlusaPredmetForIndeksAktivnaGodina(studentIndeks.getId());
         List<DrziPredmet> failedSubjects = new ArrayList<>();
         int failedESPB = 0;
         
         for (SlusaPredmet slusaPredmet : allEnrolledSubjects) {
-            // Check if student passed this subject
+            // da lie je student prosao premdet
             boolean passed = izlazakNaIspitRepository.findBySlusaPredmetId(slusaPredmet.getId()).stream()
                     .anyMatch(izlazak -> izlazak.getOcena() != null && izlazak.getOcena() >= 6 && !izlazak.isPonistio());
             
@@ -79,7 +79,7 @@ public class ObnovaGodineService {
             throw new IllegalArgumentException("Student nema nepoloženih predmeta. Obnova godine nije potrebna.");
         }
         
-        // Validate and collect next year subjects (optional)
+        // uzmianje predmeta iz sledece godine koje student zeli da polozi
         List<DrziPredmet> nextYearSubjects = new ArrayList<>();
         int nextYearESPB = 0;
         
@@ -95,19 +95,18 @@ public class ObnovaGodineService {
             }
         }
         
-        // Validate ESPB limit (max 60)
+        //racuna ESPB bodove da budu max 60
         int totalESPB = failedESPB + nextYearESPB;
         if (totalESPB > 60) {
             throw new IllegalArgumentException("Ukupan broj ESPB poena (" + totalESPB + ") premašuje maksimalni dozvoljeni limit od 60 ESPB. " +
                     "Nepoloženi predmeti: " + failedESPB + " ESPB, Predmeti sledeće godine: " + nextYearESPB + " ESPB");
         }
         
-        // Combine all subjects for enrollment
+        // spajanje svih poloz. i nepoloz. predmeta
         List<DrziPredmet> allSubjects = new ArrayList<>();
         allSubjects.addAll(failedSubjects);
         allSubjects.addAll(nextYearSubjects);
         
-        // Create ObnovaGodine
         ObnovaGodine obnovaGodine = new ObnovaGodine();
         obnovaGodine.setStudentIndeks(studentIndeks);
         obnovaGodine.setSkolskaGodina(skolskaGodina);
@@ -119,7 +118,7 @@ public class ObnovaGodineService {
         
         ObnovaGodine savedObnovaGodine = obnovaGodineRepository.save(obnovaGodine);
         
-        // Create SlusaPredmet for each selected subject (initially not passed)
+        // Pravimo SlusaPredmet z svaki predmet koji ce biti nepolozen na pocetku
         List<SlusaPredmet> slusaPredmets = new ArrayList<>();
         for (DrziPredmet drziPredmet : allSubjects) {
             SlusaPredmet slusaPredmet = new SlusaPredmet();
@@ -134,13 +133,9 @@ public class ObnovaGodineService {
         return savedObnovaGodine.getId();
     }
 
-    /**
-     * Get failed subjects for a student (subjects they haven't passed)
-     * Calculates total ESPB and available ESPB for next year subjects
-     */
+
     @Transactional(readOnly = true)
     public org.raflab.studsluzba.controllers.response.FailedSubjectsResponse getFailedSubjectsForStudent(Long studentIndeksId) {
-        // Validate student exists and is active
         StudentIndeks studentIndeks = studentIndeksRepository.findById(studentIndeksId)
                 .orElseThrow(() -> new EntityNotFoundException("StudentIndeks sa ID " + studentIndeksId + " ne postoji"));
         
@@ -148,15 +143,12 @@ public class ObnovaGodineService {
             throw new IllegalArgumentException("StudentIndeks sa ID " + studentIndeksId + " nije aktivan");
         }
         
-        // Get all subjects the student is enrolled in
         List<SlusaPredmet> allEnrolledSubjects = slusaPredmetRepository.getSlusaPredmetForIndeksAktivnaGodina(studentIndeksId);
         
-        // Find failed subjects (no passing grade or grade = 5)
         List<org.raflab.studsluzba.controllers.response.FailedSubjectsResponse.FailedSubjectInfo> failedSubjects = new ArrayList<>();
         int totalFailedESPB = 0;
         
         for (SlusaPredmet slusaPredmet : allEnrolledSubjects) {
-            // Check if student passed this subject
             boolean passed = izlazakNaIspitRepository.findBySlusaPredmetId(slusaPredmet.getId()).stream()
                     .anyMatch(izlazak -> izlazak.getOcena() != null && izlazak.getOcena() >= 6 && !izlazak.isPonistio());
             
@@ -189,41 +181,29 @@ public class ObnovaGodineService {
         
         return response;
     }
-    
-    /**
-     * Validate that student is not renewing a year they already successfully completed
-     * Rules:
-     * - Can only renew the CURRENT year (highest enrolled year)
-     * - Cannot renew a year they already renewed in the SAME school year
-     * - Can renew same year multiple times in DIFFERENT school years
-     */
+
+
     private void validateYearRenewal(StudentIndeks studentIndeks, Integer renewalYear, Long skolskaGodinaId) {
-        // Get all enrollments (UpisGodine and ObnovaGodine) for this student
         List<UpisGodine> allEnrollments = upisGodineRepository.findByStudentIndeksId(studentIndeks.getId());
         
         if (allEnrollments.isEmpty()) {
             throw new IllegalArgumentException("Student nema prethodnih upisa. Obnova godine nije moguća.");
         }
         
-        // Find the CURRENT year (highest enrolled year from UpisGodine, excluding ObnovaGodine)
         Integer currentYear = 0;
         for (UpisGodine enrollment : allEnrollments) {
-            // Only count regular UpisGodine, not ObnovaGodine
             if (!(enrollment instanceof ObnovaGodine) && enrollment.getGodina() != null) {
                 currentYear = Math.max(currentYear, enrollment.getGodina());
             }
         }
         
-        // Rule 1: Can only renew the CURRENT year
         if (!renewalYear.equals(currentYear)) {
             throw new IllegalArgumentException(
                     "Student može obnoviti samo trenutnu godinu (" + currentYear + 
                     "). Pokušaj obnove godine " + renewalYear + " nije dozvoljen."
             );
         }
-        
-        // Rule 2: Check if student already renewed THIS year in THIS school year
-        // Allow multiple renewals of same year in DIFFERENT school years
+
         List<ObnovaGodine> existingRenewals = obnovaGodineRepository.findByStudentIndeksId(studentIndeks.getId());
         boolean alreadyRenewedInSameSchoolYear = existingRenewals.stream()
                 .anyMatch(renewal -> renewal.getGodina().equals(renewalYear) && 

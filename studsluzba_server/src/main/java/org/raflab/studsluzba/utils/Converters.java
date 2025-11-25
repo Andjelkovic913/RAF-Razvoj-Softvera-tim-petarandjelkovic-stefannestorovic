@@ -189,7 +189,7 @@ public class Converters {
         studentIndeks.setId(zahtev.getStudentIndeksId());
         sp.setStudentIndeks(studentIndeks);
         
-        // postavi vezu sa DrziPredmet
+        //postavi vezu sa DrziPredmet
         DrziPredmet drziPredmet = new DrziPredmet();
         drziPredmet.setId(zahtev.getDrziPredmetId());
         sp.setDrziPredmet(drziPredmet);

@@ -45,12 +45,12 @@ public class PrijavaIspitaService {
         Ispit ispit = ispitRepository.findById(ispitId)
                 .orElseThrow(() -> new EntityNotFoundException("Ispit sa ID " + ispitId + " ne postoji"));
 
-        //TODO NOVO - Provera da li student slusa predmet
+        //TODO  - Provera da li student slusa predmet
         if (!slusaPredmetRepository.existsByStudentIndeksIdAndPredmetId(studentIndeksId, ispit.getPredmet().getId())) {
             throw new IllegalStateException("Student nije upisan na predmet i ne moze se prijaviti za ispit.");
         }
 
-        //TODO NOVO - Kreiranje i snimanje prijave na ispit
+        //TODO - kreiranje i snimanje prijave na ispit
         PrijavaIspita prijava = converters.toPrijavaIspita(request);
         if (prijava.getDatumPrijave() == null) {
             prijava.setDatumPrijave(LocalDate.now());

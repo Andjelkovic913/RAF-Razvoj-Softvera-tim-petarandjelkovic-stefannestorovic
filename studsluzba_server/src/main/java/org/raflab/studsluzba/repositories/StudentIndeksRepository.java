@@ -14,9 +14,8 @@ import org.springframework.stereotype.Repository;
 public interface StudentIndeksRepository extends JpaRepository<StudentIndeks, Long> {
 	
 	
-	@Query("select indeks from StudentIndeks indeks where indeks.studProgramOznaka like ?1 and indeks.godina = ?2 "
-			+ "and indeks.broj = ?3 ")
-    StudentIndeks findStudentIndeks(String studProgramOznaka, int godina, int broj);
+	@Query("select indeks from StudentIndeks indeks where indeks.studProgramOznaka like :studProgramOznaka and indeks.godina = :godina " + "and indeks.broj = :broj ")
+    StudentIndeks findStudentIndeks(@Param("studProgramOznaka") String studProgramOznaka, @Param("godina") int godina, @Param("broj") int broj);
 	
 	
 	@Query("select indeks from StudentIndeks indeks where "

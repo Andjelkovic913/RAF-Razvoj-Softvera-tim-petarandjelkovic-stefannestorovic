@@ -31,8 +31,8 @@ public class IzlazakNaIspitService {
     @Transactional(readOnly = true)
     public Page<IzlazakNaIspitResponse> getPassedExams(Long studentIndeksId, Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        return izlazakNaIspitRepository.findPassedExamsByStudentIndeks(studentIndeksId, pageable)
-                .map(entityMappers::fromIzlazakNaIspitToResponse);
+        return izlazakNaIspitRepository.findPassedExamsByStudentIndeks(studentIndeksId, pageable)//uzme polozene
+                .map(entityMappers::fromIzlazakNaIspitToResponse);//namapira
     }
 
     @Transactional(readOnly = true)
@@ -57,7 +57,7 @@ public class IzlazakNaIspitService {
         SlusaPredmet slusaPredmet = slusaPredmetRepository.findById(request.getSlusaPredmetId())
                 .orElseThrow(() -> new EntityNotFoundException("SlusaPredmet sa ID " + request.getSlusaPredmetId() + " ne postoji"));
         
-        // Provera da li već postoji IzlazakNaIspit za ovu PrijavaIspita
+        // Provera da li vec postoji IzlazakNaIspit za ovu PrijavaIspita
         IzlazakNaIspit izlazak = prijava.getIzlazakNaIspit();
         
         if (izlazak == null) {

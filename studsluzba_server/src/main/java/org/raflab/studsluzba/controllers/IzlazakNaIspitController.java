@@ -47,6 +47,7 @@ public class IzlazakNaIspitController {
     public Long createExamResult(@RequestBody IzlazakNaIspitRequest request) {
         return izlazakNaIspitService.createExamResult(request);
     }
+
     // 3.7 za datog studenta i predmet vratiti koliko je puta student polagao predmet (izašao na ispit)
     @GetMapping("/student/{studentIndeksId}/predmet/{predmetId}/broj-pokusaja")
     public Long getExamAttemptCount(

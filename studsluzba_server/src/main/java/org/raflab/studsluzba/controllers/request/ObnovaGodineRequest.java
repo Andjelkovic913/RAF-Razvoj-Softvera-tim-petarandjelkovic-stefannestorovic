@@ -23,7 +23,6 @@ public class ObnovaGodineRequest {
     
     private Long prethodniUpisId;
     
-    // Optional subjects from next year (failed subjects are auto-detected)
     private List<Long> nextYearDrziPredmetIds;
     
     @Min(value = 0, message = "Preneti ESPB ne može biti negativan")

@@ -57,7 +57,7 @@ public class StudentService {
                 .map(entityMappers::fromStudentPodaciToResponse);
     }
 
-    // 1.1 - selekcija studenta (njegovih ličnih podataka) preko ID-a
+    // selekcija studenta (njegovih ličnih podataka) preko ID-a
     public StudentPodaciResponse getStudentPodaciById(Long id) {
         return studentPodaciRepository.findById(id)
                 .map(entityMappers::fromStudentPodaciToResponse)
@@ -76,7 +76,7 @@ public class StudentService {
         studentPodaciRepository.deleteById(id);
     }
 
-    // 1.2 - selekcija studenta (njegovih ličnih podataka) preko broja indeksa, studProgramOznaka i godine
+    //  selekcija studenta (njegovih ličnih podataka) preko broja indeksa, studProgramOznaka i godine
     public StudentPodaciResponse getStudentPodaciByBroj(int broj, String studProgramOznaka, Integer godina) {
         StudentIndeks si = studentIndeksRepository.findStudentIndeks(studProgramOznaka.toUpperCase(), godina, broj);
         if (si == null) {
