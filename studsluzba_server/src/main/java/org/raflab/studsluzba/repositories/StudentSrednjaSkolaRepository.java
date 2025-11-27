@@ -15,5 +15,8 @@ public interface StudentSrednjaSkolaRepository extends CrudRepository<StudentSre
            "WHERE sss.srednjaSkola.id = :srednjaSkolaId " +
            "ORDER BY sss.student.prezime ASC, sss.student.ime ASC")
     List<StudentSrednjaSkola> findEnrolledStudentsBySrednjaSkola(@Param("srednjaSkolaId") Long srednjaSkolaId);
+
+    @Query("SELECT sss FROM StudentSrednjaSkola sss WHERE sss.student.id = :studentId")
+    List<StudentSrednjaSkola> findByStudentId(@Param("studentId") Long studentId);
 }
 

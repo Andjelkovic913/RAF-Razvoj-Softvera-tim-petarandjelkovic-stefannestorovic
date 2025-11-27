@@ -38,4 +38,10 @@ public interface StudentIndeksRepository extends JpaRepository<StudentIndeks, Lo
 
     List<StudentIndeks> findByBrojAndAktivanTrue(int broj);
 
+    @Query("SELECT COUNT(si) > 0 FROM StudentIndeks si WHERE si.broj = :broj AND si.godina = :godina AND si.studProgramOznaka = :studProgramOznaka AND si.aktivan = true AND (:id IS NULL OR si.id != :id)")
+    boolean existsByBrojGodinaStudProgramOznakaAndAktivanAndIdNot(@Param("broj") int broj, @Param("godina") int godina, @Param("studProgramOznaka") String studProgramOznaka, @Param("id") Long id);
+
+    @Query("SELECT COUNT(si) > 0 FROM StudentIndeks si WHERE si.student.id = :studentId AND si.godina = :godina AND (:id IS NULL OR si.id != :id)")
+    boolean existsByStudentIdAndGodinaAndIdNot(@Param("studentId") Long studentId, @Param("godina") int godina, @Param("id") Long id);
+
 }

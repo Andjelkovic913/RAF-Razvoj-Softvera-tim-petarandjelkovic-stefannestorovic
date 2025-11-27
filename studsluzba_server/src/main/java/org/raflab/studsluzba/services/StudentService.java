@@ -5,13 +5,9 @@ import org.raflab.studsluzba.controllers.request.StudentIndeksRequest;
 import org.raflab.studsluzba.controllers.request.StudentPodaciRequest;
 import org.raflab.studsluzba.controllers.response.StudentIndeksResponse;
 import org.raflab.studsluzba.controllers.response.StudentPodaciResponse;
-import org.raflab.studsluzba.model.StudentIndeks;
-import org.raflab.studsluzba.model.StudentPodaci;
-import org.raflab.studsluzba.model.StudijskiProgram;
+import org.raflab.studsluzba.model.*;
 import org.raflab.studsluzba.model.dtos.StudentDTO;
-import org.raflab.studsluzba.repositories.StudentIndeksRepository;
-import org.raflab.studsluzba.repositories.StudentPodaciRepository;
-import org.raflab.studsluzba.repositories.StudijskiProgramRepository;
+import org.raflab.studsluzba.repositories.*;
 import org.raflab.studsluzba.utils.Converters;
 import org.raflab.studsluzba.utils.EntityMappers;
 import org.raflab.studsluzba.utils.ParseUtils;
@@ -36,14 +32,51 @@ public class StudentService {
     private final StudentPodaciRepository studentPodaciRepository;
     private final StudentIndeksRepository studentIndeksRepository;
     private final StudijskiProgramRepository studijskiProgramRepository;
+    private final StudentSrednjaSkolaRepository studentSrednjaSkolaRepository;
+    private final StudentVisokaUstanovaRepository studentVisokaUstanovaRepository;
+    private final UpisGodineRepository upisGodineRepository;
+    private final SlusaPredmetRepository slusaPredmetRepository;
+    private final PrijavaIspitaRepository prijavaIspitaRepository;
+    private final UplataRepository uplataRepository;
+    private final PredispitneObavezeRepository predispitneObavezeRepository;
+    private final IzlazakNaIspitRepository izlazakNaIspitRepository;
     private final Converters converters;
     private final EntityMappers entityMappers;
 
     // StudentPodaci operations
     public Long createStudentPodaci(StudentPodaciRequest request) {
+        // Provera duplikata pre kreiranja
+        validateStudentPodaciForCreate(request);
+        
         StudentPodaci studentPodaci = converters.toStudentPodaci(request);
         StudentPodaci saved = studentPodaciRepository.save(studentPodaci);
         return saved.getId();
+    }
+    
+    /**
+     * Validira da ne postoje duplikati prilikom kreiranja novog studenta
+     */
+    private void validateStudentPodaciForCreate(StudentPodaciRequest request) {
+        // Provera JMBG
+        if (request.getJmbg() != null && !request.getJmbg().trim().isEmpty()) {
+            if (studentPodaciRepository.findByJmbg(request.getJmbg()).isPresent()) {
+                throw new RuntimeException("Student sa JMBG-om " + request.getJmbg() + " već postoji");
+            }
+        }
+        
+        // Provera broja lične karte
+        if (request.getBrojLicneKarte() != null && !request.getBrojLicneKarte().trim().isEmpty()) {
+            if (studentPodaciRepository.findByBrojLicneKarte(request.getBrojLicneKarte()).isPresent()) {
+                throw new RuntimeException("Student sa brojem lične karte " + request.getBrojLicneKarte() + " već postoji");
+            }
+        }
+        
+        // Provera fakultetskog email-a
+        if (request.getEmailFakultetski() != null && !request.getEmailFakultetski().trim().isEmpty()) {
+            if (studentPodaciRepository.findByEmailFakultetski(request.getEmailFakultetski()).isPresent()) {
+                throw new RuntimeException("Student sa fakultetskim email-om " + request.getEmailFakultetski() + " već postoji");
+            }
+        }
     }
 
     public List<StudentPodaciResponse> getAllStudentPodaci() {
@@ -67,13 +100,106 @@ public class StudentService {
     public StudentPodaciResponse updateStudentPodaci(Long id, StudentPodaciRequest request) {
         StudentPodaci student = studentPodaciRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Student ne postoji"));
+        
+        // Provera duplikata prilikom update-a
+        validateStudentPodaciForUpdate(id, request);
+        
         converters.updateStudentPodaci(student, request);
         StudentPodaci updated = studentPodaciRepository.save(student);
         return entityMappers.fromStudentPodaciToResponse(updated);
     }
+    
+    /**
+     * Validira da ne postoje duplikati prilikom update-a studenta
+     */
+    private void validateStudentPodaciForUpdate(Long id, StudentPodaciRequest request) {
+        // Provera JMBG
+        if (request.getJmbg() != null && !request.getJmbg().trim().isEmpty()) {
+            if (studentPodaciRepository.existsByJmbgAndIdNot(request.getJmbg(), id)) {
+                throw new RuntimeException("Student sa JMBG-om " + request.getJmbg() + " već postoji");
+            }
+        }
+        
+        // Provera broja lične karte
+        if (request.getBrojLicneKarte() != null && !request.getBrojLicneKarte().trim().isEmpty()) {
+            if (studentPodaciRepository.existsByBrojLicneKarteAndIdNot(request.getBrojLicneKarte(), id)) {
+                throw new RuntimeException("Student sa brojem lične karte " + request.getBrojLicneKarte() + " već postoji");
+            }
+        }
+        
+        // Provera fakultetskog email-a
+        if (request.getEmailFakultetski() != null && !request.getEmailFakultetski().trim().isEmpty()) {
+            if (studentPodaciRepository.existsByEmailFakultetskiAndIdNot(request.getEmailFakultetski(), id)) {
+                throw new RuntimeException("Student sa fakultetskim email-om " + request.getEmailFakultetski() + " već postoji");
+            }
+        }
+    }
 
+    /**
+     * Manualno brisanje studenta i svih povezanih podataka.
+     * Briše se od najdubljih zavisnosti ka roditeljskim entitetima.
+     */
+    @Transactional
     public void deleteStudentPodaci(Long id) {
-        studentPodaciRepository.deleteById(id);
+        StudentPodaci student = studentPodaciRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Student sa ID " + id + " ne postoji"));
+        
+        // 1. Dohvati sve indekse ovog studenta
+        List<StudentIndeks> indeksi = studentIndeksRepository.findStudentIndeksiForStudentPodaciId(id);
+        
+        // 2. Za svaki indeks obriši sve zavisne entitete
+        for (StudentIndeks indeks : indeksi) {
+            deleteStudentIndeksDependencies(indeks.getId());
+        }
+        
+        // 3. Obriši sve indekse
+        studentIndeksRepository.deleteAll(indeksi);
+        
+        // 4. Obriši StudentSrednjaSkola zapise
+        List<StudentSrednjaSkola> srednjeSkole = studentSrednjaSkolaRepository.findByStudentId(id);
+        studentSrednjaSkolaRepository.deleteAll(srednjeSkole);
+        
+        // 5. Obriši StudentVisokaUstanova zapise
+        List<StudentVisokaUstanova> visokeUstanove = studentVisokaUstanovaRepository.findByStudentId(id);
+        studentVisokaUstanovaRepository.deleteAll(visokeUstanove);
+        
+        // 6. Na kraju obriši samog studenta
+        studentPodaciRepository.delete(student);
+    }
+    
+    /**
+     * Briše sve zavisne entitete za dati StudentIndeks.
+     * Redosled brisanja: od najdubljih zavisnosti ka plićim.
+     */
+    private void deleteStudentIndeksDependencies(Long studentIndeksId) {
+        // 1. Dohvati sve SlusaPredmet za ovaj indeks
+        List<SlusaPredmet> slusaniPredmeti = slusaPredmetRepository.findByStudentIndeksId(studentIndeksId);
+        
+        // 2. Za svaki SlusaPredmet obriši PredispitneObaveze i IzlazakNaIspit
+        for (SlusaPredmet sp : slusaniPredmeti) {
+            // Obriši PredispitneObaveze
+            List<PredispitneObaveze> predispitne = predispitneObavezeRepository.findBySlusaPredmetId(sp.getId());
+            predispitneObavezeRepository.deleteAll(predispitne);
+            
+            // Obriši IzlazakNaIspit
+            List<IzlazakNaIspit> izlasci = izlazakNaIspitRepository.findBySlusaPredmetId(sp.getId());
+            izlazakNaIspitRepository.deleteAll(izlasci);
+        }
+        
+        // 3. Obriši sve SlusaPredmet
+        slusaPredmetRepository.deleteAll(slusaniPredmeti);
+        
+        // 4. Obriši sve PrijavaIspita (IzlazakNaIspit je već obrisan iznad)
+        List<PrijavaIspita> prijave = prijavaIspitaRepository.findByStudentIndeksId(studentIndeksId);
+        prijavaIspitaRepository.deleteAll(prijave);
+        
+        // 5. Obriši sve UpisGodine
+        List<UpisGodine> upisi = upisGodineRepository.findByStudentIndeksId(studentIndeksId);
+        upisGodineRepository.deleteAll(upisi);
+        
+        // 6. Obriši sve Uplate
+        List<Uplata> uplate = uplataRepository.findByStudentIndeksId(studentIndeksId);
+        uplataRepository.deleteAll(uplate);
     }
 
     //  selekcija studenta (njegovih ličnih podataka) preko broja indeksa, studProgramOznaka i godine
@@ -102,6 +228,9 @@ public class StudentService {
     // StudentIndeks operations
     @Transactional
     public Long saveIndeks(StudentIndeksRequest request) {
+        // Provera da student već nema aktivan indeks na istom studiju
+        validateStudentIndeksForCreate(request);
+        
         StudentIndeks studentIndeks = converters.toStudentIndeks(request);
 
         int nextBroj = findNextBroj(request.getGodina(), request.getStudProgramOznaka());
@@ -125,6 +254,18 @@ public class StudentService {
             throw new RuntimeException("Duplicate entry for broj, godina, and studProgramOznaka", e);
         } catch (Exception e) {
             throw new RuntimeException("Error while saving the StudentIndeks.", e);
+        }
+    }
+    
+    /**
+     * Validira da student već nema indeks u istoj godini
+     */
+    private void validateStudentIndeksForCreate(StudentIndeksRequest request) {
+        // Provera da li student već ima bilo kakav indeks u istoj godini
+        if (studentIndeksRepository.existsByStudentIdAndGodinaAndIdNot(request.getStudentId(), request.getGodina(), null)) {
+            throw new RuntimeException("Student sa ID " + request.getStudentId() + 
+                " već ima indeks u godini " + request.getGodina() + 
+                ". Student ne može imati više od jednog indeksa u istoj godini.");
         }
     }
 

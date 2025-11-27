@@ -21,5 +21,8 @@ public interface PrijavaIspitaRepository extends JpaRepository<PrijavaIspita, Lo
            "LEFT JOIN FETCH si.student " +
            "WHERE i.id = :ispitId")
     List<PrijavaIspita> findAllByIspitId(@Param("ispitId") Long ispitId);
+
+    @Query("SELECT p FROM PrijavaIspita p WHERE p.studentIndeks.id = :studentIndeksId")
+    List<PrijavaIspita> findByStudentIndeksId(@Param("studentIndeksId") Long studentIndeksId);
 }
 
