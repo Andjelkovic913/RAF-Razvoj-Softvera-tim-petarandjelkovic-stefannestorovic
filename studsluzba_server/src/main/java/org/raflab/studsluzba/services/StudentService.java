@@ -90,7 +90,7 @@ public class StudentService {
                 .map(entityMappers::fromStudentPodaciToResponse);
     }
 
-    // selekcija studenta (njegovih ličnih podataka) preko ID-a
+    // selekcija studenta (njegovih licnih podataka) preko ID-a
     public StudentPodaciResponse getStudentPodaciById(Long id) {
         return studentPodaciRepository.findById(id)
                 .map(entityMappers::fromStudentPodaciToResponse)
@@ -120,7 +120,7 @@ public class StudentService {
             }
         }
         
-        // Provera broja lične karte
+        // Provera broja licne karte
         if (request.getBrojLicneKarte() != null && !request.getBrojLicneKarte().trim().isEmpty()) {
             if (studentPodaciRepository.existsByBrojLicneKarteAndIdNot(request.getBrojLicneKarte(), id)) {
                 throw new RuntimeException("Student sa brojem lične karte " + request.getBrojLicneKarte() + " već postoji");
@@ -147,62 +147,62 @@ public class StudentService {
         // 1. Dohvati sve indekse ovog studenta
         List<StudentIndeks> indeksi = studentIndeksRepository.findStudentIndeksiForStudentPodaciId(id);
         
-        // 2. Za svaki indeks obriši sve zavisne entitete
+        // 2. Za svaki indeks obrisi sve zavisne entitete
         for (StudentIndeks indeks : indeksi) {
             deleteStudentIndeksDependencies(indeks.getId());
         }
         
-        // 3. Obriši sve indekse
+        // 3. Obrisi sve indekse
         studentIndeksRepository.deleteAll(indeksi);
         
-        // 4. Obriši StudentSrednjaSkola zapise
+        // 4. Obrisi StudentSrednjaSkola zapise
         List<StudentSrednjaSkola> srednjeSkole = studentSrednjaSkolaRepository.findByStudentId(id);
         studentSrednjaSkolaRepository.deleteAll(srednjeSkole);
         
-        // 5. Obriši StudentVisokaUstanova zapise
+        // 5. Obrisi StudentVisokaUstanova zapise
         List<StudentVisokaUstanova> visokeUstanove = studentVisokaUstanovaRepository.findByStudentId(id);
         studentVisokaUstanovaRepository.deleteAll(visokeUstanove);
         
-        // 6. Na kraju obriši samog studenta
+        // 6. Na kraju obrisi samog studenta
         studentPodaciRepository.delete(student);
     }
     
     /**
-     * Briše sve zavisne entitete za dati StudentIndeks.
-     * Redosled brisanja: od najdubljih zavisnosti ka plićim.
+     * Brise sve zavisne entitete za dati StudentIndeks.
+     * Redosled brisanja: od najdubljih zavisnosti ka plicim.
      */
     private void deleteStudentIndeksDependencies(Long studentIndeksId) {
         // 1. Dohvati sve SlusaPredmet za ovaj indeks
         List<SlusaPredmet> slusaniPredmeti = slusaPredmetRepository.findByStudentIndeksId(studentIndeksId);
         
-        // 2. Za svaki SlusaPredmet obriši PredispitneObaveze i IzlazakNaIspit
+        // 2. Za svaki SlusaPredmet obrisi PredispitneObaveze i IzlazakNaIspit
         for (SlusaPredmet sp : slusaniPredmeti) {
-            // Obriši PredispitneObaveze
+            // Obrisi PredispitneObaveze
             List<PredispitneObaveze> predispitne = predispitneObavezeRepository.findBySlusaPredmetId(sp.getId());
             predispitneObavezeRepository.deleteAll(predispitne);
             
-            // Obriši IzlazakNaIspit
+            // Obrisi IzlazakNaIspit
             List<IzlazakNaIspit> izlasci = izlazakNaIspitRepository.findBySlusaPredmetId(sp.getId());
             izlazakNaIspitRepository.deleteAll(izlasci);
         }
         
-        // 3. Obriši sve SlusaPredmet
+        // 3. Obrisi sve SlusaPredmet
         slusaPredmetRepository.deleteAll(slusaniPredmeti);
         
-        // 4. Obriši sve PrijavaIspita (IzlazakNaIspit je već obrisan iznad)
+        // 4. Obrisi sve PrijavaIspita (IzlazakNaIspit je vec obrisan iznad)
         List<PrijavaIspita> prijave = prijavaIspitaRepository.findByStudentIndeksId(studentIndeksId);
         prijavaIspitaRepository.deleteAll(prijave);
         
-        // 5. Obriši sve UpisGodine
+        // 5. Obrisi sve UpisGodine
         List<UpisGodine> upisi = upisGodineRepository.findByStudentIndeksId(studentIndeksId);
         upisGodineRepository.deleteAll(upisi);
         
-        // 6. Obriši sve Uplate
+        // 6. Obrisi sve Uplate
         List<Uplata> uplate = uplataRepository.findByStudentIndeksId(studentIndeksId);
         uplataRepository.deleteAll(uplate);
     }
-
-    //  selekcija studenta (njegovih ličnih podataka) preko broja indeksa, studProgramOznaka i godine
+ 
+    //  selekcija studenta (njegovih licnih podataka) preko broja indeksa, studProgramOznaka i godine
     public StudentPodaciResponse getStudentPodaciByBroj(int broj, String studProgramOznaka, Integer godina) {
         StudentIndeks si = studentIndeksRepository.findStudentIndeks(studProgramOznaka.toUpperCase(), godina, broj);
         if (si == null) {
@@ -228,7 +228,7 @@ public class StudentService {
     // StudentIndeks operations
     @Transactional
     public Long saveIndeks(StudentIndeksRequest request) {
-        // Provera da student već nema aktivan indeks na istom studiju
+        // Provera da student vec nema aktivan indeks na istom studijskom programu
         validateStudentIndeksForCreate(request);
         
         StudentIndeks studentIndeks = converters.toStudentIndeks(request);
@@ -258,14 +258,19 @@ public class StudentService {
     }
     
     /**
-     * Validira da student već nema indeks u istoj godini
+     * Validira da student vec nema indeks u istoj godini ILI na istom studijskom programu
      */
     private void validateStudentIndeksForCreate(StudentIndeksRequest request) {
-        // Provera da li student već ima bilo kakav indeks u istoj godini
-        if (studentIndeksRepository.existsByStudentIdAndGodinaAndIdNot(request.getStudentId(), request.getGodina(), null)) {
+        // Provera da li student vec ima indeks u istoj godini ILI na istom studijskom programu
+        if (studentIndeksRepository.existsByStudentIdAndGodinaOrStudProgramOznakaAndIdNot(
+                request.getStudentId(), 
+                request.getGodina(), 
+                request.getStudProgramOznaka(),
+                null)) {
             throw new RuntimeException("Student sa ID " + request.getStudentId() + 
-                " već ima indeks u godini " + request.getGodina() + 
-                ". Student ne može imati više od jednog indeksa u istoj godini.");
+                " vec ima indeks u godini " + request.getGodina() + 
+                " ili na studijskom programu " + request.getStudProgramOznaka() + 
+                ". Student ne moze imati vise od jednog indeksa u istoj godini niti na istom studijskom programu.");
         }
     }
 
@@ -344,11 +349,43 @@ public class StudentService {
         return studentIndeksRepository.findAktivanStudentIndeksiByStudentPodaciId(studentPodaciId);
     }
 
+    /**
+     * Brise StudentIndeks i sve zavisne entitete (kaskadno brisanje).
+     */
+    @Transactional
     public void deleteStudentIndeks(Long id) {
         if (!studentIndeksRepository.existsById(id)) {
             throw new EntityNotFoundException("StudentIndeks sa ID " + id + " ne postoji");
         }
+        
+        // Prvo obrisi sve zavisne entitete
+        deleteStudentIndeksDependencies(id);
+        
+        // Zatim obrisi sam indeks
         studentIndeksRepository.deleteById(id);
+    }
+
+    /**
+     * Aktivira indeks sa datim ID-om i deaktivira sve ostale indekse istog studenta.
+     * Samo jedan indeks moze biti aktivan u isto vreme.
+     */
+    @Transactional
+    public void aktivirajIndeks(Long studentIndeksId) {
+        StudentIndeks indeks = studentIndeksRepository.findById(studentIndeksId)
+                .orElseThrow(() -> new EntityNotFoundException("StudentIndeks sa ID " + studentIndeksId + " ne postoji"));
+        
+        // Dohvati sve indekse ovog studenta
+        List<StudentIndeks> sviIndeksi = studentIndeksRepository.findAllByStudentId(indeks.getStudent().getId());
+        
+        // Deaktiviraj sve indekse
+        for (StudentIndeks si : sviIndeksi) {
+            si.setAktivan(false);
+        }
+        studentIndeksRepository.saveAll(sviIndeksi);
+        
+        // Aktiviraj trazeni indeks
+        indeks.setAktivan(true);
+        studentIndeksRepository.save(indeks);
     }
 }
 

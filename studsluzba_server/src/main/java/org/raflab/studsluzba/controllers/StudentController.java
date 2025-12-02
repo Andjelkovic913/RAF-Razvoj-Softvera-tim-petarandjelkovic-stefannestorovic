@@ -96,6 +96,11 @@ public class StudentController {
         studentService.deleteStudentIndeks(id);
     }
 
+    @PutMapping(path="/aktiviraj/{studentIndeksId}")
+    public void aktivirajIndeks(@PathVariable Long studentIndeksId){
+        studentService.aktivirajIndeks(studentIndeksId);
+    }
+
 	// 1.10 - selekcija studenata na osnovu imena i/ili prezimena (može samo ime, ili samo prezime ili oba da se unesu), paginirano
 	@GetMapping(path="/search")
     public Page<StudentDTO> search(@RequestParam (required = false) String ime,

@@ -41,7 +41,16 @@ public interface StudentIndeksRepository extends JpaRepository<StudentIndeks, Lo
     @Query("SELECT COUNT(si) > 0 FROM StudentIndeks si WHERE si.broj = :broj AND si.godina = :godina AND si.studProgramOznaka = :studProgramOznaka AND si.aktivan = true AND (:id IS NULL OR si.id != :id)")
     boolean existsByBrojGodinaStudProgramOznakaAndAktivanAndIdNot(@Param("broj") int broj, @Param("godina") int godina, @Param("studProgramOznaka") String studProgramOznaka, @Param("id") Long id);
 
-    @Query("SELECT COUNT(si) > 0 FROM StudentIndeks si WHERE si.student.id = :studentId AND si.godina = :godina AND (:id IS NULL OR si.id != :id)")
-    boolean existsByStudentIdAndGodinaAndIdNot(@Param("studentId") Long studentId, @Param("godina") int godina, @Param("id") Long id);
+	// Provera da li student vec ima indeks u istoj godini ILI na istom studijskom programu
+    @Query("SELECT COUNT(si) > 0 FROM StudentIndeks si WHERE si.student.id = :studentId AND (si.godina = :godina OR si.studProgramOznaka = :studProgramOznaka) AND (:id IS NULL OR si.id != :id)")
+    boolean existsByStudentIdAndGodinaOrStudProgramOznakaAndIdNot(
+        @Param("studentId") Long studentId, 
+        @Param("godina") int godina, 
+        @Param("studProgramOznaka") String studProgramOznaka,
+        @Param("id") Long id);
+
+    // Dohvati sve indekse za studenta (za deaktivaciju prilikom aktivacije novog)
+    @Query("SELECT si FROM StudentIndeks si WHERE si.student.id = :studentId")
+    List<StudentIndeks> findAllByStudentId(@Param("studentId") Long studentId);
 
 }

@@ -23,6 +23,7 @@ public interface StudentPodaciRepository extends JpaRepository<StudentPodaci, Lo
     @Query("SELECT sp FROM StudentPodaci sp WHERE sp.emailFakultetski = :emailFakultetski")
     Optional<StudentPodaci> findByEmailFakultetski(@Param("emailFakultetski") String emailFakultetski);
 
+    // da li postoji jos neki student sa ovim id-jem koji ima ovakav JMBG
     @Query("SELECT COUNT(sp) > 0 FROM StudentPodaci sp WHERE sp.jmbg = :jmbg AND (:id IS NULL OR sp.id != :id)")
     boolean existsByJmbgAndIdNot(@Param("jmbg") String jmbg, @Param("id") Long id);
 

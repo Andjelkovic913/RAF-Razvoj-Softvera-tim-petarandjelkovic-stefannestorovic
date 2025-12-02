@@ -136,7 +136,8 @@ public class Converters {
         studentIndeks.setGodina(studentIndeksRequest.getGodina());
         studentIndeks.setStudProgramOznaka(studentIndeksRequest.getStudProgramOznaka());
         studentIndeks.setNacinFinansiranja(studentIndeksRequest.getNacinFinansiranja());
-        studentIndeks.setAktivan(studentIndeksRequest.isAktivan());
+        // Novi indeks je uvek neaktivan po default-u, aktivira se preko posebnog API poziva
+        studentIndeks.setAktivan(false);
         studentIndeks.setVaziOd(studentIndeksRequest.getVaziOd());
         return studentIndeks;
     }
