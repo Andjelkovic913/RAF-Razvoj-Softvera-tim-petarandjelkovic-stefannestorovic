@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.controllers.request.SrednjaSkolaRequest;
 import org.raflab.studsluzba.controllers.response.SrednjaSkolaResponse;
 import org.raflab.studsluzba.model.SrednjaSkola;
+import org.raflab.studsluzba.model.StudentSrednjaSkola;
 import org.raflab.studsluzba.repositories.SrednjaSkolaRepository;
+import org.raflab.studsluzba.repositories.StudentSrednjaSkolaRepository;
 import org.raflab.studsluzba.utils.EntityMappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import java.util.stream.StreamSupport;
 public class SrednjaSkolaService {
 
     private final SrednjaSkolaRepository srednjaSkolaRepository;
+    private final StudentSrednjaSkolaRepository studentSrednjaSkolaRepository;
     private final EntityMappers entityMappers;
 
     /**
@@ -75,13 +78,20 @@ public class SrednjaSkolaService {
     }
 
     /**
-     * Briše srednju školu.
+     * Briše srednju školu i sve zavisne entitete (kaskadno brisanje).
+     * Redosled: StudentSrednjaSkola -> SrednjaSkola
      */
     @Transactional
     public void deleteSrednjaSkola(Long id) {
         if (!srednjaSkolaRepository.existsById(id)) {
             throw new EntityNotFoundException("Srednja škola sa ID " + id + " ne postoji");
         }
+        
+        // 1. Obrisi sve StudentSrednjaSkola za ovu srednju skolu
+        List<StudentSrednjaSkola> studentSrednjeSkole = studentSrednjaSkolaRepository.findBySrednjaSkolaId(id);
+        studentSrednjaSkolaRepository.deleteAll(studentSrednjeSkole);
+        
+        // 2. Na kraju obrisi samu srednju skolu
         srednjaSkolaRepository.deleteById(id);
     }
 }

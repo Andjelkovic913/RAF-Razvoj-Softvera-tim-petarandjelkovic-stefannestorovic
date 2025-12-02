@@ -24,5 +24,9 @@ public interface PrijavaIspitaRepository extends JpaRepository<PrijavaIspita, Lo
 
     @Query("SELECT p FROM PrijavaIspita p WHERE p.studentIndeks.id = :studentIndeksId")
     List<PrijavaIspita> findByStudentIndeksId(@Param("studentIndeksId") Long studentIndeksId);
+    
+    // Za kaskadno brisanje IspitniRok
+    @Query("SELECT p FROM PrijavaIspita p WHERE p.ispit.ispitniRok.id = :ispitniRokId")
+    List<PrijavaIspita> findByIspitniRokId(@Param("ispitniRokId") Long ispitniRokId);
 }
 

@@ -3,10 +3,8 @@ package org.raflab.studsluzba.services;
 import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.controllers.request.IspitniRokRequest;
 import org.raflab.studsluzba.controllers.response.IspitniRokResponse;
-import org.raflab.studsluzba.model.IspitniRok;
-import org.raflab.studsluzba.model.SkolskaGodina;
-import org.raflab.studsluzba.repositories.IspitniRokRepository;
-import org.raflab.studsluzba.repositories.SkolskaGodinaRepository;
+import org.raflab.studsluzba.model.*;
+import org.raflab.studsluzba.repositories.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +19,9 @@ public class IspitniRokService {
 
     private final IspitniRokRepository ispitniRokRepository;
     private final SkolskaGodinaRepository skolskaGodinaRepository;
+    private final IspitRepository ispitRepository;
+    private final PrijavaIspitaRepository prijavaIspitaRepository;
+    private final IzlazakNaIspitRepository izlazakNaIspitRepository;
 
     @Transactional
     public Long create(IspitniRokRequest request) {
@@ -70,11 +71,32 @@ public class IspitniRokService {
         return toResponse(updated);
     }
 
+    /**
+     * Brise ispitni rok i sve zavisne entitete (kaskadno brisanje).
+     * Redosled: IzlazakNaIspit -> PrijavaIspita -> Ispit -> IspitniRok
+     */
     @Transactional
     public void delete(Long id) {
         if (!ispitniRokRepository.existsById(id)) {
             throw new EntityNotFoundException("Ispitni rok sa ID " + id + " ne postoji");
         }
+        
+        // 1. Dohvati sve Ispite za ovaj IspitniRok
+        List<Ispit> ispiti = ispitRepository.findByIspitniRokId(id);
+        
+        // 2. Za svaki Ispit obrisi IzlazakNaIspit i PrijavaIspita
+        for (Ispit ispit : ispiti) {
+            List<IzlazakNaIspit> izlasci = izlazakNaIspitRepository.findByIspitId(ispit.getId());
+            izlazakNaIspitRepository.deleteAll(izlasci);
+            
+            List<PrijavaIspita> prijave = prijavaIspitaRepository.findAllByIspitId(ispit.getId());
+            prijavaIspitaRepository.deleteAll(prijave);
+        }
+        
+        // 3. Obrisi sve Ispite
+        ispitRepository.deleteAll(ispiti);
+        
+        // 4. Na kraju obrisi sam IspitniRok
         ispitniRokRepository.deleteById(id);
     }
 

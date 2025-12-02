@@ -13,5 +13,9 @@ public interface StudentVisokaUstanovaRepository extends CrudRepository<StudentV
     
     @Query("SELECT svu FROM StudentVisokaUstanova svu WHERE svu.student.id = :studentId")
     List<StudentVisokaUstanova> findByStudentId(@Param("studentId") Long studentId);
+    
+    // Za kaskadno brisanje VisokoskolskeUstanove
+    @Query("SELECT svu FROM StudentVisokaUstanova svu WHERE svu.visokoskolskaUstanova.id = :ustanovaId")
+    List<StudentVisokaUstanova> findByVisokoskolskaUstanovaId(@Param("ustanovaId") Long ustanovaId);
 }
 

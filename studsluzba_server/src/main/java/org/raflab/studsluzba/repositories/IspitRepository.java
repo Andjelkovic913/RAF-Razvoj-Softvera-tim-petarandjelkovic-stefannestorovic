@@ -27,5 +27,9 @@ public interface IspitRepository extends JpaRepository<Ispit, Long> {
     // Za kaskadno brisanje DrziPredmet
     @Query("SELECT i FROM Ispit i WHERE i.drziPredmet.id = :drziPredmetId")
     List<Ispit> findByDrziPredmetId(@Param("drziPredmetId") Long drziPredmetId);
+    
+    // Za kaskadno brisanje IspitniRok
+    @Query("SELECT i FROM Ispit i WHERE i.ispitniRok.id = :ispitniRokId")
+    List<Ispit> findByIspitniRokId(@Param("ispitniRokId") Long ispitniRokId);
 }
 

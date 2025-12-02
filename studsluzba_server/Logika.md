@@ -47,7 +47,40 @@
 - Brisanje studijskog programa:
     [x] Kaskadno brisanje - IMPLEMENTIRANO:
         - StudentIndeks (i sve zavisnosti)
-        - Predmet (i sve zavisnosti) 
+        - Predmet (i sve zavisnosti)
+
+### SkolskaGodina
+- Brisanje skolske godine:
+    [x] Kaskadno brisanje - IMPLEMENTIRANO:
+        - IspitniRok (i sve zavisnosti: Ispit, IzlazakNaIspit, PrijavaIspita)
+        - UpisGodine
+
+### IspitniRok
+- Brisanje ispitnog roka:
+    [x] Kaskadno brisanje - IMPLEMENTIRANO:
+        - Ispit (i sve zavisnosti: IzlazakNaIspit, PrijavaIspita)
+
+### Ispit
+- Brisanje ispita:
+    [x] Kaskadno brisanje - IMPLEMENTIRANO:
+        - IzlazakNaIspit
+        - PrijavaIspita
+
+### SlusaPredmet
+- Brisanje SlusaPredmet:
+    [x] Kaskadno brisanje - IMPLEMENTIRANO:
+        - PredispitneObaveze
+        - IzlazakNaIspit
+
+### SrednjaSkola
+- Brisanje srednje skole:
+    [x] Kaskadno brisanje - IMPLEMENTIRANO:
+        - StudentSrednjaSkola
+
+### VisokoskolskaUstanova
+- Brisanje visokoskolske ustanove:
+    [x] Kaskadno brisanje - IMPLEMENTIRANO:
+        - StudentVisokaUstanova
 
 ---
 
@@ -64,12 +97,12 @@
 | **Nastavnik** | DrziPredmet, NastavnikObrazovanje, NastavnikZvanje | ✅ IMPLEMENTIRANO |
 | **Predmet** | DrziPredmet, SlusaPredmet, Ispit, PredispitneObaveze | ✅ IMPLEMENTIRANO |
 | **StudijskiProgram** | Predmet, StudentIndeks | ✅ IMPLEMENTIRANO |
-| **SkolskaGodina** | StudijskiProgram, UpisGodine, IspitniRok | ❌ NEDOSTAJE |
-| **IspitniRok** | Ispit, PrijavaIspita | ❌ NEDOSTAJE |
-| **Ispit** | IzlazakNaIspit | ❌ NEDOSTAJE |
-| **SlusaPredmet** | PredispitneObaveze, IzlazakNaIspit | ❌ NEDOSTAJE |
-| **SrednjaSkola** | StudentSrednjaSkola | ❌ NEDOSTAJE |
-| **VisokoskolskaUstanova** | StudentVisokaUstanova | ❌ NEDOSTAJE |
+| **SkolskaGodina** | UpisGodine, IspitniRok | ✅ IMPLEMENTIRANO |
+| **IspitniRok** | Ispit, PrijavaIspita | ✅ IMPLEMENTIRANO |
+| **Ispit** | IzlazakNaIspit, PrijavaIspita | ✅ IMPLEMENTIRANO |
+| **SlusaPredmet** | PredispitneObaveze, IzlazakNaIspit | ✅ IMPLEMENTIRANO |
+| **SrednjaSkola** | StudentSrednjaSkola | ✅ IMPLEMENTIRANO |
+| **VisokoskolskaUstanova** | StudentVisokaUstanova | ✅ IMPLEMENTIRANO |
 
 ### 2. VALIDACIJA DUPLIKATA - Nedostaje za većinu entiteta
 

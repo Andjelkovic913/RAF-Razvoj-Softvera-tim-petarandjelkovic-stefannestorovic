@@ -22,5 +22,9 @@ public interface UpisGodineRepository extends JpaRepository<UpisGodine, Long> {
             @Param("studentIndeksId") Long studentIndeksId,
             @Param("skolskaGodinaId") Long skolskaGodinaId,
             @Param("godina") Integer godina);
+    
+    // Za kaskadno brisanje SkolskeGodine
+    @Query("SELECT ug FROM UpisGodine ug WHERE ug.skolskaGodina.id = :skolskaGodinaId")
+    List<UpisGodine> findBySkolskaGodinaId(@Param("skolskaGodinaId") Long skolskaGodinaId);
 }
 

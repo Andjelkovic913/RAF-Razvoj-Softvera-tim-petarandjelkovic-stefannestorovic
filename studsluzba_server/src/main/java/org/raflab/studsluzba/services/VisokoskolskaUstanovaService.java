@@ -3,7 +3,9 @@ package org.raflab.studsluzba.services;
 import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.controllers.request.VisokoskolskaUstanovaRequest;
 import org.raflab.studsluzba.controllers.response.VisokoskolskaUstanovaResponse;
+import org.raflab.studsluzba.model.StudentVisokaUstanova;
 import org.raflab.studsluzba.model.VisokoskolskaUstanova;
+import org.raflab.studsluzba.repositories.StudentVisokaUstanovaRepository;
 import org.raflab.studsluzba.repositories.VisokoskolskaUstanovaRepository;
 import org.raflab.studsluzba.utils.EntityMappers;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.stream.StreamSupport;
 public class VisokoskolskaUstanovaService {
 
     private final VisokoskolskaUstanovaRepository visokaUstanovaRepository;
+    private final StudentVisokaUstanovaRepository studentVisokaUstanovaRepository;
     private final EntityMappers entityMappers;
 
     /**
@@ -71,13 +74,20 @@ public class VisokoskolskaUstanovaService {
     }
 
     /**
-     * Briše visokoškolsku ustanovu.
+     * Briše visokoškolsku ustanovu i sve zavisne entitete (kaskadno brisanje).
+     * Redosled: StudentVisokaUstanova -> VisokoskolskaUstanova
      */
     @Transactional
     public void deleteVisokoskolskaUstanova(Long id) {
         if (!visokaUstanovaRepository.existsById(id)) {
             throw new EntityNotFoundException("Visokoškolska ustanova sa ID " + id + " ne postoji");
         }
+        
+        // 1. Obrisi sve StudentVisokaUstanova za ovu visokoskolsku ustanovu
+        List<StudentVisokaUstanova> studentVisokeUstanove = studentVisokaUstanovaRepository.findByVisokoskolskaUstanovaId(id);
+        studentVisokaUstanovaRepository.deleteAll(studentVisokeUstanove);
+        
+        // 2. Na kraju obrisi samu visokoskolsku ustanovu
         visokaUstanovaRepository.deleteById(id);
     }
 }

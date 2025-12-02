@@ -3,14 +3,16 @@ package org.raflab.studsluzba.services;
 import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.controllers.request.SlusaPredmetRequest;
 import org.raflab.studsluzba.controllers.response.SlusaPredmetResponse;
-import org.raflab.studsluzba.model.SlusaPredmet;
+import org.raflab.studsluzba.model.*;
 import org.raflab.studsluzba.model.dtos.SlusaPredmetDTO;
-import org.raflab.studsluzba.repositories.SlusaPredmetRepository;
+import org.raflab.studsluzba.repositories.*;
 import org.raflab.studsluzba.utils.Converters;
 import org.raflab.studsluzba.utils.EntityMappers;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,6 +23,8 @@ import java.util.stream.StreamSupport;
 public class SlusaPredmetService {
 
     private final SlusaPredmetRepository slusaPredmetRepository;
+    private final PredispitneObavezeRepository predispitneObavezeRepository;
+    private final IzlazakNaIspitRepository izlazakNaIspitRepository;
     private final Converters converters;
     private final EntityMappers entityMappers;
 
@@ -56,7 +60,25 @@ public class SlusaPredmetService {
         return fromSlusaPredmetToResponse(updated);
     }
 
+    /**
+     * Brise SlusaPredmet i sve zavisne entitete (kaskadno brisanje).
+     * Redosled: PredispitneObaveze -> IzlazakNaIspit -> SlusaPredmet
+     */
+    @Transactional
     public void deleteSlusaPredmet(Long id) {
+        if (!slusaPredmetRepository.existsById(id)) {
+            throw new EntityNotFoundException("SlusaPredmet sa ID " + id + " ne postoji");
+        }
+        
+        // 1. Obrisi sve PredispitneObaveze za ovaj SlusaPredmet
+        List<PredispitneObaveze> predispitne = predispitneObavezeRepository.findBySlusaPredmetId(id);
+        predispitneObavezeRepository.deleteAll(predispitne);
+        
+        // 2. Obrisi sve IzlazakNaIspit za ovaj SlusaPredmet
+        List<IzlazakNaIspit> izlasci = izlazakNaIspitRepository.findBySlusaPredmetId(id);
+        izlazakNaIspitRepository.deleteAll(izlasci);
+        
+        // 3. Na kraju obrisi sam SlusaPredmet
         slusaPredmetRepository.deleteById(id);
     }
 
