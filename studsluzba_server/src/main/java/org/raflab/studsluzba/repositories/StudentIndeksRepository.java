@@ -53,4 +53,8 @@ public interface StudentIndeksRepository extends JpaRepository<StudentIndeks, Lo
     @Query("SELECT si FROM StudentIndeks si WHERE si.student.id = :studentId")
     List<StudentIndeks> findAllByStudentId(@Param("studentId") Long studentId);
 
+    // Za kaskadno brisanje StudijskogPrograma
+    @Query("SELECT si FROM StudentIndeks si WHERE si.studijskiProgram.id = :studijskiProgramId")
+    List<StudentIndeks> findByStudijskiProgramId(@Param("studijskiProgramId") Long studijskiProgramId);
+
 }

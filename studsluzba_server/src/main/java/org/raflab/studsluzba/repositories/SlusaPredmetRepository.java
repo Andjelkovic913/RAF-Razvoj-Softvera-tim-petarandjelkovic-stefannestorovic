@@ -48,4 +48,8 @@ public interface SlusaPredmetRepository extends CrudRepository<SlusaPredmet, Lon
 
 	@Query("select sp from SlusaPredmet sp where sp.studentIndeks.id = :studentIndeksId")
 	List<SlusaPredmet> findByStudentIndeksId(@Param("studentIndeksId") Long studentIndeksId);
+
+	// Za kaskadno brisanje DrziPredmet
+	@Query("select sp from SlusaPredmet sp where sp.drziPredmet.id = :drziPredmetId")
+	List<SlusaPredmet> findByDrziPredmetId(@Param("drziPredmetId") Long drziPredmetId);
 }

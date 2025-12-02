@@ -6,6 +6,7 @@ import org.raflab.studsluzba.model.Predmet;
 import org.raflab.studsluzba.model.StudijskiProgram;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -24,4 +25,8 @@ public interface PredmetRepository extends CrudRepository<Predmet, Long> {
 	List<Predmet> findByIdIn(List<Long> ids);
 	List<Predmet> findByNazivIn(List<String> nazivi);
     boolean existsBySifra(String sifra);
+
+	// Za kaskadno brisanje StudijskogPrograma
+	@Query("select p from Predmet p where p.studProgram.id = :studProgramId")
+	List<Predmet> findByStudProgramId(@Param("studProgramId") Long studProgramId);
 }

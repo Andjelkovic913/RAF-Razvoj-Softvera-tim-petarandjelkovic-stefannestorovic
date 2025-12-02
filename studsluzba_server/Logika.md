@@ -31,7 +31,23 @@
 ### Nastavnik
 - Kada se kreira novi nastavnik:
     [] Dodati mu da Drzi neki Predmet?
-    [] 
+- Brisanje nastavnika:
+    [x] Kaskadno brisanje - IMPLEMENTIRANO:
+        - DrziPredmet (i sve zavisnosti: SlusaPredmet, Ispit, PredispitneObaveze, IzlazakNaIspit, PrijavaIspita)
+        - NastavnikZvanje
+        - NastavnikObrazovanje
+
+### Predmet
+- Brisanje predmeta:
+    [x] Kaskadno brisanje - IMPLEMENTIRANO:
+        - DrziPredmet (i sve zavisnosti: SlusaPredmet, Ispit, PredispitneObaveze, IzlazakNaIspit, PrijavaIspita)
+        - Ispit (direktno vezani za predmet)
+
+### StudijskiProgram
+- Brisanje studijskog programa:
+    [x] Kaskadno brisanje - IMPLEMENTIRANO:
+        - StudentIndeks (i sve zavisnosti)
+        - Predmet (i sve zavisnosti) 
 
 ---
 
@@ -45,9 +61,9 @@
 |---------|------------------|--------|
 | **StudentPodaci** | StudentIndeks, StudentSrednjaSkola, StudentVisokaUstanova | ✅ IMPLEMENTIRANO |
 | **StudentIndeks** | SlusaPredmet, PrijavaIspita, UpisGodine, Uplata, PredispitneObaveze, IzlazakNaIspit | ✅ IMPLEMENTIRANO |
-| **Nastavnik** | DrziPredmet, NastavnikObrazovanje, NastavnikZvanje, RaspodelaNastave | ❌ NEDOSTAJE |
-| **Predmet** | DrziPredmet, SlusaPredmet, Ispit, PredispitneObaveze | ❌ NEDOSTAJE |
-| **StudijskiProgram** | Predmet, StudentIndeks | ❌ NEDOSTAJE |
+| **Nastavnik** | DrziPredmet, NastavnikObrazovanje, NastavnikZvanje | ✅ IMPLEMENTIRANO |
+| **Predmet** | DrziPredmet, SlusaPredmet, Ispit, PredispitneObaveze | ✅ IMPLEMENTIRANO |
+| **StudijskiProgram** | Predmet, StudentIndeks | ✅ IMPLEMENTIRANO |
 | **SkolskaGodina** | StudijskiProgram, UpisGodine, IspitniRok | ❌ NEDOSTAJE |
 | **IspitniRok** | Ispit, PrijavaIspita | ❌ NEDOSTAJE |
 | **Ispit** | IzlazakNaIspit | ❌ NEDOSTAJE |
@@ -89,7 +105,7 @@
 
 ### 5. PREPORUČENE AKCIJE
 
-1. **HITNO**: Implementirati cascade delete za StudentIndeks, Nastavnik, Predmet
+1. ~~**HITNO**: Implementirati cascade delete za StudentIndeks, Nastavnik, Predmet~~ ✅ ZAVRSENO
 2. **HITNO**: Dodati validaciju duplikata za Nastavnik (email/JMBG)
 3. **SREDNJE**: Implementirati business logic validacije za upis/prijavu ispita
 4. **SREDNJE**: Dodati soft delete umesto hard delete (polje `deleted` ili `aktivan`)
