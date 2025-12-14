@@ -13,16 +13,20 @@ public class StudentPodaciRequest {
     @NotNull
     private String prezime;  // not null
     @NotNull
-    private String srednjeIme;   // not null
+    private String srednjeIme;
+    @NotNull// not null
     private String jmbg;
     @NotNull
     private LocalDate datumRodjenja;  // not null
+    @NotNull
     private String mestoRodjenja;
     @NotNull
     private String mestoPrebivalista;  // not null
+    @NotNull
     private String drzavaRodjenja;
     @NotNull
     private String drzavljanstvo;   // not null
+    @NotNull
     private String nacionalnost;   // samoizjasnjavanje, moze bilo sta
     @NotNull
     private Character pol;    // not null
@@ -34,6 +38,7 @@ public class StudentPodaciRequest {
     private String emailPrivatni;  // not null
     @NotNull
     private String emailFakultetski;  // not null
+    @NotNull
     private String brojLicneKarte;
     private String licnuKartuIzdao;
     private String mestoStanovanja;
