@@ -11,6 +11,7 @@ import org.raflab.studsluzba.repositories.*;
 import org.raflab.studsluzba.utils.Converters;
 import org.raflab.studsluzba.utils.EntityMappers;
 import org.raflab.studsluzba.utils.ParseUtils;
+import org.raflab.studsluzba.utils.CoderLoader;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +43,7 @@ public class StudentService {
     private final IzlazakNaIspitRepository izlazakNaIspitRepository;
     private final Converters converters;
     private final EntityMappers entityMappers;
+    private final CoderLoader coderLoader;
 
     // StudentPodaci operations
     public Long createStudentPodaci(StudentPodaciRequest request) {
@@ -228,6 +230,12 @@ public class StudentService {
     // StudentIndeks operations
     @Transactional
     public Long saveIndeks(StudentIndeksRequest request) {
+        // Validate study program code against coder file
+        if (!coderLoader.isValidStudProgramOznaka(request.getStudProgramOznaka())) {
+            throw new RuntimeException("Invalid study program code: " + request.getStudProgramOznaka() + 
+                    ". Valid codes are: " + coderLoader.getValidStudProgramOznake());
+        }
+        
         // Provera da student vec nema aktivan indeks na istom studijskom programu
         validateStudentIndeksForCreate(request);
         

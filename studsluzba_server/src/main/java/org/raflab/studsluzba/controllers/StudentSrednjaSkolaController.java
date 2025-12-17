@@ -6,13 +6,13 @@ import org.raflab.studsluzba.controllers.response.StudentSrednjaSkolaResponse;
 import org.raflab.studsluzba.services.StudentSrednjaSkolaManagementService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
+import javax.validation.Valid;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/student-srednja-skola")
 @RequiredArgsConstructor
+@RequestMapping("/api/student-srednja-skola")
 public class StudentSrednjaSkolaController {
 
     private final StudentSrednjaSkolaManagementService studentSrednjaSkolaManagementService;
@@ -42,3 +42,7 @@ public class StudentSrednjaSkolaController {
         studentSrednjaSkolaManagementService.deleteStudentSrednjaSkola(id);
     }
 }
+
+
+
+
