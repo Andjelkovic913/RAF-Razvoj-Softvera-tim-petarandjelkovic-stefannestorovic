@@ -22,7 +22,7 @@ public interface StudentIndeksRepository extends JpaRepository<StudentIndeks, Lo
 			+ "indeks.aktivan = true and "
 			+ "(:ime is null or lower(indeks.student.ime) like concat('%', lower(:ime), '%')) and "
 			+ "(:prezime is null or lower(indeks.student.prezime) like concat('%', lower(:prezime), '%')) and "
-			+ "(:studProgramOznaka is null or lower(indeks.studProgramOznaka) like concat('%', lower(:studProgramOznaka), '%')) and"
+			+ "(:studProgramOznaka is null or lower(indeks.studProgramOznaka) like concat('%', lower(:studProgramOznaka), '%')) and "
 			+ "(:godina is null or indeks.godina = :godina) and "
 			+ "(:broj is null or indeks.broj = :broj)")
 	Page<StudentIndeks> findStudentIndeks(String ime, String prezime, String studProgramOznaka, Integer godina, Integer broj, Pageable pageable);
