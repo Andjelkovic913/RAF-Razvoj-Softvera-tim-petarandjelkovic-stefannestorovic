@@ -49,6 +49,12 @@ public class NastavnikController {
 		return nastavnikService.findByZvanje(zvanje);
 	}
 
+	// pretraga nastavnika po emailu
+	@GetMapping(path = "/search/email")
+	public List<NastavnikResponse> getNastavniciByEmail(@RequestParam String email) {
+		return nastavnikService.findByEmail(email);
+	}
+
 	// azuriranje nastavnika na osnovu id-a
 	@PutMapping(path = "/nastavnik/update/{id}")
 	public NastavnikResponse updateNastavnik(@PathVariable Long id, @RequestBody @Valid NastavnikRequest zahtev) {

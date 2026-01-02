@@ -72,6 +72,18 @@ public class NastavnikService {
                 .collect(Collectors.toList());
     }
 
+    public List<NastavnikResponse> findByEmail(String email) {
+        List<Nastavnik> nastavnici = nastavnikRepository.findByEmail(email);
+        
+        if (nastavnici == null || nastavnici.isEmpty()) {
+            return List.of();
+        }
+        
+        return nastavnici.stream()
+                .map(entityMappers::fromNastavnikToResponse)
+                .collect(Collectors.toList());
+    }
+
     public NastavnikResponse updateNastavnik(Long id, NastavnikRequest request) {
         Nastavnik nastavnik = nastavnikRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Nastavnik sa ID " + id + " ne postoji"));

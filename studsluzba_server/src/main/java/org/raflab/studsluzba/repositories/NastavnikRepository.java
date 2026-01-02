@@ -17,6 +17,8 @@ public interface NastavnikRepository extends JpaRepository<Nastavnik, Long> {	//
 
 	List<Nastavnik> findByEmailIn(List<String> emails);
 
+	@Query("SELECT n FROM Nastavnik n WHERE LOWER(n.email) = LOWER(:email)")
+	List<Nastavnik> findByEmail(String email);
 
 //	@Query("SELECT DISTINCT n FROM Nastavnik n LEFT JOIN FETCH n.zvanja")
 //	List<Nastavnik> findAll();
