@@ -115,6 +115,15 @@ public class EntityMappers {
             nastavnik.getZvanja().stream()
                 .map(this::fromNastavnikZvanjeToResponse)
                 .collect(Collectors.toSet()) : null);
+        
+        if (nastavnik.getZvanja() != null && !nastavnik.getZvanja().isEmpty()) {
+            response.setTrenutnoZvanje(nastavnik.getZvanja().stream()
+                .filter(NastavnikZvanje::isAktivno)
+                .findFirst()
+                .map(NastavnikZvanje::getZvanje)
+                .orElse(null));
+        }
+        
         response.setDatumRodjenja(nastavnik.getDatumRodjenja());
         response.setPol(nastavnik.getPol());
         response.setJmbg(nastavnik.getJmbg());

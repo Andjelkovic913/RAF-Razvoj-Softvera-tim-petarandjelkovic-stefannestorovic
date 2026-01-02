@@ -60,6 +60,18 @@ public class NastavnikService {
                 .collect(Collectors.toList());
     }
 
+    public List<NastavnikResponse> findByZvanje(String zvanje) {
+        List<NastavnikZvanje> nastavnikZvanja = nastavnikZvanjeRepository.findByZvanje(zvanje);
+        
+        if (nastavnikZvanja == null || nastavnikZvanja.isEmpty()) {
+            return List.of();
+        }
+        
+        return nastavnikZvanja.stream()
+                .map(nz -> entityMappers.fromNastavnikToResponse(nz.getNastavnik()))
+                .collect(Collectors.toList());
+    }
+
     public NastavnikResponse updateNastavnik(Long id, NastavnikRequest request) {
         Nastavnik nastavnik = nastavnikRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Nastavnik sa ID " + id + " ne postoji"));
