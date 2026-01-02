@@ -120,15 +120,33 @@ public class Converters {
     }
 
     public void updateNastavnik(Nastavnik postojeci, NastavnikRequest request){
-        postojeci.setIme(request.getIme());
-        postojeci.setPrezime(request.getPrezime());
-        postojeci.setSrednjeIme(request.getSrednjeIme());
-        postojeci.setEmail(request.getEmail());
-        postojeci.setBrojTelefona(request.getBrojTelefona());
-        postojeci.setAdresa(request.getAdresa());
-        postojeci.setDatumRodjenja(request.getDatumRodjenja());
-        postojeci.setPol(request.getPol());
-        postojeci.setJmbg(request.getJmbg());
+        if (request.getIme() != null) {
+            postojeci.setIme(request.getIme());
+        }
+        if (request.getPrezime() != null) {
+            postojeci.setPrezime(request.getPrezime());
+        }
+        if (request.getSrednjeIme() != null) {
+            postojeci.setSrednjeIme(request.getSrednjeIme());
+        }
+        if (request.getEmail() != null) {
+            postojeci.setEmail(request.getEmail());
+        }
+        if (request.getBrojTelefona() != null) {
+            postojeci.setBrojTelefona(request.getBrojTelefona());
+        }
+        if (request.getAdresa() != null) {
+            postojeci.setAdresa(request.getAdresa());
+        }
+        if (request.getDatumRodjenja() != null) {
+            postojeci.setDatumRodjenja(request.getDatumRodjenja());
+        }
+        if (request.getPol() != null) {
+            postojeci.setPol(request.getPol());
+        }
+        if (request.getJmbg() != null) {
+            postojeci.setJmbg(request.getJmbg());
+        }
     }
 
     public StudentIndeks toStudentIndeks(StudentIndeksRequest studentIndeksRequest) {
