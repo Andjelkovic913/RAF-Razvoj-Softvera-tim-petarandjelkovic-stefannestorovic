@@ -3,6 +3,7 @@ package org.raflab.studsluzba.controllers;
 import lombok.AllArgsConstructor;
 import org.raflab.studsluzba.controllers.request.NastavnikRequest;
 import org.raflab.studsluzba.controllers.response.NastavnikResponse;
+import org.raflab.studsluzba.model.dtos.NastavnikReportDTO;
 import org.raflab.studsluzba.services.NastavnikService;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,5 +66,11 @@ public class NastavnikController {
 	@DeleteMapping(path = "/nastavnik/delete/{id}")
 	public void deleteNastavnik(@PathVariable Long id) {
 		nastavnikService.deleteNastavnik(id);
+	}
+
+	// optimized endpoint for report generation
+	@GetMapping(path = "/report")
+	public List<NastavnikReportDTO> getNastavniciForReport() {
+		return nastavnikService.findAllForReport();
 	}
 }

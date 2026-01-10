@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.controllers.request.PredmetRequest;
 import org.raflab.studsluzba.controllers.response.PredmetResponse;
 import org.raflab.studsluzba.model.*;
+import org.raflab.studsluzba.model.dtos.PredmetReportDTO;
 import org.raflab.studsluzba.repositories.*;
 import org.raflab.studsluzba.utils.Converters;
 import org.raflab.studsluzba.utils.EntityMappers;
@@ -161,5 +162,9 @@ public class PredmetService {
         
         // 6. Obrisi sve Ispite
         ispitRepository.deleteAll(ispiti);
+    }
+
+    public List<PredmetReportDTO> findAllForReportByStudProgram(String studProgramOznaka) {
+        return predmetRepository.findAllForReportByStudProgram(studProgramOznaka);
     }
 }

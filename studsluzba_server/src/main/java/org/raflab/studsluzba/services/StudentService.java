@@ -395,5 +395,14 @@ public class StudentService {
         indeks.setAktivan(true);
         studentIndeksRepository.save(indeks);
     }
+
+    /**
+     * Returns optimized data for student reports.
+     * Single query that fetches ime, prezime, and godinaUpisa (from first UpisGodine).
+     */
+    @Transactional(readOnly = true)
+    public List<org.raflab.studsluzba.model.dtos.StudentReportDTO> getStudentsForReport() {
+        return upisGodineRepository.findAllStudentsForReport();
+    }
 }
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.controllers.request.NastavnikRequest;
 import org.raflab.studsluzba.controllers.response.NastavnikResponse;
 import org.raflab.studsluzba.model.*;
+import org.raflab.studsluzba.model.dtos.NastavnikReportDTO;
 import org.raflab.studsluzba.repositories.*;
 import org.raflab.studsluzba.utils.Converters;
 import org.raflab.studsluzba.utils.EntityMappers;
@@ -46,6 +47,10 @@ public class NastavnikService {
         return StreamSupport.stream(nastavnikRepository.findAll().spliterator(), false)
                 .map(entityMappers::fromNastavnikToResponse)
                 .collect(Collectors.toList());
+    }
+
+    public List<NastavnikReportDTO> findAllForReport() {
+        return nastavnikRepository.findAllForReport();
     }
 
     public NastavnikResponse findById(Long id) {

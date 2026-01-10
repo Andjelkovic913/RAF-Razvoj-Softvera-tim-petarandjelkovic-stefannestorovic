@@ -1,15 +1,20 @@
 package org.raflab.studsluzba.utils;
 
+import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.controllers.response.*;
 import org.raflab.studsluzba.model.*;
 import org.raflab.studsluzba.model.dtos.*;
+import org.raflab.studsluzba.repositories.SlusaPredmetRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class EntityMappers {
+
+	private final SlusaPredmetRepository slusaPredmetRepository;
 
 	
 	public static StudentDTO fromStudentPodaciToDTO(StudentPodaci sp) {
@@ -279,6 +284,7 @@ public class EntityMappers {
         Ispit ispit = prijavaIspita.getIspit();
 
         PrijavljeniStudentDTO dto = new PrijavljeniStudentDTO();
+        dto.setPrijavaId(prijavaIspita.getId());  // Set prijavaIspitaId
         dto.setStudentIndeksId(studentIndeks.getId());
         if (studentPodaci != null) {
             dto.setIme(studentPodaci.getIme());
@@ -292,6 +298,23 @@ public class EntityMappers {
         if (ispit != null) {
             if (ispit.getPredmet() != null) {
                 dto.setPredmetNaziv(ispit.getPredmet().getNaziv());
+                
+                // Find SlusaPredmet for this student and predmet
+                List<SlusaPredmet> slusaPredmeti = slusaPredmetRepository.findAllByStudentIndeksIdAndPredmetId(
+                    studentIndeks.getId(), 
+                    ispit.getPredmet().getId()
+                );
+                if (!slusaPredmeti.isEmpty()) {
+                    // Take the first one if multiple exist (student enrolled with multiple professors)
+                    SlusaPredmet slusaPredmet = slusaPredmeti.get(0);
+                    dto.setSlusaPredmetId(slusaPredmet.getId());
+                    // predispitneObaveze would come from IzlazakNaIspit if it exists
+                    dto.setPredispitneObaveze(0.0);  // Default, will be updated from existing result if any
+                } else {
+                    // Log warning - student registered for exam but not enrolled in subject
+                    System.err.println("WARNING: Student " + studentIndeks.getId() + 
+                        " is registered for exam but not enrolled in subject " + ispit.getPredmet().getId());
+                }
             }
             if (ispit.getIspitniRok() != null) {
                 dto.setIspitniRokNaziv(ispit.getIspitniRok().getTipRoka() != null 
@@ -453,6 +476,10 @@ public class EntityMappers {
             if (izlazak.getIspit().getDrziPredmet() != null && izlazak.getIspit().getDrziPredmet().getPredmet() != null) {
                 response.setPredmetNaziv(izlazak.getIspit().getDrziPredmet().getPredmet().getNaziv());
                 response.setPredmetSifra(izlazak.getIspit().getDrziPredmet().getPredmet().getSifra());
+            }
+            
+            if (izlazak.getIspit().getIspitniRok() != null && izlazak.getIspit().getIspitniRok().getTipRoka() != null) {
+                response.setIspitniRok(izlazak.getIspit().getIspitniRok().getTipRoka().name());
             }
         }
 

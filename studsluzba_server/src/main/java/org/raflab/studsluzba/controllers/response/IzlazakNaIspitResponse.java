@@ -12,6 +12,7 @@ public class IzlazakNaIspitResponse {
     private String predmetNaziv;
     private String predmetSifra;
     private LocalDate datumOdrzavanja;
+    private String ispitniRok;  // Exam period name (e.g., "JANUAR", "FEBRUAR")
     
     // Student
     private Long studentIndeksId;

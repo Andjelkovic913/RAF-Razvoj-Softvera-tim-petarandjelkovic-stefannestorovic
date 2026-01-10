@@ -10,6 +10,7 @@ import org.raflab.studsluzba.controllers.response.StudentIndeksResponse;
 import org.raflab.studsluzba.controllers.response.StudentPodaciResponse;
 import org.raflab.studsluzba.model.dtos.StudentDTO;
 import org.raflab.studsluzba.model.dtos.StudentProfileDTO;
+import org.raflab.studsluzba.model.dtos.StudentReportDTO;
 import org.raflab.studsluzba.model.dtos.StudentWebProfileDTO;
 import org.raflab.studsluzba.services.StudentProfileService;
 import org.raflab.studsluzba.services.StudentSrednjaSkolaService;
@@ -39,6 +40,11 @@ public class StudentController {
 	@GetMapping(path="/all")
 	public List<StudentPodaciResponse> getAllStudentPodaci() {
 		return studentService.getAllStudentPodaci();
+	}
+
+	@GetMapping(path="/report")
+	public List<StudentReportDTO> getStudentsForReport() {
+		return studentService.getStudentsForReport();
 	}
 
 	@GetMapping(path="/all-paginated")

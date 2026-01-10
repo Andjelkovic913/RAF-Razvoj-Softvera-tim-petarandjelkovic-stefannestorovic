@@ -3,6 +3,7 @@ package org.raflab.studsluzba.controllers;
 import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.controllers.request.PredmetRequest;
 import org.raflab.studsluzba.controllers.response.PredmetResponse;
+import org.raflab.studsluzba.model.dtos.PredmetReportDTO;
 import org.raflab.studsluzba.services.PredmetService;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,5 +54,11 @@ public class PredmetController {
     @DeleteMapping(path = "/{id}")
     public void deletePredmet(@PathVariable Long id) {
         predmetService.delete(id);
+    }
+
+    // optimized endpoint for report generation by study program
+    @GetMapping(path = "/report/{studProgramOznaka}")
+    public List<PredmetReportDTO> getPredmetiForReport(@PathVariable String studProgramOznaka) {
+        return predmetService.findAllForReportByStudProgram(studProgramOznaka);
     }
 }

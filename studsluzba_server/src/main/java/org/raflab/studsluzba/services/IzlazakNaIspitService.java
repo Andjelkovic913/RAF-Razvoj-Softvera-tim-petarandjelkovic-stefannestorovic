@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -54,8 +55,23 @@ public class IzlazakNaIspitService {
         PrijavaIspita prijava = prijavaIspitaRepository.findById(request.getPrijavaIspitaId())
                 .orElseThrow(() -> new EntityNotFoundException("PrijavaIspita sa ID " + request.getPrijavaIspitaId() + " ne postoji"));
         
-        SlusaPredmet slusaPredmet = slusaPredmetRepository.findById(request.getSlusaPredmetId())
-                .orElseThrow(() -> new EntityNotFoundException("SlusaPredmet sa ID " + request.getSlusaPredmetId() + " ne postoji"));
+        // Find SlusaPredmet - if not provided, try to find it from prijava
+        SlusaPredmet slusaPredmet;
+        if (request.getSlusaPredmetId() != null) {
+            slusaPredmet = slusaPredmetRepository.findById(request.getSlusaPredmetId())
+                    .orElseThrow(() -> new EntityNotFoundException("SlusaPredmet sa ID " + request.getSlusaPredmetId() + " ne postoji"));
+        } else {
+            // Fallback: find SlusaPredmet by student and predmet from prijava
+            Long studentIndeksId = prijava.getStudentIndeks().getId();
+            Long predmetId = prijava.getIspit().getPredmet().getId();
+            List<SlusaPredmet> slusaPredmeti = slusaPredmetRepository.findAllByStudentIndeksIdAndPredmetId(studentIndeksId, predmetId);
+            if (slusaPredmeti.isEmpty()) {
+                throw new EntityNotFoundException("Student nije upisan na predmet. SlusaPredmet ne postoji za student " + 
+                    studentIndeksId + " i predmet " + predmetId);
+            }
+            // Take the first one if multiple exist (student enrolled with multiple professors)
+            slusaPredmet = slusaPredmeti.get(0);
+        }
         
         // Provera da li vec postoji IzlazakNaIspit za ovu PrijavaIspita
         IzlazakNaIspit izlazak = prijava.getIzlazakNaIspit();
