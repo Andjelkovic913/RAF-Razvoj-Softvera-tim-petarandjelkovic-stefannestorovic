@@ -19,6 +19,7 @@ org\raflab\studsluzba\dtos\PredmetRequest.class
 org\raflab\studsluzba\dtos\TeacherDTO.class
 org\raflab\studsluzba\dtos\PredmetDTO.class
 org\raflab\studsluzba\dtos\StudentBySrednjaSkolaDTO.class
+org\raflab\studsluzba\dtos\AverageGradeDTO.class
 org\raflab\studsluzba\dtos\PrijavljeniStudentDTO.class
 org\raflab\studsluzba\dtos\SkolskaGodinaDTO.class
 org\raflab\studsluzba\dtos\DrziPredmetDTO.class

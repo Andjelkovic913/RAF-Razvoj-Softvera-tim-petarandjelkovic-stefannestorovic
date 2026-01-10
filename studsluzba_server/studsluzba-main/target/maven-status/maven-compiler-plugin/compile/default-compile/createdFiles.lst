@@ -131,6 +131,7 @@ org\raflab\studsluzba\controllers\request\StudentIndeksRequest.class
 org\raflab\studsluzba\model\StudentIndeks.class
 org\raflab\studsluzba\controllers\DrziPredmetController.class
 org\raflab\studsluzba\controllers\GrupaController.class
+org\raflab\studsluzba\controllers\response\AverageGradeResponse.class
 org\raflab\studsluzba\repositories\SkolskaGodinaRepository.class
 org\raflab\studsluzba\utils\CoderLoader.class
 org\raflab\studsluzba\controllers\SkolskaGodinaController.class

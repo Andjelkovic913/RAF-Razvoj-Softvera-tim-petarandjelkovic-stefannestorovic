@@ -2,6 +2,7 @@ package org.raflab.studsluzba.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.controllers.request.PredmetRequest;
+import org.raflab.studsluzba.controllers.response.AverageGradeResponse;
 import org.raflab.studsluzba.controllers.response.PredmetResponse;
 import org.raflab.studsluzba.dtos.PredmetReportDTO;
 import org.raflab.studsluzba.services.PredmetService;
@@ -60,5 +61,14 @@ public class PredmetController {
     @GetMapping(path = "/report/{studProgramOznaka}")
     public List<PredmetReportDTO> getPredmetiForReport(@PathVariable String studProgramOznaka) {
         return predmetService.findAllForReportByStudProgram(studProgramOznaka);
+    }
+
+    // 2.4 - prosečna ocena studenata na predmetu za raspon godina
+    @GetMapping(path = "/{predmetId}/average-grade")
+    public AverageGradeResponse getAverageGradeByYearRange(
+            @PathVariable Long predmetId,
+            @RequestParam Integer startYear,
+            @RequestParam Integer endYear) {
+        return predmetService.getAverageGradeByYearRange(predmetId, startYear, endYear);
     }
 }

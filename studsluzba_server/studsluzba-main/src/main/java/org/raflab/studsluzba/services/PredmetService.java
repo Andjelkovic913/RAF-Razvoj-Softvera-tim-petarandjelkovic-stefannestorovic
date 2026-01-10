@@ -2,6 +2,7 @@ package org.raflab.studsluzba.services;
 
 import lombok.RequiredArgsConstructor;
 import org.raflab.studsluzba.controllers.request.PredmetRequest;
+import org.raflab.studsluzba.controllers.response.AverageGradeResponse;
 import org.raflab.studsluzba.controllers.response.PredmetResponse;
 import org.raflab.studsluzba.model.*;
 import org.raflab.studsluzba.dtos.PredmetReportDTO;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -166,5 +168,40 @@ public class PredmetService {
 
     public List<PredmetReportDTO> findAllForReportByStudProgram(String studProgramOznaka) {
         return predmetRepository.findAllForReportByStudProgram(studProgramOznaka);
+    }
+
+    /**
+     * Izračunava prosečnu ocenu studenata na predmetu za raspon godina.
+     * @param predmetId ID predmeta
+     * @param startYear početna godina
+     * @param endYear krajnja godina
+     * @return AverageGradeResponse sa prosečnom ocenom i brojem položenih ispita
+     */
+    public AverageGradeResponse getAverageGradeByYearRange(Long predmetId, Integer startYear, Integer endYear) {
+        if (startYear > endYear) {
+            throw new IllegalArgumentException("Početna godina mora biti manja ili jednaka krajnjoj godini");
+        }
+        
+        Predmet predmet = predmetRepository.findById(predmetId)
+                .orElseThrow(() -> new EntityNotFoundException("Predmet sa ID " + predmetId + " ne postoji"));
+        
+        LocalDate startDate = LocalDate.of(startYear, 1, 1);
+        LocalDate endDate = LocalDate.of(endYear, 12, 31);
+        
+        Double averageGrade = izlazakNaIspitRepository.calculateAverageGradeByPredmetAndDateRange(
+                predmetId, startDate, endDate);
+        
+        Long totalPassed = izlazakNaIspitRepository.countPassedExamsByPredmetAndDateRange(
+                predmetId, startDate, endDate);
+        
+        return new AverageGradeResponse(
+                predmet.getId(),
+                predmet.getNaziv(),
+                predmet.getSifra(),
+                startYear,
+                endYear,
+                averageGrade,
+                totalPassed
+        );
     }
 }
