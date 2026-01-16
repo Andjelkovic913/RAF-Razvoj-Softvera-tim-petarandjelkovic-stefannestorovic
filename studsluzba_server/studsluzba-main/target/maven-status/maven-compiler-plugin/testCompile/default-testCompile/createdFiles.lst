@@ -1,0 +1,6 @@
+org\raflab\studsluzba\services\DrziPredmetServiceTest$HappyPath.class
+org\raflab\studsluzba\services\DrziPredmetServiceTest.class
+org\raflab\studsluzba\services\DrziPredmetServiceTest$SkipsInvalidEntries.class
+org\raflab\studsluzba\services\StudentIndeksServiceTest.class
+org\raflab\studsluzba\utils\ParseUtilsTest.class
+org\raflab\studsluzba\services\student\StudentServiceTest.class

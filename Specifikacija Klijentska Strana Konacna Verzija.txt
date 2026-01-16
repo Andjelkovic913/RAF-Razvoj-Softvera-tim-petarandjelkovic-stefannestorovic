@@ -1,0 +1,89 @@
+Računarski fakultet - Univerzitet Union
+Predmet: Razvoj softvera
+Školska godina: 2025/2026. 
+
+
+
+Specifikacija projekta softvera za studentsku službu - klijentska strana (konačna verzija)
+
+Klijentska strana aplikacije za studentsku službu je funkcionalna desktop aplikacija preko koje korisnik može da pokrene i izvrši sve ključne funkcionalnosti razvijene na serverskoj strani. Funkcionalnosti treba da budu grupisane na logičan način i dostupne iz menija početnog prozora. Ako za neke funkcionalnosti aplikacije fali implementacija na serverskoj strani, potrebno je dodati nove API pozive. 
+
+1. Rad sa podacima o studentima
+
+Moguće je pronaći studenta za uneti broj indeksa pri čemu se otvara posebna stranica koja sadrži celokupan profil studenta, lične podatke, sve položene i nepoložene ispite, uplate, pregled upisanih i obnovljenih godina, ukupan broj ostvarenih ESPB, trenutnu prosečnu ocenu,... Preporućeno je da se ovi elementi organizuju u posebne tabove. 
+
+Do profila studenta je moguće doći i posle pretraživanja na osnovu imena i prezimena. Iz tabele sa rezultatima pretrage može se selektovati student i otvoriti njegov profil. Potrebno je obezbediti i pretraživanje na osnovu završene srednje škole. 
+
+U otvorenom profilu studenta moguće je izvršiti sve funkcionalnosti kao što su upis, obnova godine (prema pravilima koji su definisani u specifikaciji serverske strane), unos uplate, i ostale funkcionalnosti podržane API-jima na serverskoj strani. 
+
+Takođe, iz forme koja prikazuje profil studenata moguće je generisati uverenje o studiranju i uverenje o položenim ispitima u vidu izveštaja. Na uverenju o položenim ispitima ispiti treba da budu grupisani po godini studija. 
+
+2. Rad sa podacima o studijskim programima i predmetima
+
+Omogućiti prikaz studijskih programa i predmeta na svakom studijskom programu. Obezbediti dodavanje novog predmeta na studijski program. Prikaz prosečne ocenu na predmetu za raspon godinai obezbediti u formi tabele u aplikaciji i u formi izeštaja koji može da se odštampa. 
+
+3. Rad sa podacima o ispitima
+
+Omogućiti unos novih ispitnih rokova i ispita, zatim selekciju određenog ispitnog roka i ispita i pregled studenata prijavljenih za ispit. Omogućiti funkcionalnost prijave studenta za ispit, ako student sluša dati predmet i nije ga još položio. Prikaz rezultati ispita u vidu sortiranog spiska studenata (sortirati prvo po stud programu, zatim po godini upisa, pa po broju) sa ukupnim brojem poena na ispitu (predispitne obaveze plus poeni sa ispita). Omogućiti štampanje rezultata sa jednog ispita u formi izvešaja (zapisnika sa ispita) prema primeru na materijalima. 
+
+4. Zahtevi robusnosti i performansi
+
+Obezbediti adekvatne poruke o greškama za korisnika za nepravilne i nedostajuće unose, greške u pozivu severske strane i druge moguće greške. 
+
+Za komunikaciju kombinovati sinhronu i asinhronu komunikaciji, prema izboru i prema zahtevima performansi. Koristiti što više asinhronih poziva kako se ne bi dešavalo blokiranje ekranske forme. 
+
+5. Arhitektura
+
+Klijentska strana isto treba da bude implementirana prema slojevitoj arhitekturi kao na slici. Može se dodati još jedna komponenta za keširanje podataka na klijentskoj strani.
+ 
+DTO klase koje se dele sa serevrskom stranom treba da budu dostupne u odvojenoj biblioteci i podešene u klijentskom projektu kao dipendensi koji se preuzima iz lokalnog maven repozitorijuma. 
+
+6. Tehnički zahtevi
+
+Za implementaciju projekta potrebno je koristiti sledeće tehnologije:
+- Spring boot
+- JavaFX sa fxml
+- za sinhronu komunikaciju koristiti po izboru RestTemplate, RestClient, ili HTTP Service Clients, a za sinhronu WebClient (webflux) 
+- za izveštaje - jasper reports
+
+History navigacija po aplikaciji (OBAVEZAN FEATURE BEZ KOG SE PROJEKAT NEĆE OCENJIVATI)
+Potrebno je implementirati mehanizam za kretanje kroz istoriju stranica u okviru aplikacije (nazad/napred), po uzoru na browser (back/forward).
+Minimalni zahtevi:
+Navigacija mišem (mouse button 4 i 5)
+Dugme mouse button 4 (obično „back“ na mišu) mora da vrati korisnika na prethodno posećenu stranicu (SVI PRIKAZI NE SAMO PROMENA PO MENIJU VEC I TABOVIMA I SLICNO).
+Dugme mouse button 5 (obično „forward“ na mišu) mora da odvede korisnika na sledeću stranicu (ako postoji u istoriji).
+Istorija kretanja (back stack / history)
+Potrebno je voditi evidenciju o prethodno posećenim stranicama.
+Maksimalna dubina istorije unazad mora biti konfigurabilna (application.properties).
+Primer: može se podesiti da je maksimalna istorija 10 stranica unazad; nakon toga najstariji ulaz se izbacuje.
+U napred je moguće ići samo dok postoji „forward“ istorija (npr. nakon jednog povratka nazad, postoji jedna stranica u napred, nakon novog učitavanja nove stranice forward istorija se briše, kao u browseru).
+Alternativa za korisnike bez miša sa 5 dugmića
+Studenti koji nemaju miš sa 5 dugmića treba da omoguće alternativu preko touchpad gestova (npr. swipe sa dva prsta levo/desno za back/forward, slično kao u browseru), ili
+da obezbede tastaturnu kombinaciju opisanu u sledećoj tački (ako rade tastaturu umesto touchpada).
+Accessibility – tastatura (za korisnike bez miša i touchpada)
+Potrebno je omogućiti sledeće kombinacije tastera:
+Ctrl + [ → kretanje nazad (back) u istoriji.
+Ctrl + ] → kretanje napred (forward) ako postoji stranica u napred.
+Poželjno je (nije strogo obavezno) da ovi keybind-ovi budu konfigurisani u runtime-u iz same aplikacije (npr. ekran sa podešavanjima gde korisnik može promeniti prečice).
+Rukovanje greškama
+Ne sme doći do pucanja aplikacije niti prikazivanja neočekivanih stack trace-ova ili error poruka u konzoli prilikom:
+pokušaja odlaska nazad kada je istorija prazna,
+pokušaja odlaska napred kada ne postoji sledeća stranica u istoriji,
+svih ostalih edgecase situacija
+
+
+U ovim slučajevima aplikacija treba da se ponaša „tiho“, tj. da jednostavno ignoriše akciju ili prikaže korisniku smisleno obaveštenje (po izboru tima), bez rušenja aplikacije.
+
+
+
+7. Raspodela poena
+
+Funkcionalnosti nad studentima – 13p
+Operacije nad predmetima i studijskim programima – 4p
+Operacije nad ispitima i ispitnim rokovima - 5p
+Izveštaji (zapisnik sa ispita, uverenje o studiranju i uverenje o položenim ispitima) - 8p
+
+
+8. Rok za predaju i odbranu
+
+Projekat se radi u paru i rok za završetak je termin odbrane. Projekat se brani u drugoj kolokvijumskoj nedelji, donosi se na odbranu i pokazuje ispitivaču, nije potrebno slati ga ranije. Raspored odbrana će biti poslat na mejling listu i objavljen na materijalima. Studenti mogu, ukoliko to žele, da projekat brane i ranije u dogovoru sa asistentom.

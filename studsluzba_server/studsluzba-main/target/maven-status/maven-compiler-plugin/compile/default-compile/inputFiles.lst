@@ -99,6 +99,7 @@ C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestor
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\response\SrednjaSkolaResponse.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\request\SkolskaGodinaRequest.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\response\UpisGodineResponse.java
+C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\request\StudentPodaciRequest.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\model\PredispitneObaveze.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\request\NastavnikObrazovanjeRequest.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\request\VrstaStudijaRequest.java
@@ -108,6 +109,7 @@ C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestor
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\VisokoskolskaUstanovaController.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\request\DrziPredmetNewRequest.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\repositories\GrupaRepository.java
+C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\request\StudentIndeksRequest.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\services\DrziPredmetService.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\response\GrupaResponse.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\services\UpisGodineService.java
@@ -126,6 +128,7 @@ C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestor
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\model\StudentIndeks.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\NastavnikZvanjeController.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\services\IspitService.java
+C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\request\NastavnikRequest.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\model\Ispit.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\services\ObnovaGodineService.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\UpisGodineController.java
@@ -152,6 +155,8 @@ C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestor
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\StudentSrednjaSkolaController.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\request\DodajUplataRequest.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\response\StudentBySrednjaSkolaResponse.java
+C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\response\AverageGradeResponse.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\services\GrupaService.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\IspitController.java
+C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\request\PredmetRequest.java
 C:\Users\RoPe\IdeaProjects\RAF-Razvoj-Softvera-tim-petarandjelkovic-stefannestorovic\studsluzba_server\studsluzba-main\src\main\java\org\raflab\studsluzba\controllers\response\VrstaStudijaResponse.java
