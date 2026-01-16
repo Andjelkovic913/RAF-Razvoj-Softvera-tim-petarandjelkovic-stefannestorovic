@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<BorderPane fx:id="searchNastavnikPane" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.raflab.studsluzbadesktopclient.controllers.SearchNastavnikController">
+    <top>
+        <fx:include source="menuBar.fxml"/>
+    </top>
+    <center>
+        <TabPane fx:id="mainTabPane">
+            <Tab text="Pretraga po imenu i prezimenu" closable="false">
+                <VBox alignment="CENTER" spacing="15">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                    <GridPane alignment="center" hgap="10" vgap="10">
+                        <Label text="Ime" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="imeNastavnikaTf" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Prezime" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="prezimeNastavnikaTf" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Button onAction="#handleSearchByName" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="CENTER">
+                            <GridPane.margin>
+                                <Insets top="10"/>
+                            </GridPane.margin>
+                        </Button>
+                    </GridPane>
+
+                    <TableView fx:id="tabelaNastavniciPoImenu" minHeight="350" prefWidth="750">
+                        <columns>
+                            <TableColumn fx:id="imeColumnName" prefWidth="120" text="Ime">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="ime" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="prezimeColumnName" prefWidth="120" text="Prezime">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="prezime" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="srednjeImeColumnName" prefWidth="100" text="Srednje ime">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="srednjeIme" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="emailColumnName" prefWidth="180" text="Email">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="email" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="telefonColumnName" prefWidth="110" text="Telefon">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="brojTelefona" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="actionColumnName" prefWidth="120" text="Akcija" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <Tab text="Pretraga po zvanju" closable="false">
+                <VBox alignment="CENTER" spacing="15">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                    <GridPane alignment="center" hgap="10" vgap="10">
+                        <Label text="Zvanje" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <ComboBox fx:id="zvanjeCb" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Button onAction="#handleSearchByZvanje" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER">
+                            <GridPane.margin>
+                                <Insets top="10"/>
+                            </GridPane.margin>
+                        </Button>
+                    </GridPane>
+
+                    <TableView fx:id="tabelaNastavniciPoZvanju" minHeight="350" prefWidth="750">
+                        <columns>
+                            <TableColumn fx:id="imeColumnZvanje" prefWidth="120" text="Ime">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="ime" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="prezimeColumnZvanje" prefWidth="120" text="Prezime">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="prezime" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="zvanjeColumn" prefWidth="150" text="Zvanje">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="zvanje" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="emailColumnZvanje" prefWidth="180" text="Email">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="email" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="actionColumnZvanje" prefWidth="120" text="Akcija" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <Tab text="Pretraga po Emailu" closable="false">
+                <VBox alignment="CENTER" spacing="15">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                    <GridPane alignment="center" hgap="10" vgap="10">
+                        <Label text="Email" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="emailSearchTf" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="250"/>
+
+                        <Button onAction="#handleSearchByEmail" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER">
+                            <GridPane.margin>
+                                <Insets top="10"/>
+                            </GridPane.margin>
+                        </Button>
+                    </GridPane>
+
+                    <TableView fx:id="tabelaNastavniciPoEmailu" minHeight="350" prefWidth="750">
+                        <columns>
+                            <TableColumn fx:id="imeColumnEmail" prefWidth="120" text="Ime">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="ime" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="prezimeColumnEmail" prefWidth="120" text="Prezime">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="prezime" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="emailColumnEmail" prefWidth="200" text="Email">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="email" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="telefonColumnEmail" prefWidth="130" text="Telefon">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="brojTelefona" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="actionColumnEmail" prefWidth="120" text="Akcija" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>

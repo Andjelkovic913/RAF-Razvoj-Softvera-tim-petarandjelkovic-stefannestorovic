@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sviStudenti" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7fae7ac7-b54c-46e8-9c58-3889413ed9d2">
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="imeIPrezime" class="java.lang.String"/>
+	<field name="naziv" class="java.lang.String"/>
+	<field name="ESPB" class="java.lang.String"/>
+	<field name="Ocena" class="java.lang.String"/>
+	<field name="datum" class="java.lang.String"/>
+	<field name="espb1" class="java.lang.String"/>
+	<field name="ocena1" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="360" splitType="Stretch">
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="400" y="0" width="150" height="30" uuid="f1a88cd9-6729-4495-a1bb-7304b5669fd2"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="248" height="50" uuid="ac6fe435-8115-4fe0-9f35-409725ecfd36"/>
+				<text><![CDATA[RAČUNARSKI FAKULTET                          
+Univerzitet Union                            
+Kneza Mihaila 6, Beograd   ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="80" width="315" height="30" uuid="ed7234b7-40dc-4d57-89d7-b4653695de35"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[               UVERENJE O POLOŽENIM ISPITIMA                     
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement stretchType="ContainerHeight" x="15" y="120" width="185" height="90" uuid="b56b7d0c-97b6-4f42-b575-2299e2ebecef"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Student:
+
+Indeks:
+
+Program:
+
+
+
+
+
+
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="80" y="120" width="100" height="20" uuid="f61075b9-9e3a-4ca8-b073-4b205e1c673c"/>
+				<textFieldExpression><![CDATA[$F{imeIPrezime}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="60" y="150" width="100" height="20" uuid="a9e904fe-1a75-4b3f-837a-67a7db02e337"/>
+				<textFieldExpression><![CDATA[$F{indeks}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="180" width="100" height="20" uuid="359ff982-2484-45c4-918c-7a96bdd74627"/>
+				<textFieldExpression><![CDATA[$F{program}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="8" y="210" width="198" height="30" uuid="0446f30f-0b08-4bea-9372-369064c2e809"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[   PRVA GODINA STUDIJA                                           
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="250" width="469" height="30" uuid="963dd275-ae04-434b-83e7-7f8ff49cdfbc"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[   Predmet                                         │ ESPB │ Ocena │   Datum     │
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="230" width="488" height="30" uuid="448651d8-f7f3-48f6-a70f-3402c3941adf"/>
+				<text><![CDATA[───────────────────────────────────────────────
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="20" y="290" width="100" height="30" uuid="7e333fd5-5469-476f-9018-5cb01800ec3f"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naziv}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="290" width="100" height="30" uuid="0ed640d9-9eb8-4bf1-967a-f74837702f2a"/>
+				<textFieldExpression><![CDATA[$F{ESPB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="310" y="290" width="100" height="30" uuid="3523ff2c-102c-4ce5-826e-16634e522b43"/>
+				<textFieldExpression><![CDATA[$F{Ocena}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="290" width="100" height="30" uuid="8af748a6-a039-460f-b4ca-1108c34f6d3c"/>
+				<textFieldExpression><![CDATA[$F{datum}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="18" y="330" width="126" height="30" uuid="2741ee05-e742-4302-b5ae-3e637f6d14d5"/>
+				<text><![CDATA[Ukupno 1. godina:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="250" y="313" width="100" height="30" uuid="ad03df85-67ed-48ec-9fbc-620ab5931936"/>
+				<textFieldExpression><![CDATA[$F{espb1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="313" width="100" height="30" uuid="8a6ac583-6c31-4944-bd27-af06de7966ee"/>
+				<textFieldExpression><![CDATA[$F{ocena1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="213" splitType="Stretch">
+			<staticText>
+				<reportElement x="5" y="-10" width="198" height="30" uuid="c3ffd023-4c5d-434b-acce-5f47f7e5edf7"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[   DRUGA GODINA STUDIJA                                           
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="30" width="469" height="30" uuid="6d6592c5-93a9-4431-b91d-21e129b593fc"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[   Predmet                                         │ ESPB │ Ocena │   Datum     │
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="10" width="488" height="30" uuid="e6d6de62-2ac1-4e2f-817b-c93f94dfa517"/>
+				<text><![CDATA[───────────────────────────────────────────────
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="15" y="60" width="100" height="30" uuid="679fd16b-ab65-4081-8978-821762e78dd1"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naziv}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="245" y="60" width="100" height="30" uuid="1ff354f9-131f-4ec8-8d73-74eb838b76b9"/>
+				<textFieldExpression><![CDATA[$F{ESPB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="60" width="100" height="30" uuid="23156678-67ef-4d99-b924-8b26fc2416fd"/>
+				<textFieldExpression><![CDATA[$F{Ocena}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="375" y="60" width="100" height="30" uuid="0a559a7b-eaf8-4cbe-9938-b61c07e6643c"/>
+				<textFieldExpression><![CDATA[$F{datum}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="8" y="113" width="198" height="30" uuid="7fbedf20-3fff-4972-bfbd-10b68d40f02e"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[   TRECA GODINA STUDIJA                                           
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="153" width="469" height="30" uuid="c8bab7c7-3298-4777-b650-ffa3536be3f0"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[   Predmet                                         │ ESPB │ Ocena │   Datum     │
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="133" width="488" height="30" uuid="a23b873b-dcf4-4189-9fed-821392fbc7ae"/>
+				<text><![CDATA[───────────────────────────────────────────────
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="18" y="183" width="100" height="30" uuid="83bebce8-8a5e-42fd-9487-421e5cf0c4ea"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naziv}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="248" y="183" width="100" height="30" uuid="5aefa53d-ae9d-451f-b7f0-7fd606d8e6a6"/>
+				<textFieldExpression><![CDATA[$F{ESPB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="308" y="183" width="100" height="30" uuid="d8d7f5c7-0f78-450a-80a0-8d80ccfbb135"/>
+				<textFieldExpression><![CDATA[$F{Ocena}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="378" y="183" width="100" height="30" uuid="250d594d-2afa-4afa-adca-56fe86f61ec4"/>
+				<textFieldExpression><![CDATA[$F{datum}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="15" y="83" width="126" height="30" uuid="25a921fb-6b6a-42c6-9865-dea931b7753e"/>
+				<text><![CDATA[Ukupno 2. godina:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="245" y="83" width="100" height="30" uuid="f7df76b4-88d9-4309-80f0-a8ae73c44d59"/>
+				<textFieldExpression><![CDATA[$F{espb1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="301" y="83" width="100" height="30" uuid="23e8766e-40b0-46a5-810d-afe22c008ff7"/>
+				<textFieldExpression><![CDATA[$F{ocena1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="130" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="20" width="198" height="30" uuid="fa289184-55cb-46d9-8963-e237a755e409"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[   CETVRTA GODINA STUDIJA                                           
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="60" width="469" height="30" uuid="30daed85-91ec-43bf-bfd6-6301361f2020"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[   Predmet                                         │ ESPB │ Ocena │   Datum     │
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="40" width="488" height="30" uuid="6b72e048-05bd-4949-8c76-6c315bd57b76"/>
+				<text><![CDATA[───────────────────────────────────────────────
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="15" y="90" width="100" height="30" uuid="c5a8e65a-78fe-4ca8-a43d-f999ec8d3e11"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{naziv}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="241" y="90" width="100" height="30" uuid="7b244488-789e-4ff7-99c0-308c79a2d884"/>
+				<textFieldExpression><![CDATA[$F{ESPB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="301" y="90" width="100" height="30" uuid="dec6a3d7-f02a-41ad-a5b2-114eb745d739"/>
+				<textFieldExpression><![CDATA[$F{Ocena}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="371" y="90" width="100" height="30" uuid="915f789e-995a-4495-9364-e11101e4050f"/>
+				<textFieldExpression><![CDATA[$F{datum}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="15" y="-10" width="126" height="30" uuid="c65a21ef-163b-4ad5-9742-38a33e8b5374"/>
+				<text><![CDATA[Ukupno 3. godina:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="245" y="-10" width="100" height="30" uuid="b593ebf1-56c0-4ec1-8157-701056a99aba"/>
+				<textFieldExpression><![CDATA[$F{espb1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="-13" width="100" height="30" uuid="a20d2d6d-0d8b-4881-afa9-3ef1c2394c61"/>
+				<textFieldExpression><![CDATA[$F{ocena1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="360" splitType="Stretch">
+			<staticText>
+				<reportElement x="18" y="-10" width="126" height="30" uuid="5d165ed9-301f-456f-87b9-09cc04c1e6e2"/>
+				<text><![CDATA[Ukupno 4. godina:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="-20" width="100" height="30" uuid="2645bb3e-6279-4949-83ee-88c2d36720ae"/>
+				<textFieldExpression><![CDATA[$F{espb1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="301" y="-20" width="100" height="30" uuid="277d22d8-9a00-4e80-a998-5fb85103ab6f"/>
+				<textFieldExpression><![CDATA[$F{ocena1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="30" width="519" height="50" uuid="707559f4-f69a-46e8-a844-5684e18f2d44"/>
+				<text><![CDATA[UKUPNO POLOŽENO: 
+
+──────────────────────────────────────────────]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="15" y="80" width="84" height="79" uuid="52ba9a65-bd05-4625-8698-5ccab1db5126"/>
+				<text><![CDATA[Broj predmeta:
+
+Ukupno ESPB:
+
+Prosecna ocena:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="99" y="78" width="100" height="30" uuid="8b5dac5e-b242-4900-828c-592d444da65f"/>
+				<textFieldExpression><![CDATA[$F{ocena1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="98" y="100" width="100" height="30" uuid="b9cf4f0b-732c-4499-a55e-301c1632a555"/>
+				<textFieldExpression><![CDATA[$F{ocena1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="103" y="130" width="100" height="30" uuid="c887dcfc-916c-4453-a569-5e7d319e0369"/>
+				<textFieldExpression><![CDATA[$F{ocena1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="335" y="0" width="190" height="45" uuid="e3e8671a-699f-4c8f-8470-d1d9e0aca681"/>
+				<text><![CDATA[___________________________
+
+        Studentska služba]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="220" y="30" width="100" height="30" uuid="2f7079ea-6cd2-4617-b86f-25ae9453ff68"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

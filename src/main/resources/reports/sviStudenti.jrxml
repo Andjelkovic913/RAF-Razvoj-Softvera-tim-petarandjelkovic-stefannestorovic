@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sviStudenti" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7fae7ac7-b54c-46e8-9c58-3889413ed9d2">
+	<style name="DejaVuSans" isDefault="true" fontName="DejaVu Sans" fontSize="12" pdfFontName="DejaVu Sans" pdfEncoding="UTF-8" isPdfEmbedded="true"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="ime" class="java.lang.String"/>
+	<field name="prezime" class="java.lang.String"/>
+	<field name="godinaUpisa" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="91" splitType="Stretch">
+			<staticText>
+				<reportElement x="200" y="21" width="160" height="49" forecolor="#030303" uuid="4b409f2e-411d-4011-8bce-7355fcd55c0e"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="30" pdfFontName="DejaVu Sans" pdfEncoding="UTF-8" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[STUDENTI]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="10" y="10" width="100" height="30" uuid="f1a88cd9-6729-4495-a1bb-7304b5669fd2"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="100" y="30" width="100" height="30" uuid="bc315718-64b1-431d-bf15-58c8d5ce8ecf">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c5ce6383-3d01-4be4-acc9-9013f4c76b5c"/>
+				</reportElement>
+				<text><![CDATA[ime]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="30" width="100" height="30" uuid="151e1d32-a713-4684-820f-5bcd8a1307a7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="597069ba-0a84-4f7e-8e01-5e8d3f01a82f"/>
+				</reportElement>
+				<text><![CDATA[prezime]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="30" width="100" height="30" uuid="48f5e8bd-4f57-4451-ad7a-5cd21ebc9922">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="763829f1-724f-429d-b113-5d3261cd5ab6"/>
+				</reportElement>
+				<text><![CDATA[godinaUpisa]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="37" splitType="Stretch">
+			<textField>
+				<reportElement x="100" y="0" width="100" height="30" uuid="1ab33b28-342b-4f7a-93f0-0999abf287de">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c5ce6383-3d01-4be4-acc9-9013f4c76b5c"/>
+				</reportElement>
+				<textElement>
+					<font fontName="DejaVu Sans" pdfFontName="DejaVu Sans" pdfEncoding="UTF-8" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ime}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="220" y="0" width="100" height="30" uuid="164ad1ed-2b49-4827-b5af-5626f0fd2de3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="597069ba-0a84-4f7e-8e01-5e8d3f01a82f"/>
+				</reportElement>
+				<textElement>
+					<font fontName="DejaVu Sans" pdfFontName="DejaVu Sans" pdfEncoding="UTF-8" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prezime}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="0" width="100" height="30" uuid="c45c74ea-7dbd-4ce0-9aca-e408d2c82429">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="763829f1-724f-429d-b113-5d3261cd5ab6"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{godinaUpisa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="220" y="30" width="100" height="30" uuid="2f7079ea-6cd2-4617-b86f-25ae9453ff68"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

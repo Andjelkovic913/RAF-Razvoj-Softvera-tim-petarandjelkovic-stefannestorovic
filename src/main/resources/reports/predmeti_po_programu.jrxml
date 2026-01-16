@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="predmeti_po_programu" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+    
+    <parameter name="studijskiProgram" class="java.lang.String"/>
+    <parameter name="filterObavezni" class="java.lang.String"/>
+    
+    <field name="naziv" class="java.lang.String"/>
+    <field name="sifra" class="java.lang.String"/>
+    <field name="semestar" class="java.lang.Integer"/>
+    <field name="fondCasovaPredavanja" class="java.lang.Integer"/>
+    <field name="fondCasovaVezbe" class="java.lang.Integer"/>
+    <field name="espb" class="java.lang.Integer"/>
+    <field name="obavezan" class="java.lang.Boolean"/>
+    
+    <title>
+        <band height="100">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Izveštaj - Predmeti po studijskom programu]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="0" y="35" width="555" height="25"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{studijskiProgram}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="65" width="555" height="20"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isItalic="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{filterObavezni}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+    
+    <columnHeader>
+        <band height="30">
+            <staticText>
+                <reportElement x="0" y="0" width="200" height="30" mode="Opaque" backcolor="#E0E0E0"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Naziv predmeta]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="200" y="0" width="60" height="30" mode="Opaque" backcolor="#E0E0E0"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Šifra]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="260" y="0" width="60" height="30" mode="Opaque" backcolor="#E0E0E0"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Semestar]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="320" y="0" width="80" height="30" mode="Opaque" backcolor="#E0E0E0"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Časova (P+V)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="400" y="0" width="50" height="30" mode="Opaque" backcolor="#E0E0E0"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[ESPB]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="450" y="0" width="105" height="30" mode="Opaque" backcolor="#E0E0E0"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Obavezan]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    
+    <detail>
+        <band height="25">
+            <textField>
+                <reportElement x="0" y="0" width="200" height="25"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font size="9"/>
+                    <paragraph leftIndent="5"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{naziv}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="200" y="0" width="60" height="25"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{sifra}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="260" y="0" width="60" height="25"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{semestar}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="320" y="0" width="80" height="25"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[($F{fondCasovaPredavanja} != null ? $F{fondCasovaPredavanja} : 0) + "+" + ($F{fondCasovaVezbe} != null ? $F{fondCasovaVezbe} : 0)]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="400" y="0" width="50" height="25"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{espb}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="450" y="0" width="105" height="25"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{obavezan} ? "Da" : "Ne"]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    
+    <pageFooter>
+        <band height="30">
+            <textField>
+                <reportElement x="0" y="10" width="555" height="20"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Strana " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+    
+</jasperReport>

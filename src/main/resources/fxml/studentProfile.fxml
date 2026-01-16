@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<BorderPane fx:id="studentProfilePane" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.raflab.studsluzbadesktopclient.controllers.StudentProfileController"
+            prefHeight="700" prefWidth="1000">
+    
+    <top>
+        <VBox spacing="10">
+            <fx:include source="menuBar.fxml"/>
+            <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 10 20 10 20; -fx-background-color: #f5f5f5;">
+                <Button text="← Nazad na pretragu" onAction="#handleGoBack" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                <Label fx:id="studentNameLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Label fx:id="studentIndexLabel" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Prijavi ispit" onAction="#handlePrijavaIspita" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px;"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <TabPane fx:id="profileTabPane">
+            <!-- Tab 1: Osnovni podaci (combined: personal, contact, high school, student ID) -->
+            <Tab text="Osnovni podaci" closable="false">
+                <ScrollPane fitToWidth="true">
+                    <VBox spacing="20" style="-fx-padding: 20;">
+                        <!-- Personal Data Section -->
+                        <TitledPane text="Lični podaci" expanded="true">
+                            <GridPane hgap="20" vgap="10" style="-fx-padding: 10;">
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints minWidth="200"/>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints minWidth="200"/>
+                                </columnConstraints>
+                                
+                                <Label text="Ime:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label fx:id="imeLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                
+                                <Label text="Prezime:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                <Label fx:id="prezimeLabel" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                                
+                                <Label text="Srednje ime:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <Label fx:id="srednjeImeLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                
+                                <Label text="JMBG:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                <Label fx:id="jmbgLabel" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                                
+                                <Label text="Datum rođenja:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <Label fx:id="datumRodjenjaLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                
+                                <Label text="Mesto rođenja:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                                <Label fx:id="mestoRodjenjaLabel" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                                
+                                <Label text="Država rođenja:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                <Label fx:id="drzavaRodjenjaLabel" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                
+                                <Label text="Pol:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                                <Label fx:id="polLabel" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+                                
+                                <Label text="Državljanstvo:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                                <Label fx:id="drzavljanstvoLabel" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                                
+                                <Label text="Nacionalnost:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+                                <Label fx:id="nacionalnostLabel" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+                                
+                                <Label text="Broj lične karte:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                                <Label fx:id="licnaKartaLabel" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                            </GridPane>
+                        </TitledPane>
+                        
+                        <!-- Contact Data Section -->
+                        <TitledPane text="Kontakt podaci" expanded="true">
+                            <GridPane hgap="20" vgap="10" style="-fx-padding: 10;">
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints minWidth="200"/>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints minWidth="200"/>
+                                </columnConstraints>
+                                
+                                <Label text="Adresa:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label fx:id="adresaLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                
+                                <Label text="Mesto stanovanja:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                <Label fx:id="mestoStanovanjaLabel" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                                
+                                <Label text="Email (privatni):" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <Label fx:id="emailPrivatniLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                
+                                <Label text="Email (fakultet):" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                <Label fx:id="emailFakultetLabel" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                                
+                                <Label text="Broj telefona:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <Label fx:id="telefonLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                            </GridPane>
+                        </TitledPane>
+                        
+                        <!-- Index/Student ID Section -->
+                        <TitledPane text="Podaci o indeksu" expanded="true">
+                            <GridPane hgap="20" vgap="10" style="-fx-padding: 10;">
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints minWidth="200"/>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints minWidth="200"/>
+                                </columnConstraints>
+                                
+                                <Label text="ID Studenta:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label fx:id="studentIdLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                
+                                <Label text="Broj indeksa:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                <Label fx:id="brojIndeksaLabel" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                                
+                                <Label text="Studijski program:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <Label fx:id="studProgramLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                
+                                <Label text="Godina upisa:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                <Label fx:id="godinaUpisaLabel" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                                
+                                <Label text="Način finansiranja:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <Label fx:id="finansiranjeLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                
+                                <Label text="Status indeksa:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                                <Label fx:id="statusIndeksaLabel" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                            </GridPane>
+                        </TitledPane>
+                        
+                        <!-- High School Section -->
+                        <TitledPane text="Završena srednja škola" expanded="true">
+                            <GridPane hgap="20" vgap="10" style="-fx-padding: 10;">
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints minWidth="200"/>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints minWidth="200"/>
+                                </columnConstraints>
+                                
+                                <Label text="Naziv škole:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label fx:id="srednjaSkolaNazivLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                
+                                <Label text="Mesto:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                <Label fx:id="srednjaSkolaMestoLabel" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                                
+                                <Label text="Uspeh iz srednje:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <Label fx:id="uspehSrednjaLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                
+                                <Label text="Uspeh na prijemnom:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                <Label fx:id="uspehPrijemniLabel" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                            </GridPane>
+                        </TitledPane>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+            
+            <!-- Tab 2: Ispiti (passed and unpassed) -->
+            <Tab text="Ispiti" closable="false">
+                <VBox spacing="15" style="-fx-padding: 20;">
+                    <TitledPane text="Položeni ispiti" expanded="true" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="polozeniIspitiTable" minHeight="200">
+                            <columns>
+                                <TableColumn prefWidth="60" text="Šifra">
+                                    <cellValueFactory><PropertyValueFactory property="predmetSifra"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="200" text="Predmet">
+                                    <cellValueFactory><PropertyValueFactory property="predmetNaziv"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="60" text="ESPB">
+                                    <cellValueFactory><PropertyValueFactory property="espb"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="60" text="Ocena">
+                                    <cellValueFactory><PropertyValueFactory property="ocena"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="100" text="Datum">
+                                    <cellValueFactory><PropertyValueFactory property="datumPolaganja"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="100" text="Ispitni rok">
+                                    <cellValueFactory><PropertyValueFactory property="ispitniRok"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="80" text="Pred. obav.">
+                                    <cellValueFactory><PropertyValueFactory property="predispitneObaveze"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="80" text="Poeni ispit">
+                                    <cellValueFactory><PropertyValueFactory property="poeniIspit"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="80" text="Ukupno">
+                                    <cellValueFactory><PropertyValueFactory property="ukupnoPoena"/></cellValueFactory>
+                                </TableColumn>
+                            </columns>
+                        </TableView>
+                    </TitledPane>
+                    
+                    <TitledPane text="Nepoloženi ispiti" expanded="true" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="nepolozeniIspitiTable" minHeight="200">
+                            <columns>
+                                <TableColumn prefWidth="80" text="Šifra">
+                                    <cellValueFactory><PropertyValueFactory property="predmetSifra"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="250" text="Predmet">
+                                    <cellValueFactory><PropertyValueFactory property="predmetNaziv"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="80" text="ESPB">
+                                    <cellValueFactory><PropertyValueFactory property="espb"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="120" text="Poslednji pokušaj">
+                                    <cellValueFactory><PropertyValueFactory property="datumPolaganja"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="120" text="Ispitni rok">
+                                    <cellValueFactory><PropertyValueFactory property="ispitniRok"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn prefWidth="100" text="Pred. obav.">
+                                    <cellValueFactory><PropertyValueFactory property="predispitneObaveze"/></cellValueFactory>
+                                </TableColumn>
+                            </columns>
+                        </TableView>
+                    </TitledPane>
+                </VBox>
+            </Tab>
+            
+            <!-- Tab 3: Uplate (Payments) -->
+            <Tab text="Uplate" closable="false">
+                <VBox spacing="15" style="-fx-padding: 20;">
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <Label text="Pregled uplata studenta" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="ukupnoUplataLabel" style="-fx-font-size: 14px;"/>
+                    </HBox>
+                    
+                    <TableView fx:id="uplateTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn prefWidth="120" text="Datum uplate">
+                                <cellValueFactory><PropertyValueFactory property="datumUplate"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="120" text="Iznos">
+                                <cellValueFactory><PropertyValueFactory property="iznos"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="250" text="Svrha uplate">
+                                <cellValueFactory><PropertyValueFactory property="svrhaUplate"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="120" text="Školska godina">
+                                <cellValueFactory><PropertyValueFactory property="skolskaGodina"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="120" text="Način plaćanja">
+                                <cellValueFactory><PropertyValueFactory property="nacinPlacanja"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="100" text="Status">
+                                <cellValueFactory><PropertyValueFactory property="status"/></cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
+                    
+                    <HBox alignment="CENTER_RIGHT" spacing="10">
+                        <Button text="Dodaj uplatu" onAction="#handleAddPayment" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+            
+            <!-- Tab 4: Upisi i obnove godina (Enrollments) -->
+            <Tab text="Upisi i obnove" closable="false">
+                <VBox spacing="15" style="-fx-padding: 20;">
+                    <Label text="Pregled upisanih i obnovljenih godina" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    
+                    <TableView fx:id="upisiTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn prefWidth="120" text="Školska godina">
+                                <cellValueFactory><PropertyValueFactory property="skolskaGodina"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="100" text="Godina studija">
+                                <cellValueFactory><PropertyValueFactory property="godinaStudija"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="150" text="Studijski program">
+                                <cellValueFactory><PropertyValueFactory property="studijskiProgram"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="100" text="Tip">
+                                <cellValueFactory><PropertyValueFactory property="tipUpisa"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="120" text="Datum upisa">
+                                <cellValueFactory><PropertyValueFactory property="datumUpisa"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="120" text="Finansiranje">
+                                <cellValueFactory><PropertyValueFactory property="nacinFinansiranja"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="100" text="ESPB">
+                                <cellValueFactory><PropertyValueFactory property="ostvareniEspb"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="80" text="Aktivan">
+                                <cellValueFactory><PropertyValueFactory property="aktivan"/></cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
+                    
+                    <HBox alignment="CENTER_RIGHT" spacing="10">
+                        <Button text="Upis nove godine" onAction="#handleEnrollYear" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                        <Button text="Obnova godine" onAction="#handleRenewYear" style="-fx-background-color: #FF9800; -fx-text-fill: white;"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+            
+            <!-- Tab 5: Statistika (ESPB and average grade) -->
+            <Tab text="Statistika" closable="false">
+                <VBox alignment="CENTER" spacing="30" style="-fx-padding: 40;">
+                    <Label text="Statistika studenta" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                    
+                    <HBox alignment="CENTER" spacing="50">
+                        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 30; -fx-background-color: #e3f2fd; -fx-background-radius: 10;">
+                            <Label text="Ukupno ESPB" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
+                            <Label fx:id="statistikaEspbLabel" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #1976D2;"/>
+                        </VBox>
+                        
+                        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 30; -fx-background-color: #e8f5e9; -fx-background-radius: 10;">
+                            <Label text="Prosečna ocena" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
+                            <Label fx:id="statistikaProsekLabel" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #388E3C;"/>
+                        </VBox>
+                        
+                        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 30; -fx-background-color: #fff3e0; -fx-background-radius: 10;">
+                            <Label text="Položenih ispita" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
+                            <Label fx:id="statistikaPolozeniLabel" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #F57C00;"/>
+                        </VBox>
+                        
+                        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 30; -fx-background-color: #ffebee; -fx-background-radius: 10;">
+                            <Label text="Nepoloženih ispita" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
+                            <Label fx:id="statistikaNepolozeniLabel" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: #D32F2F;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+    
+    <bottom>
+        <HBox alignment="CENTER" spacing="20" style="-fx-padding: 15; -fx-background-color: #f5f5f5;">
+            <Button text="← Nazad na pretragu" onAction="#handleGoBack" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+            <Button text="Uverenje o studiranju" onAction="#handleGenerateReport" style="-fx-background-color: #9C27B0; -fx-text-fill: white;"/>
+            <Button text="Uverenje o položenim ispitima" onAction="#handlePrintTranscript" style="-fx-background-color: #607D8B; -fx-text-fill: white;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

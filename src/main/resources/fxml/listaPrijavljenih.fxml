@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.raflab.studsluzbadesktopclient.controllers.ListaPrijavljenihController">
+    <top>
+        <fx:include source="menuBar.fxml"/>
+    </top>
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            
+            <Label text="Lista prijavljenih studenata po predmetima" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            
+            <!-- Predmeti lista -->
+            <SplitPane dividerPositions="0.3" VBox.vgrow="ALWAYS">
+                <!-- Leva strana - Lista predmeta -->
+                <VBox spacing="10">
+                    <Label text="Predmeti" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                    <TableView fx:id="predmetiTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="predmetSifraColumn" prefWidth="80" text="Šifra"/>
+                            <TableColumn fx:id="predmetNazivColumn" prefWidth="200" text="Naziv"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- Desna strana - Studenti za izabrani predmet -->
+                <VBox spacing="10">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Prijavljeni studenti" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                        <Label fx:id="predmetInfoLabel" style="-fx-text-fill: #666;"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Nastavnik:"/>
+                        <ComboBox fx:id="nastavnikComboBox" promptText="Svi nastavnici" prefWidth="250"/>
+                        <Button text="Prikaži" onAction="#handlePrikaziStudente" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                    </HBox>
+                    
+                    <TableView fx:id="studentiTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="studentIndeksColumn" prefWidth="120" text="Indeks"/>
+                            <TableColumn fx:id="studentImeColumn" prefWidth="150" text="Ime"/>
+                            <TableColumn fx:id="studentPrezimeColumn" prefWidth="150" text="Prezime"/>
+                            <TableColumn fx:id="studentSmerColumn" prefWidth="80" text="Smer"/>
+                        </columns>
+                    </TableView>
+                    
+                    <Label fx:id="brojStudenataLabel" style="-fx-font-weight: bold;"/>
+                </VBox>
+            </SplitPane>
+        </VBox>
+    </center>
+</BorderPane>

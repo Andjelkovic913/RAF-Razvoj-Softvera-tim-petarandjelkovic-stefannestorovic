@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<BorderPane fx:id="nastavnikProfilePane" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.raflab.studsluzbadesktopclient.controllers.NastavnikProfileController"
+            prefHeight="700" prefWidth="1000">
+    
+    <top>
+        <VBox spacing="10">
+            <fx:include source="menuBar.fxml"/>
+            <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 10 20 10 20; -fx-background-color: #f5f5f5;">
+                <Button text="← Nazad na pretragu" onAction="#handleGoBack" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                <Label fx:id="nastavnikNameLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Label fx:id="nastavnikZvanjeLabel" style="-fx-font-size: 14px; -fx-text-fill: #666;"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <center>
+        <TabPane fx:id="profileTabPane">
+            <!-- Tab 1: Osnovni podaci -->
+            <Tab text="Osnovni podaci" closable="false">
+                <ScrollPane fitToWidth="true">
+                    <VBox spacing="20" style="-fx-padding: 20;">
+                        <!-- Personal Data Section -->
+                        <TitledPane text="Lični podaci" expanded="true">
+                            <GridPane hgap="20" vgap="10" style="-fx-padding: 10;">
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints minWidth="200"/>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints minWidth="200"/>
+                                </columnConstraints>
+                                
+                                <Label text="Ime:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label fx:id="imeLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                
+                                <Label text="Prezime:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                <Label fx:id="prezimeLabel" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                                
+                                <Label text="Srednje ime:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <Label fx:id="srednjeImeLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                
+                                <Label text="JMBG:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                <Label fx:id="jmbgLabel" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                                
+                                <Label text="Datum rođenja:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <Label fx:id="datumRodjenjaLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                                
+                                <Label text="Pol:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                                <Label fx:id="polLabel" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                            </GridPane>
+                        </TitledPane>
+                        
+                        <!-- Contact Data Section -->
+                        <TitledPane text="Kontakt podaci" expanded="true">
+                            <GridPane hgap="20" vgap="10" style="-fx-padding: 10;">
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints minWidth="200"/>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints minWidth="200"/>
+                                </columnConstraints>
+                                
+                                <Label text="Email:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label fx:id="emailLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                
+                                <Label text="Broj telefona:" style="-fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                <Label fx:id="telefonLabel" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                                
+                                <Label text="Adresa:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <Label fx:id="adresaLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.columnSpan="3"/>
+                            </GridPane>
+                        </TitledPane>
+                        
+                        <!-- Current Position Section -->
+                        <TitledPane text="Trenutno zvanje" expanded="true">
+                            <GridPane hgap="20" vgap="10" style="-fx-padding: 10;">
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="150"/>
+                                    <ColumnConstraints minWidth="400"/>
+                                </columnConstraints>
+                                
+                                <Label text="Zvanje:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label fx:id="trenutnoZvanjeLabel" style="-fx-font-size: 14px; -fx-text-fill: #1976D2;" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                            </GridPane>
+                        </TitledPane>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+            
+            <!-- Tab 2: Istorija zvanja -->
+            <Tab text="Istorija zvanja" closable="false">
+                <VBox spacing="15" style="-fx-padding: 20;">
+                    <Label text="Pregled svih zvanja nastavnika" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    
+                    <TableView fx:id="zvanjaTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn prefWidth="250" text="Zvanje">
+                                <cellValueFactory><PropertyValueFactory property="zvanje"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="150" text="Datum izbora">
+                                <cellValueFactory><PropertyValueFactory property="datumIzbora"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="150" text="Datum prestanka">
+                                <cellValueFactory><PropertyValueFactory property="datumPrestanka"/></cellValueFactory>
+                            </TableColumn>
+                            <TableColumn prefWidth="100" text="Aktivno">
+                                <cellValueFactory><PropertyValueFactory property="aktivno"/></cellValueFactory>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+    
+    <bottom>
+        <HBox alignment="CENTER" spacing="20" style="-fx-padding: 15; -fx-background-color: #f5f5f5;">
+            <Button text="← Nazad na pretragu" onAction="#handleGoBack" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

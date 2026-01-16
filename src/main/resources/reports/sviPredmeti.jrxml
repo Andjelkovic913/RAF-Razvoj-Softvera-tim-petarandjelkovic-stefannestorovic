@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sviStudenti" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7fae7ac7-b54c-46e8-9c58-3889413ed9d2">
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="semestar" class="java.lang.Integer"/>
+	<field name="naziv" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="91" splitType="Stretch">
+			<staticText>
+				<reportElement x="210" y="30" width="150" height="49" forecolor="#030303" uuid="4b409f2e-411d-4011-8bce-7355fcd55c0e"/>
+				<textElement>
+					<font size="30"/>
+				</textElement>
+				<text><![CDATA[PREDMETI]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="10" y="10" width="150" height="30" uuid="f1a88cd9-6729-4495-a1bb-7304b5669fd2"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="240" y="30" width="100" height="30" uuid="151e1d32-a713-4684-820f-5bcd8a1307a7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="597069ba-0a84-4f7e-8e01-5e8d3f01a82f"/>
+				</reportElement>
+				<text><![CDATA[naziv]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="90" y="30" width="100" height="30" uuid="83b30612-d0a0-4e5c-9918-20b05bb2f125">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9c68fbf-b35f-4a0d-8f70-6ea194b99fe9"/>
+				</reportElement>
+				<text><![CDATA[semestar]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="55" splitType="Stretch">
+			<textField>
+				<reportElement x="90" y="9" width="120" height="30" uuid="a8440f33-7576-40c4-80f9-97a30743091d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a9c68fbf-b35f-4a0d-8f70-6ea194b99fe9"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{semestar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="10" width="100" height="30" uuid="0c67b6c9-7874-4e54-a87c-e938d70ddbaa">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="556edff0-d90e-4902-a9c2-4d6fc5139950"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{naziv}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="220" y="30" width="100" height="30" uuid="2f7079ea-6cd2-4617-b86f-25ae9453ff68"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

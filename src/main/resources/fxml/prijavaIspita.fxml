@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.raflab.studsluzbadesktopclient.controllers.PrijavaIspitaController">
+    <top>
+        <fx:include source="menuBar.fxml"/>
+    </top>
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Prijava ispita:" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="← Nazad na ispite" onAction="#handleBackToIspiti"/>
+            </HBox>
+            
+            <!-- Student search and registration -->
+            <TitledPane text="Prijavi studenta na ispit" expanded="true">
+                <VBox spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Ispitni rok:"/>
+                        <ComboBox fx:id="ispitniRokComboBox" promptText="Izaberite ispitni rok" prefWidth="300" onAction="#handleIspitniRokSelected"/>
+                        <Button text="✕" onAction="#handleClearIspitniRok" style="-fx-font-size: 14px;" prefWidth="30"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Ispit:"/>
+                        <ComboBox fx:id="ispitComboBox" promptText="Izaberite ispit" prefWidth="400" onAction="#handleIspitSelected"/>
+                        <Button text="✕" onAction="#handleClearIspit" style="-fx-font-size: 14px;" prefWidth="30"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Smer:"/>
+                        <ComboBox fx:id="smerComboBox" promptText="Izaberite smer (opciono)" prefWidth="200"/>
+                        <Button text="✕" onAction="#handleClearSmer" style="-fx-font-size: 14px;" prefWidth="30"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Broj indeksa:"/>
+                        <TextField fx:id="brojIndeksaTf" promptText="Broj" prefWidth="80"/>
+                        <Label text="/"/>
+                        <TextField fx:id="godinaIndeksaTf" promptText="Godina" prefWidth="80"/>
+                        <Button text="Pretraži studenta" onAction="#handleSearchStudent"/>
+                    </HBox>
+                    
+                    <HBox fx:id="studentSelectionBox" spacing="10" alignment="CENTER_LEFT" visible="false" managed="false">
+                        <Label text="Izaberite studenta:"/>
+                        <ComboBox fx:id="studentComboBox" promptText="Izaberite studenta (smer)" prefWidth="350" onAction="#handleStudentSelected"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Student:"/>
+                        <Label fx:id="studentInfoLabel" style="-fx-font-weight: bold;"/>
+                    </HBox>
+                    
+                    <HBox spacing="10">
+                        <Button text="Prijavi na ispit" onAction="#handlePrijaviIspit" 
+                                style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                    </HBox>
+                </VBox>
+            </TitledPane>
+            
+            <!-- Table of registered students -->
+            <Label text="Prijavljeni studenti" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <TableView fx:id="prijavljeniTable" VBox.vgrow="ALWAYS" minHeight="300">
+                <columns>
+                    <TableColumn fx:id="indeksColumn" prefWidth="120" text="Indeks">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="fullIndexDisplay"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="imeColumn" prefWidth="150" text="Ime">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="ime"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="prezimeColumn" prefWidth="150" text="Prezime">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="prezime"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="predispitneColumn" prefWidth="150" text="Predispitne obaveze">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="predispitneObaveze"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+            
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Osveži listu" onAction="#handleRefresh"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

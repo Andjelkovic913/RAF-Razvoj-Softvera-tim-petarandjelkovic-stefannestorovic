@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" 
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
+              name="uverenjeOPolozenimIspitimaPoGodini" 
+              pageWidth="595" 
+              pageHeight="842" 
+              columnWidth="555" 
+              leftMargin="20" 
+              rightMargin="20" 
+              topMargin="20" 
+              bottomMargin="20">
+    
+    <parameter name="studentIme" class="java.lang.String"/>
+    <parameter name="studentPrezime" class="java.lang.String"/>
+    <parameter name="brojIndeksa" class="java.lang.String"/>
+    <parameter name="studijskiProgram" class="java.lang.String"/>
+    <parameter name="ukupnoEspb" class="java.lang.Integer"/>
+    <parameter name="prosecnaOcena" class="java.lang.Double"/>
+    
+    <field name="predmetNaziv" class="java.lang.String"/>
+    <field name="espb" class="java.lang.Integer"/>
+    <field name="ocena" class="java.lang.Integer"/>
+    <field name="datumPolaganja" class="java.time.LocalDate"/>
+    <field name="godinaStudija" class="java.lang.Integer"/>
+    
+    <variable name="godinaEspbSum" class="java.lang.Integer" resetType="Group" resetGroup="GodinaGroup" calculation="Sum">
+        <variableExpression><![CDATA[$F{espb}]]></variableExpression>
+    </variable>
+    
+    <group name="GodinaGroup">
+        <groupExpression><![CDATA[$F{godinaStudija} != null ? $F{godinaStudija} : 0]]></groupExpression>
+        <groupHeader>
+            <band height="40">
+                <textField>
+                    <reportElement x="10" y="10" width="535" height="20"/>
+                    <textElement>
+                        <font size="12" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{godinaStudija} == null ? "PREDMETI BEZ DEFINISANE GODINE" :
+                                                      $F{godinaStudija} == 1 ? "PRVA GODINA STUDIJA" :
+                                                      $F{godinaStudija} == 2 ? "DRUGA GODINA STUDIJA" :
+                                                      $F{godinaStudija} == 3 ? "TREĆA GODINA STUDIJA" :
+                                                      $F{godinaStudija} == 4 ? "ČETVRTA GODINA STUDIJA" :
+                                                      "GODINA STUDIJA: " + $F{godinaStudija}]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupHeader>
+        <groupFooter>
+            <band height="30">
+                <textField>
+                    <reportElement x="400" y="5" width="145" height="20"/>
+                    <textElement textAlignment="Right">
+                        <font size="10" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA["Ukupno ESPB: " + $V{godinaEspbSum}]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupFooter>
+    </group>
+    
+    <title>
+        <band height="180">
+            <staticText>
+                <reportElement x="0" y="0" width="250" height="60"/>
+                <textElement>
+                    <font size="10"/>
+                </textElement>
+                <text><![CDATA[RAČUNARSKI FAKULTET
+Univerzitet Union
+Kneza Mihaila 6, Beograd]]></text>
+            </staticText>
+            
+            <textField pattern="dd.MM.yyyy">
+                <reportElement x="400" y="0" width="155" height="20"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+            </textField>
+            
+            <staticText>
+                <reportElement x="150" y="70" width="255" height="25"/>
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[UVERENJE O POLOŽENIM ISPITIMA]]></text>
+            </staticText>
+            
+            <staticText>
+                <reportElement x="10" y="110" width="80" height="20"/>
+                <textElement><font size="11"/></textElement>
+                <text><![CDATA[Student:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="90" y="110" width="200" height="20"/>
+                <textElement><font size="11"/></textElement>
+                <textFieldExpression><![CDATA[$P{studentIme} + " " + $P{studentPrezime}]]></textFieldExpression>
+            </textField>
+            
+            <staticText>
+                <reportElement x="10" y="135" width="80" height="20"/>
+                <textElement><font size="11"/></textElement>
+                <text><![CDATA[Indeks:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="90" y="135" width="150" height="20"/>
+                <textElement><font size="11"/></textElement>
+                <textFieldExpression><![CDATA[$P{brojIndeksa}]]></textFieldExpression>
+            </textField>
+            
+            <staticText>
+                <reportElement x="10" y="160" width="80" height="20"/>
+                <textElement><font size="11"/></textElement>
+                <text><![CDATA[Program:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="90" y="160" width="300" height="20"/>
+                <textElement><font size="11"/></textElement>
+                <textFieldExpression><![CDATA[$P{studijskiProgram}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+    
+    <columnHeader>
+        <band height="30">
+            <staticText>
+                <reportElement x="10" y="5" width="280" height="20"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Predmet]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="290" y="5" width="60" height="20"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[ESPB]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="350" y="5" width="60" height="20"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Ocena]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="410" y="5" width="135" height="20"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Datum]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    
+    <detail>
+        <band height="25">
+            <textField>
+                <reportElement x="10" y="0" width="280" height="20"/>
+                <box leftPadding="5"><pen lineWidth="0.5"/></box>
+                <textElement verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{predmetNaziv}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="290" y="0" width="60" height="20"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{espb}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="350" y="0" width="60" height="20"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{ocena}]]></textFieldExpression>
+            </textField>
+            <textField pattern="dd.MM.yyyy">
+                <reportElement x="410" y="0" width="135" height="20"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{datumPolaganja}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    
+    <summary>
+        <band height="100">
+            <line>
+                <reportElement x="10" y="10" width="535" height="1"/>
+            </line>
+            
+            <staticText>
+                <reportElement x="10" y="25" width="150" height="20"/>
+                <textElement>
+                    <font size="11" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Ukupno ostvareno ESPB:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="160" y="25" width="100" height="20"/>
+                <textElement>
+                    <font size="11" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{ukupnoEspb}]]></textFieldExpression>
+            </textField>
+            
+            <staticText>
+                <reportElement x="10" y="50" width="150" height="20"/>
+                <textElement>
+                    <font size="11" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Prosečna ocena:]]></text>
+            </staticText>
+            <textField pattern="#0.00">
+                <reportElement x="160" y="50" width="100" height="20"/>
+                <textElement>
+                    <font size="11" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{prosecnaOcena}]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+</jasperReport>
