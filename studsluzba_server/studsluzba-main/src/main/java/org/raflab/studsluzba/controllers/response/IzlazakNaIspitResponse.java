@@ -16,6 +16,8 @@ public class IzlazakNaIspitResponse {
     
     // Student
     private Long studentIndeksId;
+    private String ime;
+    private String prezime;
     private int broj;
     private int godina;
     private String studProgramOznaka;

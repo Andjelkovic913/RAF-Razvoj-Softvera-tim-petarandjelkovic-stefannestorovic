@@ -21,4 +21,5 @@ public class StudentExamDTO {
     private Double poeniIspit;
     private Double ukupnoPoena;
     private boolean polozen;
+    private Integer godinaStudija;
 }

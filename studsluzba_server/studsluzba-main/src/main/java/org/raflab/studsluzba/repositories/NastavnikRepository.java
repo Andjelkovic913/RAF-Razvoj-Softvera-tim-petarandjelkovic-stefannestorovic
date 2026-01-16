@@ -21,12 +21,12 @@ public interface NastavnikRepository extends JpaRepository<Nastavnik, Long> {	//
 	@Query("select sp from Nastavnik sp where "
 			+ "(:ime is null or lower(sp.ime) like :ime) and "
 			+ "(:prezime is null or lower(sp.prezime) like :prezime)")			
-	List<Nastavnik> findByImeAndPrezime(String ime, String prezime);
+	List<Nastavnik> findByImeAndPrezime(@org.springframework.data.repository.query.Param("ime") String ime, @org.springframework.data.repository.query.Param("prezime") String prezime);
 
 	List<Nastavnik> findByEmailIn(List<String> emails);
 
 	@Query("SELECT n FROM Nastavnik n WHERE LOWER(n.email) = LOWER(:email)")
-	List<Nastavnik> findByEmail(String email);
+	List<Nastavnik> findByEmail(@org.springframework.data.repository.query.Param("email") String email);
 
 //	@Query("SELECT DISTINCT n FROM Nastavnik n LEFT JOIN FETCH n.zvanja")
 //	List<Nastavnik> findAll();

@@ -25,13 +25,18 @@ public interface StudentIndeksRepository extends JpaRepository<StudentIndeks, Lo
 			+ "(:studProgramOznaka is null or lower(indeks.studProgramOznaka) like concat('%', lower(:studProgramOznaka), '%')) and "
 			+ "(:godina is null or indeks.godina = :godina) and "
 			+ "(:broj is null or indeks.broj = :broj)")
-	Page<StudentIndeks> findStudentIndeks(String ime, String prezime, String studProgramOznaka, Integer godina, Integer broj, Pageable pageable);
+	Page<StudentIndeks> findStudentIndeks(@Param("ime") String ime, 
+										   @Param("prezime") String prezime, 
+										   @Param("studProgramOznaka") String studProgramOznaka, 
+										   @Param("godina") Integer godina, 
+										   @Param("broj") Integer broj, 
+										   Pageable pageable);
 	
 	@Query("select si from StudentIndeks si where si.student.id = :idStudentPodaci")
-	List<StudentIndeks> findStudentIndeksiForStudentPodaciId(Long idStudentPodaci);
+	List<StudentIndeks> findStudentIndeksiForStudentPodaciId(@Param("idStudentPodaci") Long idStudentPodaci);
 
 	@Query("select si from StudentIndeks si where si.student.id = :idStudentPodaci and si.aktivan = true")
-	StudentIndeks findAktivanStudentIndeksiByStudentPodaciId(Long idStudentPodaci);
+	StudentIndeks findAktivanStudentIndeksiByStudentPodaciId(@Param("idStudentPodaci") Long idStudentPodaci);
 
 	@Query("SELECT s.broj FROM StudentIndeks s WHERE s.godina = :godina AND s.studProgramOznaka = :studProgramOznaka AND s.aktivan = true ORDER BY s.broj ASC")
 	List<Integer> findBrojeviByGodinaAndStudProgramOznaka(@Param("godina") int godina, @Param("studProgramOznaka") String studProgramOznaka);

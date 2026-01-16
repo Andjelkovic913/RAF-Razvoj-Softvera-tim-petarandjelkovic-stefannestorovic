@@ -541,6 +541,12 @@ public class EntityMappers {
             response.setBroj(izlazak.getStudentIndeks().getBroj());
             response.setGodina(izlazak.getStudentIndeks().getGodina());
             response.setStudProgramOznaka(izlazak.getStudentIndeks().getStudProgramOznaka());
+            
+            // Dodaj ime i prezime studenta
+            if (izlazak.getStudentIndeks().getStudent() != null) {
+                response.setIme(izlazak.getStudentIndeks().getStudent().getIme());
+                response.setPrezime(izlazak.getStudentIndeks().getStudent().getPrezime());
+            }
         }
         // rezultati
         response.setOsvojeniPredispitniPoeni(izlazak.getOsvojeniPredispitniPoeni());
