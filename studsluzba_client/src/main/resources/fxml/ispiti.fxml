@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.raflab.studsluzbadesktopclient.controllers.IspitiController">
+    <top>
+        <fx:include source="menuBar.fxml"/>
+    </top>
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Ispiti za rok:" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Label fx:id="selectedRokLabel" style="-fx-font-size: 16px;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="← Nazad na rokove" onAction="#handleBackToRokovi"/>
+            </HBox>
+            
+            <!-- Add new exam form -->
+            <TitledPane text="Dodaj novi ispit" expanded="true">
+                <GridPane hgap="10" vgap="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    
+                    <Label text="Predmet (DrziPredmet):" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <ComboBox fx:id="drziPredmetCb" prefWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    
+                    <Label text="Datum održavanja:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <DatePicker fx:id="datumOdrzavanjaDp" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    
+                    <Label text="Vreme početka:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                    <TextField fx:id="vremePocetkaTf" promptText="HH:mm" prefWidth="100" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                    
+                    <Label text="Vreme završetka:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                    <TextField fx:id="vremeZavrsetkaTf" promptText="HH:mm" prefWidth="100" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                    
+                    <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Button text="Dodaj ispit" onAction="#handleAddIspit" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                        <Button text="Očisti" onAction="#handleClearForm"/>
+                    </HBox>
+                </GridPane>
+            </TitledPane>
+            
+            <!-- Table of exams -->
+            <TableView fx:id="ispitiTable" VBox.vgrow="ALWAYS" minHeight="300">
+                <columns>
+                    <TableColumn fx:id="idColumn" prefWidth="50" text="ID">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="id"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="predmetColumn" prefWidth="200" text="Predmet">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="predmetNaziv"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="datumColumn" prefWidth="100" text="Datum">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="datumOdrzavanja"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="vremeColumn" prefWidth="100" text="Vreme">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="vremePocetka"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="nastavnikColumn" prefWidth="150" text="Nastavnik">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="nastavnikIme"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="zakljucenColumn" prefWidth="80" text="Zaključen">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="zakljucen"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="actionColumn" prefWidth="280" text="Akcije"/>
+                </columns>
+            </TableView>
+            
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Osveži listu" onAction="#handleRefresh"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

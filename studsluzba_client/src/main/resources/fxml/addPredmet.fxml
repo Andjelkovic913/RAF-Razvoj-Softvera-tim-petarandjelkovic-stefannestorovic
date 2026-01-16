@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.raflab.studsluzbadesktopclient.controllers.AddPredmetController"
+            prefHeight="500.0" prefWidth="500.0">
+
+    <top>
+        <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: #f5f5f5;">
+            <Label text="Dodavanje novog predmeta" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true">
+            <VBox spacing="15" style="-fx-padding: 20;">
+                <GridPane hgap="10" vgap="15">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="150" prefWidth="150"/>
+                        <ColumnConstraints minWidth="250" prefWidth="250"/>
+                    </columnConstraints>
+
+                    <Label text="Studijski program:*" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <ComboBox fx:id="studProgramCb" promptText="Izaberite program" 
+                              GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="250"/>
+
+                    <Label text="Šifra predmeta:*" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <TextField fx:id="sifraTf" promptText="npr. RN001" 
+                               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="Naziv predmeta:*" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <TextField fx:id="nazivTf" promptText="Unesite naziv predmeta" 
+                               GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <Label text="ESPB:*" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <TextField fx:id="espbTf" promptText="npr. 8" 
+                               GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                    <Label text="Semestar:*" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                    <ComboBox fx:id="semestarCb" promptText="Izaberite semestar" 
+                              GridPane.columnIndex="1" GridPane.rowIndex="4" prefWidth="250"/>
+
+                    <Label text="Fond časova predavanja:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                    <TextField fx:id="fondPredavanjaTf" promptText="npr. 3" 
+                               GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+                    <Label text="Fond časova vežbi:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                    <TextField fx:id="fondVezbeTf" promptText="npr. 2" 
+                               GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+                    <Label text="Obavezan predmet:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+                    <CheckBox fx:id="obavezanCheckBox" selected="true"
+                              GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+                    <Label text="Opis:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+                    <TextArea fx:id="opisTa" promptText="Kratak opis predmeta" 
+                              GridPane.columnIndex="1" GridPane.rowIndex="8" 
+                              prefRowCount="3" wrapText="true"/>
+                </GridPane>
+
+                <Label text="* Obavezna polja" style="-fx-font-size: 11px; -fx-text-fill: gray;"/>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 15; -fx-background-color: #f5f5f5;">
+            <Button text="Sačuvaj" onAction="#handleSave" 
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-min-width: 100;"/>
+            <Button text="Otkaži" onAction="#handleCancel" 
+                    style="-fx-min-width: 100;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

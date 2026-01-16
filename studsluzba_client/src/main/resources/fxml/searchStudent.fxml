@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<BorderPane fx:id="searchStudentPane" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.raflab.studsluzbadesktopclient.controllers.SearchStudentController">
+    <top>
+        <fx:include source="menuBar.fxml"/>
+    </top>
+    <center>
+        <TabPane fx:id="mainTabPane">
+            <Tab text="Pretraga po imenu i prezimenu" closable="false">
+                <VBox alignment="CENTER" spacing="15">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                    <GridPane alignment="center" hgap="10" vgap="10">
+                        <Label text="Ime" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="imeStudentaTf" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Prezime" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="prezimeStudentaTf" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Button onAction="#handleSearchByName" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="CENTER">
+                            <GridPane.margin>
+                                <Insets top="10"/>
+                            </GridPane.margin>
+                        </Button>
+                    </GridPane>
+
+                    <TableView fx:id="tabelaStudentiPoImenu" minHeight="350" prefWidth="700">
+                        <columns>
+                            <TableColumn fx:id="imeColumnName" prefWidth="150" text="Ime">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="ime" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="prezimeColumnName" prefWidth="150" text="Prezime">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="prezime" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="brojIndeksaColumnName" prefWidth="120" text="Broj indeksa">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="brojIndeksa" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="godinaUpisaColumnName" prefWidth="100" text="Godina upisa">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="godinaUpisa" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="studProgramColumnName" prefWidth="180" text="Studijski program">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="studijskiProgram" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="actionColumnName" prefWidth="120" text="Akcija" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <Tab text="Pretraga po broju indeksa" closable="false">
+                <VBox alignment="CENTER" spacing="15">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                    <GridPane alignment="center" hgap="10" vgap="10">
+                        <Label text="Broj indeksa" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="brojIndeksaTf" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Godina indeksa" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="godinaIndeksaTf" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Button onAction="#handleSearchByIndex" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="CENTER">
+                            <GridPane.margin>
+                                <Insets top="10"/>
+                            </GridPane.margin>
+                        </Button>
+                    </GridPane>
+
+                    <TableView fx:id="tabelaStudentiPoIndeksu" minHeight="350" prefWidth="700">
+                        <columns>
+                            <TableColumn fx:id="imeColumnIndex" prefWidth="150" text="Ime">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="ime" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="prezimeColumnIndex" prefWidth="150" text="Prezime">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="prezime" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="brojIndeksaColumnIndex" prefWidth="120" text="Broj indeksa">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="brojIndeksa" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="godinaUpisaColumnIndex" prefWidth="100" text="Godina upisa">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="godinaUpisa" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="studProgramColumnIndex" prefWidth="180" text="Studijski program">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="studijskiProgram" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="actionColumnIndex" prefWidth="120" text="Akcija" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <Tab text="Pretraga po završenoj srednjoj školi" closable="false">
+                <VBox alignment="CENTER" spacing="15">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                    <GridPane alignment="center" hgap="10" vgap="10">
+                        <Label text="Završena srednja škola" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <ComboBox fx:id="srednjaSkolaCb" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Button onAction="#handleSearchByHighSchool" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER">
+                            <GridPane.margin>
+                                <Insets top="10"/>
+                            </GridPane.margin>
+                        </Button>
+                    </GridPane>
+
+                    <TableView fx:id="tabelaStudentiPoSrednjojSkoli" minHeight="350" prefWidth="700">
+                        <columns>
+                            <TableColumn fx:id="imeColumnSchool" prefWidth="120" text="Ime">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="ime" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="prezimeColumnSchool" prefWidth="120" text="Prezime">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="prezime" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="srednjaSkolaNazivColumn" prefWidth="200" text="Srednja škola">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="srednjaSkolaNaziv" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="srednjaSkolaMestoColumn" prefWidth="120" text="Mesto">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="srednjaSkolaMesto" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="uspehSrednjaColumn" prefWidth="140" text="Uspeh iz srednje">
+                                <cellValueFactory>
+                                    <PropertyValueFactory property="uspehIzSrednjeSkole" />
+                                </cellValueFactory>
+                            </TableColumn>
+                            <TableColumn fx:id="actionColumnSchool" prefWidth="120" text="Akcija" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>

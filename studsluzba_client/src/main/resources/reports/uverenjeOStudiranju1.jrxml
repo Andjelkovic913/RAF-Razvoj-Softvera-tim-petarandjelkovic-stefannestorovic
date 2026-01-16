@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sviStudenti" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7fae7ac7-b54c-46e8-9c58-3889413ed9d2">
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="ime" class="java.lang.String"/>
+	<field name="prezime" class="java.lang.String"/>
+	<field name="srednjeIme" class="java.lang.String"/>
+	<field name="jmbg" class="java.lang.String"/>
+	<field name="datumRodjenja" class="java.time.LocalDate"/>
+	<field name="mestoRodjenja" class="java.lang.String"/>
+	<field name="studijskiProgram" class="java.lang.String"/>
+	<field name="brojIndeksa" class="java.lang.Integer"/>
+	<field name="godinaUpisa" class="java.lang.Integer"/>
+	<field name="aktivanIndeks" class="java.lang.Boolean"/>
+	<field name="ukupnoEspb" class="java.lang.Integer"/>
+	<field name="prosecnaOcena" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="420" splitType="Stretch">
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="400" y="0" width="150" height="30" uuid="f1a88cd9-6729-4495-a1bb-7304b5669fd2"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="248" height="50" uuid="ac6fe435-8115-4fe0-9f35-409725ecfd36"/>
+				<textElement><font fontName="DejaVu Sans" size="10" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[RAČUNARSKI FAKULTET
+Univerzitet Union
+Kneza Mihaila 6, Beograd]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="15" y="79" width="250" height="30" uuid="ed7234b7-40dc-4d57-89d7-b4653695de35"/>
+				<textElement><font fontName="DejaVu Sans" size="12" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[Potvrđuje se da je student:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="15" y="120" width="130" height="20" uuid="b56b7d0c-97b6-4f42-b575-2299e2ebecef"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[Ime i Prezime:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="145" y="120" width="300" height="20" uuid="f61075b9-9e3a-4ca8-b073-4b205e1c673c"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<textFieldExpression><![CDATA[$F{ime} + " " + ($F{srednjeIme} != null ? $F{srednjeIme} + " " : "") + $F{prezime}]]></textFieldExpression>
+			</textField>
+			
+			<staticText>
+				<reportElement x="15" y="145" width="130" height="20" uuid="a1b2c3d4-0001-0001-0001-000000000001"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[JMBG:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="145" y="145" width="200" height="20" uuid="a9e904fe-1a75-4b3f-837a-67a7db02e337"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<textFieldExpression><![CDATA[$F{jmbg}]]></textFieldExpression>
+			</textField>
+			
+			<staticText>
+				<reportElement x="15" y="170" width="130" height="20" uuid="a1b2c3d4-0001-0001-0001-000000000002"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[Datum rođenja:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="145" y="170" width="200" height="20" uuid="359ff982-2484-45c4-918c-7a96bdd74627"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<textFieldExpression><![CDATA[$F{datumRodjenja} != null ? $F{datumRodjenja}.format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy.")) : ""]]></textFieldExpression>
+			</textField>
+			
+			<staticText>
+				<reportElement x="15" y="195" width="130" height="20" uuid="a1b2c3d4-0001-0001-0001-000000000003"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[Mesto rođenja:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="145" y="195" width="200" height="20" uuid="1e764631-2c79-40c0-bad1-172f4af6526d"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<textFieldExpression><![CDATA[$F{mestoRodjenja}]]></textFieldExpression>
+			</textField>
+			
+			<staticText>
+				<reportElement x="15" y="230" width="400" height="20" uuid="a1b2c3d4-0001-0001-0001-000000000004"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[upisan/a na Računarski fakultet u Beogradu:]]></text>
+			</staticText>
+			
+			<staticText>
+				<reportElement x="15" y="260" width="130" height="20" uuid="a1b2c3d4-0001-0001-0001-000000000005"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[Broj indeksa:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="145" y="260" width="200" height="20" uuid="0a99291f-347d-4c9d-b739-580928c1692d"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<textFieldExpression><![CDATA[$F{studijskiProgram} + " " + $F{brojIndeksa} + "/" + $F{godinaUpisa}]]></textFieldExpression>
+			</textField>
+			
+			<staticText>
+				<reportElement x="15" y="285" width="130" height="20" uuid="a1b2c3d4-0001-0001-0001-000000000006"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[Studijski program:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="145" y="285" width="200" height="20" uuid="5381fdd2-0f5d-46c4-b87a-5f7b614461de"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<textFieldExpression><![CDATA[$F{studijskiProgram}]]></textFieldExpression>
+			</textField>
+			
+			<staticText>
+				<reportElement x="15" y="310" width="130" height="20" uuid="a1b2c3d4-0001-0001-0001-000000000007"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[Datum upisa:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="145" y="310" width="200" height="20" uuid="a1b2c3d4-e5f6-7890-abcd-ef1234567890"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<textFieldExpression><![CDATA[$F{godinaUpisa} + ". godina"]]></textFieldExpression>
+			</textField>
+			
+			<staticText>
+				<reportElement x="15" y="335" width="130" height="20" uuid="a1b2c3d4-0001-0001-0001-000000000008"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[Status:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="145" y="335" width="200" height="20" uuid="c3d4e5f6-a7b8-9012-cdef-123456789012"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<textFieldExpression><![CDATA[$F{aktivanIndeks} ? "Aktivan" : "Neaktivan"]]></textFieldExpression>
+			</textField>
+			
+			<staticText>
+				<reportElement x="15" y="360" width="130" height="20" uuid="a1b2c3d4-0001-0001-0001-000000000009"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[Ostvareno ESPB:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="145" y="360" width="200" height="20" uuid="d4e5f6a7-b8c9-0123-defa-234567890123"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<textFieldExpression><![CDATA[$F{ukupnoEspb} != null ? $F{ukupnoEspb}.toString() : "0"]]></textFieldExpression>
+			</textField>
+			
+			<staticText>
+				<reportElement x="15" y="385" width="130" height="20" uuid="a1b2c3d4-0001-0001-0001-000000000010"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[Prosečna ocena:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="145" y="385" width="200" height="20" uuid="e5f6a7b8-c9d0-1234-efab-345678901234"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<textFieldExpression><![CDATA[$F{prosecnaOcena} != null ? String.format("%.2f", $F{prosecnaOcena}) : "-"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="130" splitType="Stretch">
+			<staticText>
+				<reportElement x="15" y="-20" width="300" height="70" uuid="2bd386c0-e019-48ef-94f0-861ca5c995f2"/>
+				<textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[Uverenje se izdaje na zahtev studenta radi ostvarivanja prava kod nadležnih organa.
+
+U Beogradu,]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="90" y="20" width="200" height="30" uuid="2c26a619-fa99-4a97-86d4-d92202e19962"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="364" y="69" width="166" height="61" uuid="1d935ca1-8d68-471d-9b1a-b43e8f883133"/>
+				<textElement textAlignment="Center"><font fontName="DejaVu Sans" size="10" pdfEncoding="UTF-8"/></textElement>
+				<text><![CDATA[_____________________________
+
+DEKAN FAKULTETA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="55" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="220" y="30" width="100" height="30" uuid="2f7079ea-6cd2-4617-b86f-25ae9453ff68"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
