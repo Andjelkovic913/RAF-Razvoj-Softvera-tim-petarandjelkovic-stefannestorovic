@@ -1,5 +1,6 @@
 package org.raflab.studsluzbadesktopclient.controllers;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -58,6 +59,13 @@ public class SearchNastavnikController {
 
     @FXML
     private TableColumn<NastavnikDTO, Void> actionColumnEmail;
+
+    @FXML private Button searchByNameBtn;
+    @FXML private Button searchByZvanjeBtn;
+    @FXML private Button searchByEmailBtn;
+
+    private static final String LOADING_TEXT = "Učitavanje...";
+    private static final String SEARCH_TEXT = "Pretraga";
 
     public SearchNastavnikController(NastavnikService nastavnikService, MainView mainView, 
                                      CoderFactory coderFactory, NavigationHistoryService navigationHistoryService) {
@@ -158,72 +166,88 @@ public class SearchNastavnikController {
     }
 
     public void handleSearchByName(ActionEvent actionEvent) {
-        try {
-            String ime = imeNastavnikaTf.getText();
-            String prezime = prezimeNastavnikaTf.getText();
+        String ime = imeNastavnikaTf.getText();
+        String prezime = prezimeNastavnikaTf.getText();
 
-            List<NastavnikDTO> results;
-            if ((ime == null || ime.trim().isEmpty()) && (prezime == null || prezime.trim().isEmpty())) {
-                results = nastavnikService.findAll();
-            } else {
-                results = nastavnikService.searchByNameAndSurname(ime, prezime);
-            }
+        setButtonLoading(searchByNameBtn, true);
 
-            if (results != null) {
-                tabelaNastavniciPoImenu.setItems(FXCollections.observableArrayList(results));
-            } else {
-                showAlert("Greška", "Došlo je do greške pri pretrazi nastavnika.");
-            }
-        } catch (Exception e) {
-            showAlert("Greška", "Došlo je do greške: " + e.getMessage());
+        // Ako su oba polja prazna, dohvati sve nastavnike
+        if ((ime == null || ime.trim().isEmpty()) && (prezime == null || prezime.trim().isEmpty())) {
+            nastavnikService.findAllAsync()
+                .subscribe(
+                    results -> Platform.runLater(() -> {
+                        setButtonLoading(searchByNameBtn, false);
+                        tabelaNastavniciPoImenu.setItems(FXCollections.observableArrayList(results));
+                    }),
+                    error -> Platform.runLater(() -> {
+                        setButtonLoading(searchByNameBtn, false);
+                        showAlert("Greška", "Došlo je do greške: " + error.getMessage());
+                    })
+                );
+        } else {
+            nastavnikService.searchByNameAndSurnameAsync(ime, prezime)
+                .subscribe(
+                    results -> Platform.runLater(() -> {
+                        setButtonLoading(searchByNameBtn, false);
+                        tabelaNastavniciPoImenu.setItems(FXCollections.observableArrayList(results));
+                    }),
+                    error -> Platform.runLater(() -> {
+                        setButtonLoading(searchByNameBtn, false);
+                        showAlert("Greška", "Došlo je do greške: " + error.getMessage());
+                    })
+                );
         }
     }
 
     public void handleSearchByZvanje(ActionEvent actionEvent) {
-        try {
-            String zvanje = zvanjeCb.getValue();
+        String zvanje = zvanjeCb.getValue();
 
-            if (zvanje == null || zvanje.trim().isEmpty()) {
-                showAlert("Upozorenje", "Molimo izaberite zvanje.");
-                return;
-            }
-
-            List<NastavnikDTO> results = nastavnikService.searchByZvanje(zvanje);
-
-            if (results != null) {
-                tabelaNastavniciPoZvanju.setItems(FXCollections.observableArrayList(results));
-            } else {
-                showAlert("Greška", "Došlo je do greške pri pretrazi nastavnika.");
-            }
-        } catch (Exception e) {
-            showAlert("Greška", "Došlo je do greške: " + e.getMessage());
+        if (zvanje == null || zvanje.trim().isEmpty()) {
+            showAlert("Upozorenje", "Molimo izaberite zvanje.");
+            return;
         }
+
+        setButtonLoading(searchByZvanjeBtn, true);
+
+        nastavnikService.searchByZvanjeAsync(zvanje)
+            .subscribe(
+                results -> Platform.runLater(() -> {
+                    setButtonLoading(searchByZvanjeBtn, false);
+                    tabelaNastavniciPoZvanju.setItems(FXCollections.observableArrayList(results));
+                }),
+                error -> Platform.runLater(() -> {
+                    setButtonLoading(searchByZvanjeBtn, false);
+                    showAlert("Greška", "Došlo je do greške: " + error.getMessage());
+                })
+            );
     }
 
     public void handleSearchByEmail(ActionEvent actionEvent) {
-        try {
-            String email = emailSearchTf.getText();
+        String email = emailSearchTf.getText();
 
-            if (email == null || email.trim().isEmpty()) {
-                showAlert("Upozorenje", "Molimo unesite email za pretragu.");
-                return;
-            }
-
-            if (!isValidEmail(email.trim())) {
-                showAlert("Upozorenje", "Molimo unesite ispravan format email adrese (npr. ime@domen.rs).");
-                return;
-            }
-
-            List<NastavnikDTO> results = nastavnikService.searchByEmail(email.trim());
-
-            if (results != null) {
-                tabelaNastavniciPoEmailu.setItems(FXCollections.observableArrayList(results));
-            } else {
-                showAlert("Greška", "Došlo je do greške pri pretrazi nastavnika.");
-            }
-        } catch (Exception e) {
-            showAlert("Greška", "Došlo je do greške: " + e.getMessage());
+        if (email == null || email.trim().isEmpty()) {
+            showAlert("Upozorenje", "Molimo unesite email za pretragu.");
+            return;
         }
+
+        if (!isValidEmail(email.trim())) {
+            showAlert("Upozorenje", "Molimo unesite ispravan format email adrese (npr. ime@domen.rs).");
+            return;
+        }
+
+        setButtonLoading(searchByEmailBtn, true);
+
+        nastavnikService.searchByEmailAsync(email.trim())
+            .subscribe(
+                results -> Platform.runLater(() -> {
+                    setButtonLoading(searchByEmailBtn, false);
+                    tabelaNastavniciPoEmailu.setItems(FXCollections.observableArrayList(results));
+                }),
+                error -> Platform.runLater(() -> {
+                    setButtonLoading(searchByEmailBtn, false);
+                    showAlert("Greška", "Došlo je do greške: " + error.getMessage());
+                })
+            );
     }
 
     private boolean isValidEmail(String email) {
@@ -240,5 +264,12 @@ public class SearchNastavnikController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void setButtonLoading(Button button, boolean loading) {
+        if (button != null) {
+            button.setDisable(loading);
+            button.setText(loading ? LOADING_TEXT : SEARCH_TEXT);
+        }
     }
 }

@@ -14,7 +14,7 @@ public interface UplataRepository extends JpaRepository<Uplata, Long> {
     /**
      * Dohvata sve uplate za određenog studenta
      */
-    @Query("SELECT u FROM Uplata u WHERE u.studentIndeks.id = :studentIndeksId")
+    @Query("SELECT u FROM Uplata u LEFT JOIN FETCH u.skolskaGodina WHERE u.studentIndeks.id = :studentIndeksId")
     List<Uplata> findByStudentIndeksId(@Param("studentIndeksId") Long studentIndeksId);
 
     /**

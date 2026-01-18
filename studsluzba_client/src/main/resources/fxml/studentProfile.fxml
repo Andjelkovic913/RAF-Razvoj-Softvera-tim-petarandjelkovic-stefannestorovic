@@ -24,11 +24,9 @@
     
     <center>
         <TabPane fx:id="profileTabPane">
-            <!-- Tab 1: Osnovni podaci (combined: personal, contact, high school, student ID) -->
             <Tab text="Osnovni podaci" closable="false">
                 <ScrollPane fitToWidth="true">
                     <VBox spacing="20" style="-fx-padding: 20;">
-                        <!-- Personal Data Section -->
                         <TitledPane text="Lični podaci" expanded="true">
                             <GridPane hgap="20" vgap="10" style="-fx-padding: 10;">
                                 <columnConstraints>
@@ -73,7 +71,6 @@
                             </GridPane>
                         </TitledPane>
                         
-                        <!-- Contact Data Section -->
                         <TitledPane text="Kontakt podaci" expanded="true">
                             <GridPane hgap="20" vgap="10" style="-fx-padding: 10;">
                                 <columnConstraints>
@@ -221,7 +218,6 @@
                 </VBox>
             </Tab>
             
-            <!-- Tab 3: Uplate (Payments) -->
             <Tab text="Uplate" closable="false">
                 <VBox spacing="15" style="-fx-padding: 20;">
                     <HBox alignment="CENTER_LEFT" spacing="20">
@@ -259,7 +255,6 @@
                 </VBox>
             </Tab>
             
-            <!-- Tab 4: Upisi i obnove godina (Enrollments) -->
             <Tab text="Upisi i obnove" closable="false">
                 <VBox spacing="15" style="-fx-padding: 20;">
                     <Label text="Pregled upisanih i obnovljenih godina" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
@@ -300,7 +295,6 @@
                 </VBox>
             </Tab>
             
-            <!-- Tab 5: Statistika (ESPB and average grade) -->
             <Tab text="Statistika" closable="false">
                 <VBox alignment="CENTER" spacing="30" style="-fx-padding: 40;">
                     <Label text="Statistika studenta" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>

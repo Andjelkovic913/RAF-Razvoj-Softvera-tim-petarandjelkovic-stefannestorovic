@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.raflab</groupId>
     <artifactId>studsluzba</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
   </parent>
   
   <artifactId>studsluzba-dtos</artifactId>

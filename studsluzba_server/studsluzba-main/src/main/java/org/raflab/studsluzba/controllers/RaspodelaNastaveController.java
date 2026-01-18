@@ -8,7 +8,7 @@ import org.raflab.studsluzba.dtos.StudentIndeksDTO;
 import org.raflab.studsluzba.services.RaspodelaNastaveService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import java.util.List;
 

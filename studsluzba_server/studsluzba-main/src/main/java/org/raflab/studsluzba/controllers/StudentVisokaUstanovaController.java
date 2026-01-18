@@ -6,7 +6,7 @@ import org.raflab.studsluzba.controllers.response.StudentVisokaUstanovaResponse;
 import org.raflab.studsluzba.services.StudentVisokaUstanovaService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @CrossOrigin

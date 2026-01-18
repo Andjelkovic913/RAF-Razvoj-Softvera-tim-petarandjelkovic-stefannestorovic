@@ -34,6 +34,8 @@
                     </HBox>
                     
                     <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Smer:"/>
+                        <ComboBox fx:id="smerCb" promptText="Izaberite smer" prefWidth="120"/>
                         <Label text="Broj indeksa:"/>
                         <TextField fx:id="brojIndeksaTf" promptText="Broj" prefWidth="80"/>
                         <Label text="/"/>

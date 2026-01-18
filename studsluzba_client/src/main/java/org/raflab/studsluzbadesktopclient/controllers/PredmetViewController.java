@@ -47,11 +47,11 @@ public class PredmetViewController {
     @FXML
     private VBox predmetiContainer;
 
-    @FXML
-    private Button editBtn;
-
-    @FXML
-    private Button deleteBtn;
+//    @FXML
+//    private Button editBtn;
+//
+//    @FXML
+//    private Button deleteBtn;
 
     private PredmetDTO selectedPredmet;
 
@@ -131,7 +131,7 @@ public class PredmetViewController {
                 .collect(Collectors.groupingBy(p -> (p.getSemestar() - 1) / 2 + 1));
 
         predmetiPoGodinama.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
+                .sorted(Map.Entry.comparingByKey()) // sortira po kljucu - godini
                 .forEach(entry -> {
                     Integer godina = entry.getKey();
                     List<PredmetDTO> predmetiGodine = entry.getValue();
@@ -140,20 +140,20 @@ public class PredmetViewController {
                     predmetiContainer.getChildren().add(godinaPane);
                 });
     }
-
+    // za svaku godinu
     private TitledPane createGodinaPane(Integer godina, List<PredmetDTO> predmeti) {
         VBox content = new VBox(10);
         content.setPadding(new Insets(10));
 
         Map<Integer, List<PredmetDTO>> predmetiPoSemestrima = predmeti.stream()
-                .collect(Collectors.groupingBy(PredmetDTO::getSemestar));
+                .collect(Collectors.groupingBy(PredmetDTO::getSemestar)); // uzeo predmete po semestrima
 
         predmetiPoSemestrima.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
+                .sorted(Map.Entry.comparingByKey()) // sortira po semestru rastuce
                 .forEach(entry -> {
                     Integer semestar = entry.getKey();
                     List<PredmetDTO> predmetiSemestra = entry.getValue();
-
+                    // ide po semestrima i prikazuje ih sa svojim oredmetima
                     Label semestarLabel = new Label(getRomanNumeral(semestar) + " semestar");
                     semestarLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 13px;");
 
@@ -197,18 +197,20 @@ public class PredmetViewController {
 
         TableColumn<PredmetDTO, String> obavezanCol = new TableColumn<>("Obavezan");
         obavezanCol.setCellValueFactory(cellData -> {
-            String value = cellData.getValue().isObavezan() ? "✓" : "";
+            String value = cellData.getValue().isObavezan() ? "✓" : "x";
             return new javafx.beans.property.SimpleStringProperty(value);
         });
         obavezanCol.setPrefWidth(80);
 
         table.getColumns().addAll(nazivCol, sifraCol, casovaCol, espbCol, obavezanCol);
 
+        /*
         table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             selectedPredmet = newSelection;
             editBtn.setDisable(newSelection == null);
             deleteBtn.setDisable(newSelection == null);
         });
+        */
 
         table.setPrefHeight(150);
         return table;
@@ -220,6 +222,7 @@ public class PredmetViewController {
         handleRefresh(null);
     }
 
+    /*
     @FXML
     public void handleEditPredmet(ActionEvent event) {
         if (selectedPredmet == null) {
@@ -258,6 +261,7 @@ public class PredmetViewController {
             }
         });
     }
+    */
 
     @FXML
     public void handleGoBack(ActionEvent event) {

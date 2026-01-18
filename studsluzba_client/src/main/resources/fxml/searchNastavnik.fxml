@@ -24,7 +24,7 @@
                         <Label text="Prezime" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                         <TextField fx:id="prezimeNastavnikaTf" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                        <Button onAction="#handleSearchByName" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="CENTER">
+                        <Button fx:id="searchByNameBtn" onAction="#handleSearchByName" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="CENTER">
                             <GridPane.margin>
                                 <Insets top="10"/>
                             </GridPane.margin>
@@ -73,7 +73,7 @@
                         <Label text="Zvanje" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                         <ComboBox fx:id="zvanjeCb" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-                        <Button onAction="#handleSearchByZvanje" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER">
+                        <Button fx:id="searchByZvanjeBtn" onAction="#handleSearchByZvanje" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER">
                             <GridPane.margin>
                                 <Insets top="10"/>
                             </GridPane.margin>
@@ -117,7 +117,7 @@
                         <Label text="Email" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                         <TextField fx:id="emailSearchTf" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="250"/>
 
-                        <Button onAction="#handleSearchByEmail" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER">
+                        <Button fx:id="searchByEmailBtn" onAction="#handleSearchByEmail" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER">
                             <GridPane.margin>
                                 <Insets top="10"/>
                             </GridPane.margin>

@@ -1,7 +1,7 @@
 package org.raflab.studsluzba.services;
 
 import lombok.RequiredArgsConstructor;
-import org.raflab.studsluzba.controllers.request.NastavnikRequest;
+import org.raflab.studsluzba.dtos.NastavnikRequest;
 import org.raflab.studsluzba.controllers.response.NastavnikResponse;
 import org.raflab.studsluzba.model.*;
 import org.raflab.studsluzba.dtos.NastavnikReportDTO;
@@ -11,7 +11,7 @@ import org.raflab.studsluzba.utils.EntityMappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -10,6 +10,7 @@ import org.raflab.studsluzbadesktopclient.MainView;
 import org.raflab.studsluzba.dtos.IspitDTO;
 import org.raflab.studsluzba.dtos.IspitniRokDTO;
 import org.raflab.studsluzbadesktopclient.services.IspitService;
+import org.raflab.studsluzbadesktopclient.services.IspitniRokService;
 import org.raflab.studsluzbadesktopclient.services.PredmetService;
 import org.springframework.stereotype.Component;
 
@@ -23,12 +24,14 @@ import java.util.Map;
 public class IspitiController {
 
     private final IspitService ispitService;
+    private final IspitniRokService ispitniRokService;
     private final PredmetService predmetService;
     private final MainView mainView;
 
     private static IspitniRokDTO selectedIspitniRok;
 
     @FXML private Label selectedRokLabel;
+    @FXML private ComboBox<IspitniRokDTO> ispitniRokCb;
     @FXML private ComboBox<DrziPredmetItem> drziPredmetCb;
     @FXML private DatePicker datumOdrzavanjaDp;
     @FXML private TextField vremePocetkaTf;
@@ -36,8 +39,9 @@ public class IspitiController {
     @FXML private TableView<IspitDTO> ispitiTable;
     @FXML private TableColumn<IspitDTO, Void> actionColumn;
 
-    public IspitiController(IspitService ispitService, PredmetService predmetService, MainView mainView) {
+    public IspitiController(IspitService ispitService, IspitniRokService ispitniRokService, PredmetService predmetService, MainView mainView) {
         this.ispitService = ispitService;
+        this.ispitniRokService = ispitniRokService;
         this.predmetService = predmetService;
         this.mainView = mainView;
     }
@@ -55,9 +59,47 @@ public class IspitiController {
             selectedRokLabel.setText("Nije izabran rok");
         }
         
+        loadIspitniRokovi();
         loadDrziPredmeti();
         setupActionColumn();
         loadIspiti();
+    }
+
+    private void loadIspitniRokovi() {
+        try {
+            List<IspitniRokDTO> rokovi = ispitniRokService.getAll();
+            ispitniRokCb.setItems(FXCollections.observableArrayList(rokovi));
+            
+            ispitniRokCb.setCellFactory(param -> new ListCell<IspitniRokDTO>() {
+                @Override
+                protected void updateItem(IspitniRokDTO item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.getTipRoka() + " (" + item.getDatumPocetka() + " - " + item.getDatumZavrsetka() + ")");
+                    }
+                }
+            });
+            
+            ispitniRokCb.setButtonCell(new ListCell<IspitniRokDTO>() {
+                @Override
+                protected void updateItem(IspitniRokDTO item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.getTipRoka() + " (" + item.getDatumPocetka() + " - " + item.getDatumZavrsetka() + ")");
+                    }
+                }
+            });
+            
+            if (selectedIspitniRok != null) {
+                ispitniRokCb.setValue(selectedIspitniRok);
+            }
+        } catch (Exception e) {
+            showAlert("Upozorenje", "Greška pri učitavanju ispitnih rokova: " + e.getMessage());
+        }
     }
 
     private void loadDrziPredmeti() {
@@ -78,7 +120,7 @@ public class IspitiController {
                             .toList()
             ));
         } catch (Exception e) {
-            System.err.println("Error loading drzi predmet: " + e.getMessage());
+            showAlert("Upozorenje", "Greška pri učitavanju predmeta: " + e.getMessage());
         }
     }
 
@@ -146,16 +188,16 @@ public class IspitiController {
             DrziPredmetItem selectedDrziPredmet = drziPredmetCb.getValue();
             
             dto.setDrziPredmetId(selectedDrziPredmet.getId());
-            dto.setPredmetId(selectedDrziPredmet.getPredmetId());  // Server requires this!
+            dto.setPredmetId(selectedDrziPredmet.getPredmetId());
             dto.setDatumOdrzavanja(datumOdrzavanjaDp.getValue());
             
-            // Parse time fields - server requires both
             dto.setVremePocetka(LocalTime.parse(vremePocetkaTf.getText().trim()));
             dto.setVremeZavrsetka(LocalTime.parse(vremeZavrsetkaTf.getText().trim()));
             
-            if (selectedIspitniRok != null) {
-                dto.setIspitniRokId(selectedIspitniRok.getId());
-                dto.setSkolskaGodinaId(selectedIspitniRok.getSkolskaGodinaId());  // Server requires this!
+            IspitniRokDTO selectedRok = ispitniRokCb.getValue();
+            if (selectedRok != null) {
+                dto.setIspitniRokId(selectedRok.getId());
+                dto.setSkolskaGodinaId(selectedRok.getSkolskaGodinaId());
             }
 
             Long id = ispitService.create(dto);
@@ -209,6 +251,7 @@ public class IspitiController {
 
     @FXML
     public void handleClearForm(ActionEvent event) {
+        ispitniRokCb.setValue(selectedIspitniRok);
         drziPredmetCb.setValue(null);
         datumOdrzavanjaDp.setValue(null);
         vremePocetkaTf.clear();
@@ -237,8 +280,8 @@ public class IspitiController {
             showAlert("Greška", "Unesite vreme završetka (npr. 12:00).");
             return false;
         }
-        if (selectedIspitniRok == null) {
-            showAlert("Greška", "Nije izabran ispitni rok.");
+        if (ispitniRokCb.getValue() == null) {
+            showAlert("Greška", "Izaberite ispitni rok.");
             return false;
         }
         return true;
@@ -252,7 +295,6 @@ public class IspitiController {
         alert.showAndWait();
     }
 
-    // Helper class for DrziPredmet combo box
     public static class DrziPredmetItem {
         private final Long id;
         private final Long predmetId;

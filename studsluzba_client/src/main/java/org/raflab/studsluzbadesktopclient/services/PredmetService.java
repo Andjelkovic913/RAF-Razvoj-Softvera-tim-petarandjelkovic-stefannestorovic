@@ -5,12 +5,16 @@ import org.raflab.studsluzba.dtos.AverageGradeDTO;
 import org.raflab.studsluzba.dtos.PredmetDTO;
 import org.raflab.studsluzba.dtos.PredmetReportDTO;
 import org.raflab.studsluzba.dtos.PredmetRequest;
+import org.raflab.studsluzba.dtos.YearlyGradeStatsDTO;
+import org.raflab.studsluzba.dtos.PredmetGradeStatsDTO;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import org.springframework.core.ParameterizedTypeReference;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +26,7 @@ import java.util.Map;
 public class PredmetService {
 
     private final RestTemplate restTemplate;
+    private final WebClient webClient;
     private final String baseUrl;
 
     private final String PREDMET_URL_PATH = "/api/predmet";
@@ -160,44 +165,106 @@ public class PredmetService {
         }
     }
 
-    /**
-     * Fetches optimized data for Predmeti report generation by study program.
-     */
-    public List<PredmetReportDTO> getPredmetiForReport(String studProgramOznaka) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURL("report/" + studProgramOznaka));
-        ResponseEntity<PredmetReportDTO[]> response = restTemplate.getForEntity(
-                builder.toUriString(), PredmetReportDTO[].class);
-        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-            return List.of(response.getBody());
-        }
-        return List.of();
+
+//    public List<PredmetReportDTO> getPredmetiForReport(String studProgramOznaka) {
+//        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURL("report/" + studProgramOznaka));
+//        ResponseEntity<PredmetReportDTO[]> response = restTemplate.getForEntity(
+//                builder.toUriString(), PredmetReportDTO[].class);
+//        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+//            return List.of(response.getBody());
+//        }
+//        return List.of();
+//    }
+
+
+    public Mono<List<PredmetDTO>> getAllPredmetiAsync() {
+        return webClient.get()
+                .uri(PREDMET_URL_PATH + "/svi")
+                .retrieve()
+                .bodyToMono(PredmetDTO[].class)
+                .map(arr -> {
+                    List<PredmetDTO> result = new ArrayList<>();
+                    if (arr != null) {
+                        result.addAll(Arrays.asList(arr));
+                    }
+                    return result;
+                })
+                .onErrorReturn(new ArrayList<>());
     }
 
-    /**
-     * Izračunava prosečnu ocenu studenata na predmetu za raspon godina.
-     * @param predmetId ID predmeta
-     * @param startYear početna godina
-     * @param endYear krajnja godina
-     * @return AverageGradeDTO sa prosečnom ocenom i brojem položenih ispita
-     */
-    public AverageGradeDTO getAverageGradeByYearRange(Long predmetId, Integer startYear, Integer endYear) {
-        try {
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURL(predmetId + "/average-grade"));
-            builder.queryParam("startYear", startYear);
-            builder.queryParam("endYear", endYear);
 
-            ResponseEntity<AverageGradeDTO> response = restTemplate.getForEntity(
-                    builder.toUriString(),
-                    AverageGradeDTO.class
-            );
+    public Mono<List<PredmetDTO>> getPredmetiByProgramAsync(Long programId, Boolean obavezan) {
+        return webClient.get()
+                .uri(uriBuilder -> {
+                    uriBuilder.path(PREDMET_URL_PATH + "/by-program/" + programId);
+                    if (obavezan != null) {
+                        uriBuilder.queryParam("obavezan", obavezan);
+                    }
+                    return uriBuilder.build();
+                })
+                .retrieve()
+                .bodyToMono(PredmetDTO[].class)
+                .map(arr -> {
+                    List<PredmetDTO> result = new ArrayList<>();
+                    if (arr != null) {
+                        result.addAll(Arrays.asList(arr));
+                    }
+                    return result;
+                })
+                .onErrorReturn(new ArrayList<>());
+    }
 
-            if (response.getStatusCode() == HttpStatus.OK) {
-                return response.getBody();
-            }
-            return null;
-        } catch (Exception e) {
-            System.err.println("Greška pri izračunavanju prosečne ocene: " + e.getMessage());
-            throw new RuntimeException("Greška pri izračunavanju prosečne ocene: " + e.getMessage(), e);
-        }
+
+     //asinhrono dohvatanje statistike ocena za sve predmete
+    public Mono<List<PredmetGradeStatsDTO>> getAllPredmetiGradeStatsAsync(Integer startYear, Integer endYear) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(PREDMET_URL_PATH + "/all-stats")
+                        .queryParam("startYear", startYear)
+                        .queryParam("endYear", endYear)
+                        .build())
+                .retrieve() // ceka odgovor
+                .bodyToMono(PredmetGradeStatsDTO[].class)
+                .map(arr -> {
+                    List<PredmetGradeStatsDTO> result = new ArrayList<>();
+                    if (arr != null) {
+                        result.addAll(Arrays.asList(arr));
+                    }
+                    return result;
+                })
+                .onErrorReturn(new ArrayList<>()); // ne puca nego prazna lista
+    }
+
+
+    public Mono<List<YearlyGradeStatsDTO>> getYearlyGradeStatsAsync(Long predmetId, Integer startYear, Integer endYear) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(PREDMET_URL_PATH + "/" + predmetId + "/yearly-stats")
+                        .queryParam("startYear", startYear)
+                        .queryParam("endYear", endYear)
+                        .build())
+                .retrieve()
+                .bodyToMono(YearlyGradeStatsDTO[].class)
+                .map(arr -> {
+                    List<YearlyGradeStatsDTO> result = new ArrayList<>();
+                    if (arr != null) {
+                        result.addAll(Arrays.asList(arr));
+                    }
+                    return result;
+                })
+                .onErrorReturn(new ArrayList<>());
+    }
+
+
+    public Mono<AverageGradeDTO> getAverageGradeByYearRangeAsync(Long predmetId, Integer startYear, Integer endYear) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(PREDMET_URL_PATH + "/" + predmetId + "/average-grade")
+                        .queryParam("startYear", startYear)
+                        .queryParam("endYear", endYear)
+                        .build())
+                .retrieve()
+                .bodyToMono(AverageGradeDTO.class)
+                .onErrorResume(e -> Mono.empty());
     }
 }

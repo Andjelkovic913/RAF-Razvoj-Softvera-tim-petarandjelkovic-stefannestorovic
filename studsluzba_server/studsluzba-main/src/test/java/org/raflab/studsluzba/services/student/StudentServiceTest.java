@@ -12,7 +12,7 @@ import org.raflab.studsluzba.repositories.StudentIndeksRepository;
 import org.raflab.studsluzba.services.StudentService;
 import org.raflab.studsluzba.utils.EntityMappers;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

@@ -30,14 +30,7 @@ public interface IzlazakNaIspitRepository extends JpaRepository<IzlazakNaIspit, 
     @Query("SELECT i FROM IzlazakNaIspit i WHERE i.prijava.ispit.id = :ispitId")
     List<IzlazakNaIspit> findByIspitId(@Param("ispitId") Long ispitId);
 
-    /**
-     * Izračunava prosečnu ocenu studenata na predmetu za raspon datuma.
-     * Vraća prosečnu ocenu svih studenata koji su položili predmet (ocena >= 6) u datom periodu.
-     * @param predmetId ID predmeta
-     * @param startDate početni datum (uključen)
-     * @param endDate krajnji datum (uključen)
-     * @return prosečna ocena ili null ako nema položenih ispita
-     */
+
     @Query("SELECT AVG(i.ocena * 1.0) FROM IzlazakNaIspit i " +
            "JOIN i.prijava p " +
            "JOIN p.ispit isp " +
@@ -50,9 +43,7 @@ public interface IzlazakNaIspitRepository extends JpaRepository<IzlazakNaIspit, 
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
 
-    /**
-     * Broji ukupan broj položenih ispita za predmet u rasponu datuma.
-     */
+
     @Query("SELECT COUNT(i) FROM IzlazakNaIspit i " +
            "JOIN i.prijava p " +
            "JOIN p.ispit isp " +
@@ -64,5 +55,37 @@ public interface IzlazakNaIspitRepository extends JpaRepository<IzlazakNaIspit, 
             @Param("predmetId") Long predmetId,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
+
+
+    @Query("SELECT AVG(i.ocena * 1.0) FROM IzlazakNaIspit i " +
+           "JOIN i.prijava p " +
+           "JOIN p.ispit isp " +
+           "WHERE isp.predmet.id = :predmetId " +
+           "AND i.ocena >= 6 " +
+           "AND YEAR(isp.datumOdrzavanja) = :year")
+    Double calculateAverageGradeByPredmetAndYear(
+            @Param("predmetId") Long predmetId,
+            @Param("year") Integer year);
+
+
+    @Query("SELECT COUNT(i) FROM IzlazakNaIspit i " +
+           "JOIN i.prijava p " +
+           "JOIN p.ispit isp " +
+           "WHERE isp.predmet.id = :predmetId " +
+           "AND i.ocena >= 6 " +
+           "AND YEAR(isp.datumOdrzavanja) = :year")
+    Long countPassedExamsByPredmetAndYear(
+            @Param("predmetId") Long predmetId,
+            @Param("year") Integer year);
+
+
+    @Query("SELECT COUNT(i) FROM IzlazakNaIspit i " +
+           "JOIN i.prijava p " +
+           "JOIN p.ispit isp " +
+           "WHERE isp.predmet.id = :predmetId " +
+           "AND YEAR(isp.datumOdrzavanja) = :year")
+    Long countTotalExamAttemptsByPredmetAndYear(
+            @Param("predmetId") Long predmetId,
+            @Param("year") Integer year);
 
 }

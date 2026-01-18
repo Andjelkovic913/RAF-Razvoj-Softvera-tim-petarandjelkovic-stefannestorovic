@@ -5,9 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.view.JasperViewer;
+import org.raflab.studsluzbadesktopclient.services.ReportService;
 import org.raflab.studsluzbadesktopclient.MainView;
 import org.raflab.studsluzba.dtos.IspitDTO;
 import org.raflab.studsluzba.dtos.IspitniRokDTO;
@@ -18,7 +16,6 @@ import org.raflab.studsluzbadesktopclient.services.IspitniRokService;
 import org.raflab.studsluzbadesktopclient.services.PrijavaIspitaService;
 import org.springframework.stereotype.Component;
 
-import java.io.InputStream;
 import java.util.*;
 
 @Component
@@ -27,6 +24,7 @@ public class RezultatiIspitaController {
     private final IspitService ispitService;
     private final IspitniRokService ispitniRokService;
     private final PrijavaIspitaService prijavaIspitaService;
+    private final ReportService reportService;
     private final MainView mainView;
 
     private static IspitDTO preSelectedIspit;
@@ -44,10 +42,12 @@ public class RezultatiIspitaController {
     @FXML private TableView<IzlazakNaIspitDTO> rezultatiTable;
 
     public RezultatiIspitaController(IspitService ispitService, IspitniRokService ispitniRokService,
-                                      PrijavaIspitaService prijavaIspitaService, MainView mainView) {
+                                      PrijavaIspitaService prijavaIspitaService, ReportService reportService,
+                                      MainView mainView) {
         this.ispitService = ispitService;
         this.ispitniRokService = ispitniRokService;
         this.prijavaIspitaService = prijavaIspitaService;
+        this.reportService = reportService;
         this.mainView = mainView;
     }
 
@@ -61,10 +61,8 @@ public class RezultatiIspitaController {
         setupIspitComboBox();
         loadIspitniRokovi();
         
-        // Setup grade combo box
         ocenaCb.setItems(FXCollections.observableArrayList(5, 6, 7, 8, 9, 10));
         
-        // Auto-select preselected ispit if it exists
         if (preSelectedIspit != null && preSelectedIspit.getIspitniRokId() != null) {
             autoSelectPreSelectedIspit();
         }
@@ -137,13 +135,12 @@ public class RezultatiIspitaController {
     }
 
     private void autoSelectPreSelectedIspit() {
-        // Find and select the ispitni rok for the preselected ispit
         List<IspitniRokDTO> rokovi = ispitniRokComboBox.getItems();
         for (IspitniRokDTO rok : rokovi) {
             if (rok.getId().equals(preSelectedIspit.getIspitniRokId())) {
                 ispitniRokComboBox.setValue(rok);
                 selectedIspitniRok = rok;
-                loadIspiti(); // This will auto-select the ispit in loadIspiti method
+                loadIspiti();
                 break;
             }
         }
@@ -197,7 +194,6 @@ public class RezultatiIspitaController {
             List<PrijavljeniStudentDTO> prijavljeni = ispitService.getPrijavljeniStudenti(selectedIspit.getId());
             studentCb.setItems(FXCollections.observableArrayList(prijavljeni));
             
-            // Custom display for combo box
             studentCb.setCellFactory(lv -> new ListCell<>() {
                 @Override
                 protected void updateItem(PrijavljeniStudentDTO item, boolean empty) {
@@ -220,7 +216,7 @@ public class RezultatiIspitaController {
         try {
             List<IzlazakNaIspitDTO> rezultati = prijavaIspitaService.getRezultatiByIspit(selectedIspit.getId(), 0, 100);
             
-            // Sort by study program -> year -> index number
+            // sortiranje po programu, godini, broju
             rezultati.sort(Comparator
                     .comparing((IzlazakNaIspitDTO r) -> r.getStudProgramOznaka() != null ? r.getStudProgramOznaka() : "")
                     .thenComparing(r -> r.getGodinaIndeksa() != null ? r.getGodinaIndeksa() : 0)
@@ -239,14 +235,12 @@ public class RezultatiIspitaController {
         try {
             PrijavljeniStudentDTO student = studentCb.getValue();
             
-            // Validate prijavaId - required for server
             if (student.getPrijavaId() == null) {
                 showAlert("Greška", "Nedostaje prijavaId za izabranog studenta. Student možda nije pravilno prijavljen na ispit.");
                 return;
             }
             
             IzlazakNaIspitDTO dto = new IzlazakNaIspitDTO();
-            // Server requires prijavaIspitaId (from PrijavaIspita), not ispitId
             dto.setPrijavaIspitaId(student.getPrijavaId());
             dto.setIspitId(selectedIspit.getId());
             dto.setSlusaPredmetId(student.getSlusaPredmetId());
@@ -277,33 +271,14 @@ public class RezultatiIspitaController {
         }
 
         try {
-            // Load the report template
-            InputStream reportStream = getClass().getResourceAsStream("/reports/zapisnikIspita.jrxml");
-            if (reportStream == null) {
-                showAlert("Greška", "Šablon izveštaja nije pronađen.");
-                return;
-            }
-
-            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
-
-            // Prepare parameters
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("predmetNaziv", selectedIspit.getPredmetNaziv());
             parameters.put("datumIspita", selectedIspit.getDatumOdrzavanja() != null ? 
                     selectedIspit.getDatumOdrzavanja().toString() : "");
-            parameters.put("ispitniRok", ""); // Could be populated if needed
+            parameters.put("ispitniRok", selectedIspitniRok != null ? selectedIspitniRok.getTipRoka() : "");
 
-            // Get results sorted
             List<IzlazakNaIspitDTO> rezultati = new ArrayList<>(rezultatiTable.getItems());
-
-            // Create data source
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(rezultati);
-
-            // Fill the report
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-
-            // Display the report
-            JasperViewer.viewReport(jasperPrint, false);
+            reportService.showReport("zapisnikIspita", parameters, rezultati);
 
         } catch (Exception e) {
             showAlert("Greška", "Greška pri generisanju izveštaja: " + e.getMessage());

@@ -2,7 +2,7 @@ package org.raflab.studsluzba.model;
 
 import java.util.List;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

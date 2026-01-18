@@ -1,8 +1,8 @@
 package org.raflab.studsluzba.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
-import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -10,7 +10,7 @@ import java.util.List;
 public class Grupa {
 	
 	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Long id;
 	
 	@ManyToOne

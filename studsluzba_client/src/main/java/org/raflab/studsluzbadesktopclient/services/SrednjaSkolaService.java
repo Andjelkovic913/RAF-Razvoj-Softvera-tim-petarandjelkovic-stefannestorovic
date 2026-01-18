@@ -3,6 +3,9 @@ package org.raflab.studsluzbadesktopclient.services;
 import lombok.AllArgsConstructor;
 import org.raflab.studsluzba.dtos.SrednjaSkolaDTO;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -48,6 +51,25 @@ public class SrednjaSkolaService {
         );
 
         if (response.getStatusCode() == HttpStatus.OK) {
+            return response.getBody();
+        }
+        return null;
+    }
+
+    public SrednjaSkolaDTO createSrednjaSkola(java.util.Map<String, String> request) {
+        String url = baseUrl + SREDNJA_SKOLA_URL_PATH + "/add";
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<java.util.Map<String, String>> entity = new HttpEntity<>(request, headers);
+        
+        ResponseEntity<SrednjaSkolaDTO> response = restTemplate.postForEntity(
+                url,
+                entity,
+                SrednjaSkolaDTO.class
+        );
+
+        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
             return response.getBody();
         }
         return null;

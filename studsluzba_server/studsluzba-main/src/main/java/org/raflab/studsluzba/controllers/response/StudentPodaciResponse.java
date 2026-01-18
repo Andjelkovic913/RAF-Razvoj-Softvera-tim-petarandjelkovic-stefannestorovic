@@ -2,7 +2,7 @@ package org.raflab.studsluzba.controllers.response;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data

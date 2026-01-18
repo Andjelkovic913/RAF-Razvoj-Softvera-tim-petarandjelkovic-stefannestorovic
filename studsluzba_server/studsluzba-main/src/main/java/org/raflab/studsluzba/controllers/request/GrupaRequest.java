@@ -2,7 +2,7 @@ package org.raflab.studsluzba.controllers.request;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 @Data

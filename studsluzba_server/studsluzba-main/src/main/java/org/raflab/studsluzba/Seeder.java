@@ -5,6 +5,7 @@ import org.raflab.studsluzba.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.*;
 //Koristi se najčešće za inicijalizaciju podataka, testiranje, pokretanje skripti ili bilo koji startup zadatak.
 @Component
 @AllArgsConstructor
+@Slf4j
 public class Seeder implements CommandLineRunner {
 
     private final StudijskiProgramRepository studijskiProgramRepository;
@@ -472,9 +474,9 @@ public class Seeder implements CommandLineRunner {
             uplataRepository.save(uplata);
         }
 
-        System.out.println("Database seeding completed successfully!");
-        System.out.println("Created: " + skolskaGodinaList.size() + " school years, " +
-                spList.size() + " study programs, " + predmetList.size() + " subjects, " +
-                nastavnikList.size() + " teachers, " + studentPodaciList.size() + " students");
+        log.info("Database seeding completed successfully!");
+        log.info("Created: {} school years, {} study programs, {} subjects, {} teachers, {} students",
+                skolskaGodinaList.size(), spList.size(), predmetList.size(), 
+                nastavnikList.size(), studentPodaciList.size());
     }
 }

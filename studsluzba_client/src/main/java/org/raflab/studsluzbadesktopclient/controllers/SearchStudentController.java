@@ -1,16 +1,20 @@
 package org.raflab.studsluzbadesktopclient.controllers;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 import org.raflab.studsluzbadesktopclient.MainView;
 import org.raflab.studsluzba.dtos.SrednjaSkolaDTO;
 import org.raflab.studsluzba.dtos.StudentBySrednjaSkolaDTO;
 import org.raflab.studsluzba.dtos.StudentDTO;
+import org.raflab.studsluzba.dtos.StudProgramDTO;
 import org.raflab.studsluzbadesktopclient.services.NavigationHistoryService;
 import org.raflab.studsluzbadesktopclient.services.SrednjaSkolaService;
+import org.raflab.studsluzbadesktopclient.services.StudProgramService;
 import org.raflab.studsluzbadesktopclient.services.StudentService;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +27,7 @@ public class SearchStudentController {
     
     private final StudentService studentService;
     private final SrednjaSkolaService srednjaSkolaService;
+    private final StudProgramService studProgramService;
     private final MainView mainView;
     private final NavigationHistoryService navigationHistoryService;
     
@@ -50,6 +55,9 @@ public class SearchStudentController {
     private ComboBox<SrednjaSkolaDTO> srednjaSkolaCb;
 
     @FXML
+    private ComboBox<StudProgramDTO> smerCb;
+
+    @FXML
     private TableView<StudentBySrednjaSkolaDTO> tabelaStudentiPoSrednjojSkoli;
 
     @FXML
@@ -61,10 +69,19 @@ public class SearchStudentController {
     @FXML
     private TableColumn<StudentBySrednjaSkolaDTO, Void> actionColumnSchool;
 
-    public SearchStudentController(StudentService studentService, SrednjaSkolaService srednjaSkolaService, 
-                                   MainView mainView, NavigationHistoryService navigationHistoryService) {
+    @FXML private Button searchByNameBtn;
+    @FXML private Button searchByIndexBtn;
+    @FXML private Button searchByHighSchoolBtn;
+
+    private static final String LOADING_TEXT = "Učitavanje...";
+    private static final String SEARCH_TEXT = "Pretraga";
+
+    public SearchStudentController(StudentService studentService, SrednjaSkolaService srednjaSkolaService,
+                                   StudProgramService studProgramService, MainView mainView, 
+                                   NavigationHistoryService navigationHistoryService) {
         this.studentService = studentService;
         this.srednjaSkolaService = srednjaSkolaService;
+        this.studProgramService = studProgramService;
         this.mainView = mainView;
         this.navigationHistoryService = navigationHistoryService;
     }
@@ -73,18 +90,34 @@ public class SearchStudentController {
     public void initialize() {
         setupTabChangeTracking();
         loadSrednjeSkole();
+        setupSmerComboBox();
+        loadStudijskiProgrami();
         setupActionColumns();
+    }
+
+    private void setupSmerComboBox() {
+        smerCb.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(StudProgramDTO smer) {
+                if (smer == null) return "";
+                return smer.getOznaka() + " - " + smer.getNaziv();
+            }
+
+            @Override
+            public StudProgramDTO fromString(String s) {
+                return null;
+            }
+        });
     }
     
     private void setupTabChangeTracking() {
         if (mainTabPane != null) {
-            // Register initial tab state (tab 0) so we can go back to it
             int initialTab = mainTabPane.getSelectionModel().getSelectedIndex();
             if (initialTab >= 0) {
                 navigationHistoryService.registerTabChange(VIEW_NAME, initialTab);
             }
             
-            // Track future tab changes
+            // prati promene tabova
             mainTabPane.getSelectionModel().selectedIndexProperty().addListener(
                 (observable, oldIndex, newIndex) -> {
                     if (!navigationHistoryService.isNavigating()) {
@@ -96,17 +129,14 @@ public class SearchStudentController {
     }
 
     private void setupActionColumns() {
-        // Setup action column for name search table
         if (actionColumnName != null) {
             actionColumnName.setCellFactory(createButtonCellFactory());
         }
         
-        // Setup action column for index search table
         if (actionColumnIndex != null) {
             actionColumnIndex.setCellFactory(createButtonCellFactory());
         }
         
-        // Setup action column for high school search table
         if (actionColumnSchool != null) {
             actionColumnSchool.setCellFactory(createButtonCellFactoryForSchool());
         }
@@ -125,7 +155,7 @@ public class SearchStudentController {
                             openStudentProfile(student.getIdStudentPodaci(), student.getIdIndeks());
                         });
                     }
-
+                    // prikazuje dugme ako red nije prazan
                     @Override
                     protected void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
@@ -174,7 +204,6 @@ public class SearchStudentController {
             return;
         }
         
-        // Cache current search state before navigating
         mainView.cacheCurrentRoot("searchStudent");
         
         StudentProfileController.setStudentIds(studentPodaciId, indeksId);
@@ -194,85 +223,118 @@ public class SearchStudentController {
         }
     }
 
-    public void handleSearchByName(ActionEvent actionEvent) {
+    private void loadStudijskiProgrami() {
         try {
-            String ime = imeStudentaTf.getText();
-            String prezime = prezimeStudentaTf.getText();
-
-            List<StudentDTO> studenti = studentService.searchByNameAndSurname(ime, prezime);
-
-            if (studenti != null) {
-                tabelaStudentiPoImenu.setItems(FXCollections.observableArrayList(studenti));
-            } else {
-                showAlert("Greska", "Doslo je do greske pri pretrazi studenata.");
+            List<StudProgramDTO> programi = studProgramService.getSudijskiProgramiSorted();
+            if (programi != null && !programi.isEmpty()) {
+                smerCb.setItems(FXCollections.observableArrayList(programi));
             }
         } catch (Exception e) {
-            showAlert("Greska", "Doslo je do greske: " + e.getMessage());
+            showAlert("Greska", "Greska pri ucitavanju studijskih programa: " + e.getMessage());
         }
+    }
+
+    public void handleSearchByName(ActionEvent actionEvent) {
+        String ime = imeStudentaTf.getText();
+        String prezime = prezimeStudentaTf.getText();
+
+        setButtonLoading(searchByNameBtn, true);
+
+        studentService.searchByNameAndSurnameAsync(ime, prezime)
+            .subscribe(
+                studenti -> Platform.runLater(() -> {
+                    setButtonLoading(searchByNameBtn, false);
+                    if (studenti != null) {
+                        tabelaStudentiPoImenu.setItems(FXCollections.observableArrayList(studenti));
+                    } else {
+                        showAlert("Greska", "Doslo je do greske pri pretrazi studenata.");
+                    }
+                }),
+                error -> Platform.runLater(() -> {
+                    setButtonLoading(searchByNameBtn, false);
+                    showAlert("Greska", "Doslo je do greske: " + error.getMessage());
+                })
+            );
     }
 
     public void handleSearchByIndex(ActionEvent actionEvent) {
-        try {
-            String brojText = brojIndeksaTf.getText();
-            String godinaText = godinaIndeksaTf.getText();
+        String brojText = brojIndeksaTf.getText();
+        String godinaText = godinaIndeksaTf.getText();
+        StudProgramDTO selectedSmer = smerCb.getValue();
+        String smer = selectedSmer != null ? selectedSmer.getOznaka() : null;
 
-            Integer broj = null;
-            Integer godina = null;
+        Integer broj = null;
+        Integer godina = null;
 
-            if (brojText != null && !brojText.trim().isEmpty()) {
-                try {
-                    broj = Integer.parseInt(brojText.trim());
-                } catch (NumberFormatException e) {
-                    showAlert("Greska", "Broj indeksa mora biti broj.");
-                    return;
-                }
-            }
-
-            if (godinaText != null && !godinaText.trim().isEmpty()) {
-                try {
-                    godina = Integer.parseInt(godinaText.trim());
-                } catch (NumberFormatException e) {
-                    showAlert("Greska", "Godina indeksa mora biti broj.");
-                    return;
-                }
-            }
-
-            if (broj == null && godina == null) {
-                showAlert("Upozorenje", "Unesite bar jedan parametar za pretragu.");
+        if (brojText != null && !brojText.trim().isEmpty()) {
+            try {
+                broj = Integer.parseInt(brojText.trim());
+            } catch (NumberFormatException e) {
+                showAlert("Greska", "Broj indeksa mora biti broj.");
                 return;
             }
-
-            List<StudentDTO> studenti = studentService.searchByIndex(broj, godina);
-
-            if (studenti != null) {
-                tabelaStudentiPoIndeksu.setItems(FXCollections.observableArrayList(studenti));
-            } else {
-                showAlert("Greska", "Doslo je do greske pri pretrazi studenata.");
-            }
-        } catch (Exception e) {
-            showAlert("Greska", "Doslo je do greske: " + e.getMessage());
         }
+
+        if (godinaText != null && !godinaText.trim().isEmpty()) {
+            try {
+                godina = Integer.parseInt(godinaText.trim());
+            } catch (NumberFormatException e) {
+                showAlert("Greska", "Godina indeksa mora biti broj.");
+                return;
+            }
+        }
+
+        if (broj == null && godina == null) {
+            showAlert("Upozorenje", "Unesite bar jedan parametar za pretragu.");
+            return;
+        }
+
+        setButtonLoading(searchByIndexBtn, true);
+        final Integer finalBroj = broj;
+        final Integer finalGodina = godina;
+
+        studentService.searchByIndexAsync(finalBroj, finalGodina, smer)
+            .subscribe(
+                studenti -> Platform.runLater(() -> {
+                    setButtonLoading(searchByIndexBtn, false);
+                    if (studenti != null) {
+                        tabelaStudentiPoIndeksu.setItems(FXCollections.observableArrayList(studenti));
+                    } else {
+                        showAlert("Greska", "Doslo je do greske pri pretrazi studenata.");
+                    }
+                }),
+                error -> Platform.runLater(() -> {
+                    setButtonLoading(searchByIndexBtn, false);
+                    showAlert("Greska", "Doslo je do greske: " + error.getMessage());
+                })
+            );
     }
 
     public void handleSearchByHighSchool(ActionEvent actionEvent) {
-        try {
-            SrednjaSkolaDTO selectedSkola = srednjaSkolaCb.getValue();
+        SrednjaSkolaDTO selectedSkola = srednjaSkolaCb.getValue();
 
-            if (selectedSkola == null) {
-                showAlert("Upozorenje", "Izaberite srednju skolu.");
-                return;
-            }
-
-            List<StudentBySrednjaSkolaDTO> studenti = studentService.searchByHighSchool(selectedSkola.getId());
-
-            if (studenti != null) {
-                tabelaStudentiPoSrednjojSkoli.setItems(FXCollections.observableArrayList(studenti));
-            } else {
-                showAlert("Greska", "Doslo je do greske pri pretrazi studenata.");
-            }
-        } catch (Exception e) {
-            showAlert("Greska", "Doslo je do greske: " + e.getMessage());
+        if (selectedSkola == null) {
+            showAlert("Upozorenje", "Izaberite srednju skolu.");
+            return;
         }
+
+        setButtonLoading(searchByHighSchoolBtn, true);
+
+        studentService.searchByHighSchoolAsync(selectedSkola.getId())
+            .subscribe(
+                studenti -> Platform.runLater(() -> {
+                    setButtonLoading(searchByHighSchoolBtn, false);
+                    if (studenti != null) {
+                        tabelaStudentiPoSrednjojSkoli.setItems(FXCollections.observableArrayList(studenti));
+                    } else {
+                        showAlert("Greska", "Doslo je do greske pri pretrazi studenata.");
+                    }
+                }),
+                error -> Platform.runLater(() -> {
+                    setButtonLoading(searchByHighSchoolBtn, false);
+                    showAlert("Greska", "Doslo je do greske: " + error.getMessage());
+                })
+            );
     }
 
 
@@ -282,5 +344,15 @@ public class SearchStudentController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    /**
+     * Helper metoda za postavljanje loading stanja dugmeta.
+     */
+    private void setButtonLoading(Button button, boolean loading) {
+        if (button != null) {
+            button.setDisable(loading);
+            button.setText(loading ? LOADING_TEXT : SEARCH_TEXT);
+        }
     }
 }

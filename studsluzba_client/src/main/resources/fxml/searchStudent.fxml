@@ -24,7 +24,7 @@
                         <Label text="Prezime" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                         <TextField fx:id="prezimeStudentaTf" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                        <Button onAction="#handleSearchByName" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="CENTER">
+                        <Button fx:id="searchByNameBtn" onAction="#handleSearchByName" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="CENTER">
                             <GridPane.margin>
                                 <Insets top="10"/>
                             </GridPane.margin>
@@ -76,7 +76,10 @@
                         <Label text="Godina indeksa" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                         <TextField fx:id="godinaIndeksaTf" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                        <Button onAction="#handleSearchByIndex" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.halignment="CENTER">
+                        <Label text="Smer (opciono)" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <ComboBox fx:id="smerCb" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                        <Button fx:id="searchByIndexBtn" onAction="#handleSearchByIndex" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.halignment="CENTER">
                             <GridPane.margin>
                                 <Insets top="10"/>
                             </GridPane.margin>
@@ -125,7 +128,7 @@
                         <Label text="Završena srednja škola" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
                         <ComboBox fx:id="srednjaSkolaCb" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-                        <Button onAction="#handleSearchByHighSchool" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER">
+                        <Button fx:id="searchByHighSchoolBtn" onAction="#handleSearchByHighSchool" text="Pretraga" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.halignment="CENTER">
                             <GridPane.margin>
                                 <Insets top="10"/>
                             </GridPane.margin>

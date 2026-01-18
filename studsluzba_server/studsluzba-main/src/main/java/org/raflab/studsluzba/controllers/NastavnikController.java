@@ -1,13 +1,13 @@
 package org.raflab.studsluzba.controllers;
 
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzba.controllers.request.NastavnikRequest;
+import org.raflab.studsluzba.dtos.NastavnikRequest;
 import org.raflab.studsluzba.controllers.response.NastavnikResponse;
 import org.raflab.studsluzba.dtos.NastavnikReportDTO;
 import org.raflab.studsluzba.services.NastavnikService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @CrossOrigin

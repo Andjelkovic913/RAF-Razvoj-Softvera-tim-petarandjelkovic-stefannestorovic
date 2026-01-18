@@ -1,14 +1,16 @@
 package org.raflab.studsluzba.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.raflab.studsluzba.controllers.request.PredmetRequest;
+import org.raflab.studsluzba.dtos.PredmetRequest;
 import org.raflab.studsluzba.controllers.response.AverageGradeResponse;
 import org.raflab.studsluzba.controllers.response.PredmetResponse;
+import org.raflab.studsluzba.controllers.response.YearlyGradeStatsResponse;
+import org.raflab.studsluzba.controllers.response.PredmetGradeStatsResponse;
 import org.raflab.studsluzba.dtos.PredmetReportDTO;
 import org.raflab.studsluzba.services.PredmetService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -70,5 +72,22 @@ public class PredmetController {
             @RequestParam Integer startYear,
             @RequestParam Integer endYear) {
         return predmetService.getAverageGradeByYearRange(predmetId, startYear, endYear);
+    }
+
+    // 2.4.1 - detaljna statistika ocena po godinama za predmet
+    @GetMapping(path = "/{predmetId}/yearly-stats")
+    public List<YearlyGradeStatsResponse> getYearlyGradeStats(
+            @PathVariable Long predmetId,
+            @RequestParam Integer startYear,
+            @RequestParam Integer endYear) {
+        return predmetService.getYearlyGradeStats(predmetId, startYear, endYear);
+    }
+
+    // 2.4.2 - statistika ocena za sve predmete u rasponu godina
+    @GetMapping(path = "/all-stats")
+    public List<PredmetGradeStatsResponse> getAllPredmetiGradeStats(
+            @RequestParam Integer startYear,
+            @RequestParam Integer endYear) {
+        return predmetService.getAllPredmetiGradeStats(startYear, endYear);
     }
 }

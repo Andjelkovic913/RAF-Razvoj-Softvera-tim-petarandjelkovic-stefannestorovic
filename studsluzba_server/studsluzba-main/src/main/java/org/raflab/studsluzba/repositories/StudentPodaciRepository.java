@@ -23,6 +23,9 @@ public interface StudentPodaciRepository extends JpaRepository<StudentPodaci, Lo
     @Query("SELECT sp FROM StudentPodaci sp WHERE sp.emailFakultetski = :emailFakultetski")
     Optional<StudentPodaci> findByEmailFakultetski(@Param("emailFakultetski") String emailFakultetski);
 
+    @Query("SELECT sp FROM StudentPodaci sp WHERE sp.emailPrivatni = :emailPrivatni")
+    Optional<StudentPodaci> findByEmailPrivatni(@Param("emailPrivatni") String emailPrivatni);
+
     // da li postoji jos neki student sa ovim id-jem koji ima ovakav JMBG
     @Query("SELECT COUNT(sp) > 0 FROM StudentPodaci sp WHERE sp.jmbg = :jmbg AND (:id IS NULL OR sp.id != :id)")
     boolean existsByJmbgAndIdNot(@Param("jmbg") String jmbg, @Param("id") Long id);
@@ -32,6 +35,9 @@ public interface StudentPodaciRepository extends JpaRepository<StudentPodaci, Lo
 
     @Query("SELECT COUNT(sp) > 0 FROM StudentPodaci sp WHERE sp.emailFakultetski = :emailFakultetski AND (:id IS NULL OR sp.id != :id)")
     boolean existsByEmailFakultetskiAndIdNot(@Param("emailFakultetski") String emailFakultetski, @Param("id") Long id);
+
+    @Query("SELECT COUNT(sp) > 0 FROM StudentPodaci sp WHERE sp.emailPrivatni = :emailPrivatni AND (:id IS NULL OR sp.id != :id)")
+    boolean existsByEmailPrivatniAndIdNot(@Param("emailPrivatni") String emailPrivatni, @Param("id") Long id);
 
     @Query("select sp from StudentPodaci sp where "
             + "(:ime is null or lower(sp.ime) like concat('%', lower(:ime), '%')) and "

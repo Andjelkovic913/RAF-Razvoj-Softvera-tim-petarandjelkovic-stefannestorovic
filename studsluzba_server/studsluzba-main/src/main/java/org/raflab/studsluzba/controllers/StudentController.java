@@ -3,8 +3,8 @@ package org.raflab.studsluzba.controllers;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzba.controllers.request.StudentIndeksRequest;
-import org.raflab.studsluzba.controllers.request.StudentPodaciRequest;
+import org.raflab.studsluzba.dtos.StudentIndeksRequest;
+import org.raflab.studsluzba.dtos.StudentPodaciRequest;
 import org.raflab.studsluzba.controllers.response.StudentBySrednjaSkolaResponse;
 import org.raflab.studsluzba.controllers.response.StudentIndeksResponse;
 import org.raflab.studsluzba.controllers.response.StudentPodaciResponse;
@@ -18,7 +18,7 @@ import org.raflab.studsluzba.services.StudentService;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @CrossOrigin
 @RestController
@@ -40,6 +40,11 @@ public class StudentController {
 	@GetMapping(path="/all")
 	public List<StudentPodaciResponse> getAllStudentPodaci() {
 		return studentService.getAllStudentPodaci();
+	}
+
+	@GetMapping(path="/studijski-programi")
+	public List<String> getAllStudijskiProgrami() {
+		return studentService.getAllStudijskiProgrami();
 	}
 
 	@GetMapping(path="/report")

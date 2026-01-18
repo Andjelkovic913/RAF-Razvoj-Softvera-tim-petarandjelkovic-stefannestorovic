@@ -188,6 +188,12 @@ public class EntityMappers {
         return response;
     }
 
+    public List<NastavnikResponse> fromNastavnikListToResponse(Iterable<Nastavnik> nastavnici) {
+        List<NastavnikResponse> responses = new java.util.ArrayList<>();
+        nastavnici.forEach(n -> responses.add(fromNastavnikToResponse(n)));
+        return responses;
+    }
+
     private NastavnikZvanjeResponse fromNastavnikZvanjeToResponse(NastavnikZvanje zvanje) {
         if (zvanje == null) {
             return null;
@@ -260,7 +266,7 @@ public class EntityMappers {
         return dto;
     }
 
-    private DrziPredmetResponse fromDrziPredmetToResponse(DrziPredmet dp) {
+    public DrziPredmetResponse fromDrziPredmetToResponse(DrziPredmet dp) {
         if (dp == null) {
             return null;
         }
@@ -606,6 +612,46 @@ public class EntityMappers {
         response.setPozivNaBroj(uplata.getPozivNaBroj());
         response.setOpis(uplata.getOpis());
         return response;
+    }
+
+    public StudentPaymentDTO fromUplataToStudentPaymentDTO(Uplata uplata) {
+        if (uplata == null) {
+            System.out.println("DEBUG [EntityMappers]: Uplata is null");
+            return null;
+        }
+        
+        System.out.println("DEBUG [EntityMappers]: Processing uplata ID: " + uplata.getId());
+        System.out.println("DEBUG [EntityMappers]: Uplata skolskaGodina object: " + uplata.getSkolskaGodina());
+        
+        StudentPaymentDTO dto = new StudentPaymentDTO();
+        dto.setId(uplata.getId());
+        dto.setDatumUplate(uplata.getDatumUplate().toLocalDate());
+        dto.setIznos(java.math.BigDecimal.valueOf(uplata.getIznosRsd()));
+        dto.setSvrhaUplate(uplata.getOpis() != null ? uplata.getOpis() : uplata.getTip().toString());
+        
+        if (uplata.getSkolskaGodina() != null) {
+            String naziv = uplata.getSkolskaGodina().getNaziv();
+            System.out.println("DEBUG [EntityMappers]: SkolskaGodina naziv: " + naziv);
+            dto.setSkolskaGodina(naziv);
+        } else {
+            System.out.println("DEBUG [EntityMappers]: SkolskaGodina is NULL!");
+            dto.setSkolskaGodina("");
+        }
+        
+        dto.setNacinPlacanja(uplata.getTip().toString());
+        dto.setStatus(uplata.getStatus().toString());
+        
+        System.out.println("DEBUG [EntityMappers]: Final DTO skolskaGodina: " + dto.getSkolskaGodina());
+        return dto;
+    }
+
+    public List<StudentPaymentDTO> fromUplateToStudentPaymentDTOs(List<Uplata> uplate) {
+        if (uplate == null) {
+            return null;
+        }
+        return uplate.stream()
+                .map(this::fromUplataToStudentPaymentDTO)
+                .collect(Collectors.toList());
     }
 
     public VisokoskolskaUstanovaResponse fromVisokoskolskaUstanovaToResponse(VisokoskolskaUstanova vu) {

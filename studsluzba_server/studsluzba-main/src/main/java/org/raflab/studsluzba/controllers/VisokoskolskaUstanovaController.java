@@ -6,7 +6,7 @@ import org.raflab.studsluzba.controllers.response.VisokoskolskaUstanovaResponse;
 import org.raflab.studsluzba.services.VisokoskolskaUstanovaService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -18,8 +18,8 @@ public class VisokoskolskaUstanovaController {
     private final VisokoskolskaUstanovaService visokaUstanovaService;
 
     @PostMapping("/add")
-    public Long addNewVisokoskolskaUstanova(@RequestBody @Valid VisokoskolskaUstanovaRequest request) {
-        return visokaUstanovaService.createVisokoskolskaUstanova(request);
+    public VisokoskolskaUstanovaResponse addNewVisokoskolskaUstanova(@RequestBody @Valid VisokoskolskaUstanovaRequest request) {
+        return visokaUstanovaService.createVisokoskolskaUstanovaAndReturn(request);
     }
 
     @GetMapping("/{id}")

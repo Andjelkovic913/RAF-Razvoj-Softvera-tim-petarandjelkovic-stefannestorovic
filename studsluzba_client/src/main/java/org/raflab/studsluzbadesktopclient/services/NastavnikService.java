@@ -20,13 +20,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Mono;
 
 @RestController
 @AllArgsConstructor
 public class NastavnikService {
 
     private RestTemplate restTemplate;
+    private WebClient webClient;
     private String baseUrl;
 
     private final String NASTAVNIK_URL_PATH = "/api/nastavnik";
@@ -318,5 +321,88 @@ public class NastavnikService {
             return List.of(response.getBody());
         }
         return List.of();
+    }
+
+    // ==================== ASINHRONE METODE (WebClient) ====================
+
+    /**
+     * Asinhrona pretraga nastavnika po imenu i prezimenu.
+     */
+    public Mono<List<NastavnikDTO>> searchByNameAndSurnameAsync(String ime, String prezime) {
+        return webClient.get()
+                .uri(uriBuilder -> {
+                    uriBuilder.path(NASTAVNIK_URL_PATH + "/search");
+                    if (ime != null && !ime.trim().isEmpty()) {
+                        uriBuilder.queryParam("ime", ime);
+                    }
+                    if (prezime != null && !prezime.trim().isEmpty()) {
+                        uriBuilder.queryParam("prezime", prezime);
+                    }
+                    return uriBuilder.build();
+                })
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                .map(this::mapToNastavnikDTOList)
+                .onErrorReturn(new ArrayList<>());
+    }
+
+    /**
+     * Asinhrono dohvatanje svih nastavnika.
+     */
+    public Mono<List<NastavnikDTO>> findAllAsync() {
+        return webClient.get()
+                .uri(NASTAVNIK_URL_PATH + "/all")
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                .map(this::mapToNastavnikDTOList)
+                .onErrorReturn(new ArrayList<>());
+    }
+
+    /**
+     * Asinhrona pretraga nastavnika po zvanju.
+     */
+    public Mono<List<NastavnikDTO>> searchByZvanjeAsync(String zvanje) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(NASTAVNIK_URL_PATH + "/search/zvanje")
+                        .queryParam("zvanje", zvanje)
+                        .build())
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                .map(this::mapToNastavnikDTOList)
+                .onErrorReturn(new ArrayList<>());
+    }
+
+    /**
+     * Asinhrona pretraga nastavnika po email-u.
+     */
+    public Mono<List<NastavnikDTO>> searchByEmailAsync(String email) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(NASTAVNIK_URL_PATH + "/search/email")
+                        .queryParam("email", email)
+                        .build())
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                .map(this::mapToNastavnikDTOList)
+                .onErrorReturn(new ArrayList<>());
+    }
+
+    /**
+     * Asinhrono dohvatanje nastavnika za izveštaj.
+     */
+    public Mono<List<NastavnikReportDTO>> getNastavniciForReportAsync() {
+        return webClient.get()
+                .uri(NASTAVNIK_URL_PATH + "/report")
+                .retrieve()
+                .bodyToMono(NastavnikReportDTO[].class)
+                .map(arr -> {
+                    List<NastavnikReportDTO> result = new ArrayList<>();
+                    if (arr != null) {
+                        result.addAll(java.util.Arrays.asList(arr));
+                    }
+                    return result;
+                })
+                .onErrorReturn(new ArrayList<>());
     }
 }

@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudentProfileDTO {
-    // Basic info
     private Long idStudentPodaci;
     private Long idIndeks;
     private String ime;
@@ -26,37 +25,31 @@ public class StudentProfileDTO {
     private String nacionalnost;
     private String brojLicneKarte;
     
-    // Contact info
     private String adresa;
     private String mestoStanovanja;
     private String emailPrivatni;
     private String emailFakultetski;
     private String brojTelefona;
     
-    // Index info
     private String studijskiProgram;
     private Integer brojIndeksa;
     private Integer godinaUpisa;
     private String nacinFinansiranja;
     private boolean aktivanIndeks;
     
-    // High school info
     private String srednjaSkolaNaziv;
     private String srednjaSkolaMesto;
     private Double uspehSrednjaSkola;
     private Double uspehPrijemni;
     
-    // Statistics
     private Integer ukupnoEspb;
     private Double prosecnaOcena;
     
-    // Related data
     private List<StudentExamDTO> polozeniIspiti;
     private List<StudentExamDTO> nepolozeniIspiti;
     private List<StudentPaymentDTO> uplate;
     private List<StudentEnrollmentDTO> upisi;
     
-    // Server-specific fields
     private StudentIndeksDTO indeks;
     private List<SlusaPredmetDTO> slusaPredmete;
     private List<PredmetDTO> nepolozeniPredmeti;

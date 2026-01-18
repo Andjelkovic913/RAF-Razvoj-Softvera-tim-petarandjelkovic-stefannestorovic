@@ -1,0 +1,7 @@
+- prosečna ocena studenata na predmetu za raspon godina (na primer zadaje se godine 2015-2018 i vraća se prosečna ocena svih studenata koji su položili predmet u tom periodu)
+
+- prosečna ocena na ispitu
+
+- rezultati ispita u vidu sortiranog spiska studenata (sortirati prvo po stud programu, zatim po godini upisa, pa po broju) sa ukupnim brojem poena na ispitu (predispitne obaveze plus poeni sa ispita)
+
+- selekcija ostvarenih poena na predispinim obavezama za studenta na određenom predmetu u školskoj godini

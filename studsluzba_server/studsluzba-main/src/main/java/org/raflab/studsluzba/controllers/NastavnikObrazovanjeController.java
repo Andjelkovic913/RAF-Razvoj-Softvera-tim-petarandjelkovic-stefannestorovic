@@ -6,7 +6,7 @@ import org.raflab.studsluzba.controllers.response.NastavnikObrazovanjeResponse;
 import org.raflab.studsluzba.services.NastavnikObrazovanjeService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @CrossOrigin

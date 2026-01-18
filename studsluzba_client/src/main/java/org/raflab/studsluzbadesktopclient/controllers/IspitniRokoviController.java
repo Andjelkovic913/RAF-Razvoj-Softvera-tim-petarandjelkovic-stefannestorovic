@@ -70,7 +70,7 @@ public class IspitniRokoviController {
             }
             skolskaGodinaCb.setItems(FXCollections.observableArrayList(items));
         } catch (Exception e) {
-            System.err.println("Error loading skolske godine: " + e.getMessage());
+            showAlert("Upozorenje", "Greška pri učitavanju školskih godina, koriste se podrazumevane vrednosti.");
             // Fallback to hardcoded values if server fails
             int currentYear = LocalDate.now().getYear();
             skolskaGodinaCb.setItems(FXCollections.observableArrayList(

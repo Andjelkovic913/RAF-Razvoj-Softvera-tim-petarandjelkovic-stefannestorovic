@@ -11,7 +11,7 @@ import org.raflab.studsluzba.model.Predmet;
 import org.raflab.studsluzba.repositories.DrziPredmetRepository;
 import org.raflab.studsluzba.repositories.NastavnikRepository;
 import org.raflab.studsluzba.repositories.PredmetRepository;
-import org.raflab.studsluzba.utils.Converters;
+import org.raflab.studsluzba.utils.EntityMappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +27,7 @@ public class DrziPredmetService {
     private final DrziPredmetRepository drziPredmetRepository;
     private final PredmetRepository predmetRepository;
     private final NastavnikRepository nastavnikRepository;
-    private final Converters converters;
+    private final EntityMappers entityMappers;
 
     @Transactional
     public void saveDrziPredmet(DrziPredmetRequest request) {
@@ -86,16 +86,16 @@ public class DrziPredmetService {
     @Transactional(readOnly = true)
     public DrziPredmetResponse findById(Long id) {
         return drziPredmetRepository.findById(id)
-                .map(converters::toDrziPredmetResponse)
-                .orElseThrow(() -> new javax.persistence.EntityNotFoundException("DrziPredmet sa ID " + id + " ne postoji"));
+                .map(entityMappers::fromDrziPredmetToResponse)
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("DrziPredmet sa ID " + id + " ne postoji"));
     }
 
     @Transactional
     public Long create(DrziPredmetAddRequest request) {
         Predmet predmet = predmetRepository.findById(request.getPredmetId())
-                .orElseThrow(() -> new javax.persistence.EntityNotFoundException("Predmet sa ID " + request.getPredmetId() + " ne postoji"));
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("Predmet sa ID " + request.getPredmetId() + " ne postoji"));
         Nastavnik nastavnik = nastavnikRepository.findById(request.getNastavnikId())
-                .orElseThrow(() -> new javax.persistence.EntityNotFoundException("Nastavnik sa ID " + request.getNastavnikId() + " ne postoji"));
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("Nastavnik sa ID " + request.getNastavnikId() + " ne postoji"));
 
         DrziPredmet drziPredmet = new DrziPredmet();
         drziPredmet.setPredmet(predmet);
@@ -110,31 +110,31 @@ public class DrziPredmetService {
         List<DrziPredmet> result = new ArrayList<>();
         drziPredmetRepository.findAll().forEach(result::add);
         return result.stream()
-                .map(converters::toDrziPredmetResponse)
+                .map(entityMappers::fromDrziPredmetToResponse)
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public DrziPredmetResponse update(Long id, DrziPredmetAddRequest request) {
         DrziPredmet existing = drziPredmetRepository.findById(id)
-                .orElseThrow(() -> new javax.persistence.EntityNotFoundException("DrziPredmet sa ID " + id + " ne postoji"));
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("DrziPredmet sa ID " + id + " ne postoji"));
 
         Predmet predmet = predmetRepository.findById(request.getPredmetId())
-                .orElseThrow(() -> new javax.persistence.EntityNotFoundException("Predmet sa ID " + request.getPredmetId() + " ne postoji"));
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("Predmet sa ID " + request.getPredmetId() + " ne postoji"));
         Nastavnik nastavnik = nastavnikRepository.findById(request.getNastavnikId())
-                .orElseThrow(() -> new javax.persistence.EntityNotFoundException("Nastavnik sa ID " + request.getNastavnikId() + " ne postoji"));
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("Nastavnik sa ID " + request.getNastavnikId() + " ne postoji"));
 
         existing.setPredmet(predmet);
         existing.setNastavnik(nastavnik);
 
         DrziPredmet updated = drziPredmetRepository.save(existing);
-        return converters.toDrziPredmetResponse(updated);
+        return entityMappers.fromDrziPredmetToResponse(updated);
     }
 
     @Transactional
     public void delete(Long id) {
         if (!drziPredmetRepository.existsById(id)) {
-            throw new javax.persistence.EntityNotFoundException("DrziPredmet sa ID " + id + " ne postoji");
+            throw new jakarta.persistence.EntityNotFoundException("DrziPredmet sa ID " + id + " ne postoji");
         }
         drziPredmetRepository.deleteById(id);
     }

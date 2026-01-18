@@ -1,16 +1,19 @@
 package org.raflab.studsluzbadesktopclient.controllers;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
-import org.raflab.studsluzbadesktopclient.dtos.DrziPredmetDTO;
+import org.raflab.studsluzba.dtos.DrziPredmetDTO;
 import org.raflab.studsluzba.dtos.PredmetDTO;
 import org.raflab.studsluzba.dtos.StudentDTO;
+import org.raflab.studsluzba.dtos.StudProgramDTO;
 import org.raflab.studsluzbadesktopclient.services.DrziPredmetService;
 import org.raflab.studsluzbadesktopclient.services.PredmetService;
 import org.raflab.studsluzbadesktopclient.services.SlusaPredmetService;
+import org.raflab.studsluzbadesktopclient.services.StudProgramService;
 import org.raflab.studsluzbadesktopclient.services.StudentService;
 import org.springframework.stereotype.Component;
 
@@ -23,11 +26,13 @@ public class PrijavaStudentaController {
     private final PredmetService predmetService;
     private final SlusaPredmetService slusaPredmetService;
     private final DrziPredmetService drziPredmetService;
+    private final StudProgramService studProgramService;
 
     @FXML private TextField imeTf;
     @FXML private TextField prezimeTf;
     @FXML private TextField brojIndeksaTf;
     @FXML private TextField godinaIndeksaTf;
+    @FXML private ComboBox<StudProgramDTO> smerCb;
     @FXML private Label selectedStudentLabel;
     @FXML private TableView<StudentDTO> studentiTable;
     @FXML private ComboBox<PredmetDTO> predmetComboBox;
@@ -38,20 +43,50 @@ public class PrijavaStudentaController {
     public PrijavaStudentaController(StudentService studentService, 
                                     PredmetService predmetService,
                                     SlusaPredmetService slusaPredmetService,
-                                    DrziPredmetService drziPredmetService) {
+                                    DrziPredmetService drziPredmetService,
+                                    StudProgramService studProgramService) {
         this.studentService = studentService;
         this.predmetService = predmetService;
         this.slusaPredmetService = slusaPredmetService;
         this.drziPredmetService = drziPredmetService;
+        this.studProgramService = studProgramService;
     }
 
     @FXML
     public void initialize() {
         setupPredmetComboBox();
         setupNastavnikComboBox();
+        setupSmerComboBox();
         setupTableSelection();
         loadPredmeti();
+        loadStudijskiProgrami();
         selectedStudentLabel.setText("-");
+    }
+
+    private void setupSmerComboBox() {
+        smerCb.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(StudProgramDTO smer) {
+                if (smer == null) return "";
+                return smer.getOznaka() + " - " + smer.getNaziv();
+            }
+
+            @Override
+            public StudProgramDTO fromString(String s) {
+                return null;
+            }
+        });
+    }
+
+    private void loadStudijskiProgrami() {
+        try {
+            List<StudProgramDTO> programi = studProgramService.getSudijskiProgramiSorted();
+            if (programi != null && !programi.isEmpty()) {
+                smerCb.setItems(FXCollections.observableArrayList(programi));
+            }
+        } catch (Exception e) {
+            showAlert("Greška", "Greška pri učitavanju studijskih programa: " + e.getMessage());
+        }
     }
 
     private void setupPredmetComboBox() {
@@ -97,7 +132,8 @@ public class PrijavaStudentaController {
             @Override
             public String toString(DrziPredmetDTO drzi) {
                 if (drzi == null) return "";
-                return drzi.getNastavnikIme() + " " + drzi.getNastavnikPrezime();
+                if (drzi.getTeacher() == null) return "Nepoznat nastavnik";
+                return drzi.getTeacher().getFirstName() + " " + drzi.getTeacher().getLastName();
             }
 
             @Override
@@ -116,12 +152,17 @@ public class PrijavaStudentaController {
     }
 
     private void loadPredmeti() {
-        try {
-            List<PredmetDTO> predmeti = predmetService.getAllPredmeti();
-            predmetComboBox.setItems(FXCollections.observableArrayList(predmeti));
-        } catch (Exception e) {
-            showAlert("Greška", "Greška pri učitavanju predmeta: " + e.getMessage());
-        }
+        predmetService.getAllPredmetiAsync()
+            .subscribe(
+                predmeti -> Platform.runLater(() -> {
+                    if (predmeti != null && !predmeti.isEmpty()) {
+                        predmetComboBox.setItems(FXCollections.observableArrayList(predmeti));
+                    }
+                }),
+                error -> Platform.runLater(() ->
+                    showAlert("Greška", "Greška pri učitavanju predmeta: " + error.getMessage())
+                )
+            );
     }
 
     @FXML
@@ -150,6 +191,8 @@ public class PrijavaStudentaController {
     public void handleSearchByIndex(ActionEvent event) {
         String brojText = brojIndeksaTf.getText().trim();
         String godinaText = godinaIndeksaTf.getText().trim();
+        StudProgramDTO selectedSmer = smerCb.getValue();
+        String smer = selectedSmer != null ? selectedSmer.getOznaka() : null;
 
         if (brojText.isEmpty() || godinaText.isEmpty()) {
             showAlert("Upozorenje", "Unesite broj i godinu indeksa.");
@@ -160,7 +203,7 @@ public class PrijavaStudentaController {
             Integer broj = Integer.parseInt(brojText);
             Integer godina = Integer.parseInt(godinaText);
 
-            List<StudentDTO> studenti = studentService.searchByIndex(broj, godina);
+            List<StudentDTO> studenti = studentService.searchByIndex(broj, godina, smer);
             studentiTable.setItems(FXCollections.observableArrayList(studenti));
             
             if (studenti.isEmpty()) {
@@ -203,13 +246,16 @@ public class PrijavaStudentaController {
         try {
             Long slusaPredmetId = slusaPredmetService.prijaviStudentaNaPredmet(
                 selectedStudent.getIdIndeks(), 
-                selectedDrzi.getId()
+                (long) selectedDrzi.getId()
             );
             
             if (slusaPredmetId != null) {
+                String teacherName = selectedDrzi.getTeacher() != null ? 
+                    selectedDrzi.getTeacher().getFirstName() + " " + selectedDrzi.getTeacher().getLastName() : 
+                    "Nepoznat nastavnik";
                 showAlert("Uspeh", "Student " + selectedStudent.getIme() + " " + selectedStudent.getPrezime() + 
                          " je uspešno prijavljen na predmet:\n" + 
-                         selectedPredmet.getNaziv() + " (" + selectedDrzi.getNastavnikIme() + " " + selectedDrzi.getNastavnikPrezime() + ")");
+                         selectedPredmet.getNaziv() + " (" + teacherName + ")");
                 handleClear(null);
             }
         } catch (Exception e) {

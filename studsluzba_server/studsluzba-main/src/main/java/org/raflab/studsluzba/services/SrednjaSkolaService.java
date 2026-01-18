@@ -11,7 +11,7 @@ import org.raflab.studsluzba.utils.EntityMappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -37,6 +37,21 @@ public class SrednjaSkolaService {
         
         SrednjaSkola saved = srednjaSkolaRepository.save(ss);
         return saved.getId();
+    }
+
+    /**
+     * Kreira novu srednju školu i vraća kompletan objekat.
+     */
+    @Transactional
+    public SrednjaSkolaResponse createSrednjaSkolaAndReturn(SrednjaSkolaRequest request) {
+        SrednjaSkola ss = new SrednjaSkola();
+        ss.setNaziv(request.getNaziv());
+        ss.setVrsta(SrednjaSkola.VrstaSkole.valueOf(request.getVrsta().toUpperCase()));
+        ss.setMesto(request.getMesto());
+        ss.setNapomena(request.getNapomena());
+        
+        SrednjaSkola saved = srednjaSkolaRepository.save(ss);
+        return entityMappers.fromSrednjaSkolaToResponse(saved);
     }
 
     /**

@@ -3,7 +3,7 @@ package org.raflab.studsluzba.controllers.request;
 import lombok.Data;
 import org.raflab.studsluzba.model.PredispitneObaveze;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @Data
 public class PredispitneObavezeRequest {

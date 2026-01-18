@@ -59,16 +59,11 @@ public class NavigationHistoryService {
         }
     }
 
-    /**
-     * Records a new view navigation. Clears forward history.
-     */
-    public void navigateTo(String fxmlName) {
-        navigateTo(fxmlName, null, false);
-    }
+    //public void navigateTo(String fxmlName) {
+//        navigateTo(fxmlName, null, false);
+//    }
 
-    /**
-     * Records a new view navigation with context data.
-     */
+
     public void navigateTo(String fxmlName, Object contextData, boolean cached) {
         NavigationContext context = NavigationContext.forViewChange(fxmlName, cached);
         if (contextData != null) {
@@ -93,20 +88,19 @@ public class NavigationHistoryService {
      * Records navigation with full context.
      */
     public void navigateToContext(NavigationContext context) {
-        if (isNavigating) return; // Don't track changes during history navigation
+        if (isNavigating) return; // kada ides kroz istoriju onda ne pamtiss promene
         
-        if (currentContext != null) {
-            // Don't add duplicate consecutive entries
+        if (currentContext != null) { // ovde ne ulazi prvi put
+            // bez duplikata
             if (!currentContext.getStateKey().equals(context.getStateKey())) {
                 backStack.push(currentContext);
-                // Enforce max depth
                 while (backStack.size() > maxDepth) {
                     backStack.removeLast();
                 }
             }
         }
         
-        currentContext = context;
+        currentContext = context; // prvi put je main
         
         // Clear forward history on new navigation (standard browser behavior)
         forwardStack.clear();

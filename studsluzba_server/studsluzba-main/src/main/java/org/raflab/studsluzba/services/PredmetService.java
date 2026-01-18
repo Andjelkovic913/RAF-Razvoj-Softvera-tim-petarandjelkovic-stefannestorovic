@@ -1,7 +1,7 @@
 package org.raflab.studsluzba.services;
 
 import lombok.RequiredArgsConstructor;
-import org.raflab.studsluzba.controllers.request.PredmetRequest;
+import org.raflab.studsluzba.dtos.PredmetRequest;
 import org.raflab.studsluzba.controllers.response.AverageGradeResponse;
 import org.raflab.studsluzba.controllers.response.PredmetResponse;
 import org.raflab.studsluzba.model.*;
@@ -12,11 +12,13 @@ import org.raflab.studsluzba.utils.EntityMappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.raflab.studsluzba.controllers.response.YearlyGradeStatsResponse;
+import org.raflab.studsluzba.controllers.response.PredmetGradeStatsResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -170,13 +172,7 @@ public class PredmetService {
         return predmetRepository.findAllForReportByStudProgram(studProgramOznaka);
     }
 
-    /**
-     * Izračunava prosečnu ocenu studenata na predmetu za raspon godina.
-     * @param predmetId ID predmeta
-     * @param startYear početna godina
-     * @param endYear krajnja godina
-     * @return AverageGradeResponse sa prosečnom ocenom i brojem položenih ispita
-     */
+
     public AverageGradeResponse getAverageGradeByYearRange(Long predmetId, Integer startYear, Integer endYear) {
         if (startYear > endYear) {
             throw new IllegalArgumentException("Početna godina mora biti manja ili jednaka krajnjoj godini");
@@ -203,5 +199,76 @@ public class PredmetService {
                 averageGrade,
                 totalPassed
         );
+    }
+
+
+    public List<YearlyGradeStatsResponse> getYearlyGradeStats(Long predmetId, Integer startYear, Integer endYear) {
+        if (startYear > endYear) {
+            throw new IllegalArgumentException("Početna godina mora biti manja ili jednaka krajnjoj godini");
+        }
+        
+        if (!predmetRepository.existsById(predmetId)) {
+            throw new EntityNotFoundException("Predmet sa ID " + predmetId + " ne postoji");
+        }
+        
+        List<YearlyGradeStatsResponse> stats = new ArrayList<>();
+        
+        for (int year = startYear; year <= endYear; year++) {
+            Long totalAttempts = izlazakNaIspitRepository.countTotalExamAttemptsByPredmetAndYear(predmetId, year);
+            Long passed = izlazakNaIspitRepository.countPassedExamsByPredmetAndYear(predmetId, year);
+            Double avgGrade = izlazakNaIspitRepository.calculateAverageGradeByPredmetAndYear(predmetId, year);
+            
+            int brStudenata = totalAttempts != null ? totalAttempts.intValue() : 0;
+            int polozilo = passed != null ? passed.intValue() : 0;
+            Double procenatProlaz = brStudenata > 0 ? (polozilo * 100.0 / brStudenata) : null;
+            
+            // Dodaj samo ako ima podataka za tu godinu
+            if (brStudenata > 0) {
+                stats.add(new YearlyGradeStatsResponse(
+                    year,
+                    brStudenata,
+                    polozilo,
+                    avgGrade,
+                    procenatProlaz
+                ));
+            }
+        }
+        
+        return stats;
+    }
+
+    // vraca statistiku ocena za sve predmete u rasponu godina.
+    public List<PredmetGradeStatsResponse> getAllPredmetiGradeStats(Integer startYear, Integer endYear) {
+        if (startYear > endYear) {
+            throw new IllegalArgumentException("Početna godina mora biti manja ili jednaka krajnjoj godini");
+        }
+        
+        LocalDate startDate = LocalDate.of(startYear, 1, 1);
+        LocalDate endDate = LocalDate.of(endYear, 12, 31);
+        
+        List<PredmetGradeStatsResponse> stats = new ArrayList<>();
+        List<Predmet> allPredmeti = new ArrayList<>();
+        predmetRepository.findAll().forEach(allPredmeti::add);
+        
+        for (Predmet predmet : allPredmeti) {
+            Double avgGrade = izlazakNaIspitRepository.calculateAverageGradeByPredmetAndDateRange(predmet.getId(), startDate, endDate);
+            Long passed = izlazakNaIspitRepository.countPassedExamsByPredmetAndDateRange(predmet.getId(), startDate, endDate);
+            
+            int polozilo = passed != null ? passed.intValue() : 0;
+
+            if (polozilo > 0) {
+                stats.add(new PredmetGradeStatsResponse(
+                    predmet.getId(),
+                    predmet.getSifra(),
+                    predmet.getNaziv(),
+                    polozilo, // brStudenata = polozilo
+                    polozilo,
+                    avgGrade,
+                    100.0 // procenatProlaz = 100%
+                ));
+            }
+        }
+        
+        return stats;
     }
 }

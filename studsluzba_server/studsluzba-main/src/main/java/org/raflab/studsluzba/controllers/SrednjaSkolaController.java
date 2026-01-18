@@ -6,7 +6,7 @@ import org.raflab.studsluzba.controllers.response.SrednjaSkolaResponse;
 import org.raflab.studsluzba.services.SrednjaSkolaService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -18,8 +18,8 @@ public class SrednjaSkolaController {
     private final SrednjaSkolaService srednjaSkolaService;
 
     @PostMapping("/add")
-    public Long addNewSrednjaSkola(@RequestBody @Valid SrednjaSkolaRequest request) {
-        return srednjaSkolaService.createSrednjaSkola(request);
+    public SrednjaSkolaResponse addNewSrednjaSkola(@RequestBody @Valid SrednjaSkolaRequest request) {
+        return srednjaSkolaService.createSrednjaSkolaAndReturn(request);
     }
 
     @GetMapping("/{id}")

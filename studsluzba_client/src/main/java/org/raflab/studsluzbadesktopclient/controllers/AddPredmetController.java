@@ -89,7 +89,7 @@ public class AddPredmetController {
 
             semestarCb.setItems(FXCollections.observableArrayList(1, 2, 3, 4, 5, 6, 7, 8));
         } catch (Exception e) {
-            System.err.println("Greška pri inicijalizaciji: " + e.getMessage());
+            showError("Greška", "Greška pri inicijalizaciji: " + e.getMessage());
         }
     }
 

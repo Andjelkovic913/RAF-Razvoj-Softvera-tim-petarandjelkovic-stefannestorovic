@@ -1,7 +1,7 @@
 package org.raflab.studsluzba.model;
 
 import java.time.LocalDate;
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity

@@ -2,7 +2,9 @@ package org.raflab.studsluzbadesktopclient.services;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.view.JasperViewer;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import org.raflab.studsluzbadesktopclient.MainView;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ import java.util.Map;
 public class ReportService {
 
     /**
-     * Generiše izveštaj i prikazuje ga u JasperViewer-u.
+     * Generiše izveštaj, eksportuje ga u PDF i otvara sistemskim pregledačem.
      *
      * @param reportName naziv .jrxml fajla (bez ekstenzije), npr. "sviStudenti"
      * @param parameters mapa parametara za izveštaj (može biti null ili prazna)
@@ -31,8 +33,33 @@ public class ReportService {
      */
     public void showReport(String reportName, Map<String, Object> parameters, Collection<?> dataSource) 
             throws ReportException {
-        JasperPrint jasperPrint = generateReport(reportName, parameters, dataSource);
-        JasperViewer.viewReport(jasperPrint, false);
+        try {
+            JasperPrint jasperPrint = generateReport(reportName, parameters, dataSource);
+            
+            // Save PDF to user.dir (current working directory)
+            String fileName = reportName + "_" + System.currentTimeMillis() + ".pdf";
+            String pdfPath = System.getProperty("user.dir") + "/" + fileName;
+            
+            // Export to PDF using JRPdfExporter
+            JRPdfExporter exporter = new JRPdfExporter();
+            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(pdfPath));
+            exporter.exportReport();
+            
+            // Open with system default PDF viewer
+            String os = System.getProperty("os.name").toLowerCase();
+            ProcessBuilder pb;
+            if (os.contains("mac")) {
+                pb = new ProcessBuilder("open", pdfPath);
+            } else if (os.contains("win")) {
+                pb = new ProcessBuilder("cmd", "/c", "start", "", pdfPath);
+            } else {
+                pb = new ProcessBuilder("xdg-open", pdfPath);
+            }
+            pb.start();
+        } catch (Exception e) {
+            throw new ReportException("Greška pri prikazivanju izveštaja: " + e.getMessage(), e);
+        }
     }
 
     /**

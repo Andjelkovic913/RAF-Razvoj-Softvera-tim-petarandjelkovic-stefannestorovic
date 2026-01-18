@@ -11,7 +11,7 @@ import org.raflab.studsluzba.utils.EntityMappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -35,6 +35,19 @@ public class VisokoskolskaUstanovaService {
         
         VisokoskolskaUstanova saved = visokaUstanovaRepository.save(vu);
         return saved.getId();
+    }
+
+    /**
+     * Kreira novu visokoškolsku ustanovu i vraća kompletan objekat.
+     */
+    @Transactional
+    public VisokoskolskaUstanovaResponse createVisokoskolskaUstanovaAndReturn(VisokoskolskaUstanovaRequest request) {
+        VisokoskolskaUstanova vu = new VisokoskolskaUstanova();
+        vu.setNaziv(request.getNaziv());
+        vu.setTipSkole(request.getTipSkole());
+        
+        VisokoskolskaUstanova saved = visokaUstanovaRepository.save(vu);
+        return entityMappers.fromVisokoskolskaUstanovaToResponse(saved);
     }
 
     /**

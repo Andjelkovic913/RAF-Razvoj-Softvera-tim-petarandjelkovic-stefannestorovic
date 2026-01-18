@@ -244,15 +244,11 @@ public class PrijavaIspitaController {
         try {
             Integer broj = Integer.parseInt(brojText);
             Integer godina = Integer.parseInt(godinaText);
-
-            foundStudents = studentService.searchByIndex(broj, godina);
             
             StudProgramDTO selectedSmer = smerComboBox.getValue();
-            if (selectedSmer != null) {
-                foundStudents = foundStudents.stream()
-                    .filter(s -> selectedSmer.getOznaka().equals(s.getStudProgramOznaka()))
-                    .toList();
-            }
+            String smerOznaka = selectedSmer != null ? selectedSmer.getOznaka() : null;
+
+            foundStudents = studentService.searchByIndex(broj, godina, smerOznaka);
             
             if (foundStudents.isEmpty()) {
                 studentInfoLabel.setText("Student nije pronađen");

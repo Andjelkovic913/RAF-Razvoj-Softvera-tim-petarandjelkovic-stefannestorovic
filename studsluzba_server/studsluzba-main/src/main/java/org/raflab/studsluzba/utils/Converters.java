@@ -1,15 +1,12 @@
 package org.raflab.studsluzba.utils;
 
 import org.raflab.studsluzba.controllers.request.*;
-import org.raflab.studsluzba.controllers.response.DrziPredmetResponse;
-import org.raflab.studsluzba.controllers.response.NastavnikResponse;
-import org.raflab.studsluzba.controllers.response.NastavnikZvanjeResponse;
+import org.raflab.studsluzba.dtos.NastavnikRequest;
+import org.raflab.studsluzba.dtos.PredmetRequest;
+import org.raflab.studsluzba.dtos.StudentIndeksRequest;
+import org.raflab.studsluzba.dtos.StudentPodaciRequest;
 import org.raflab.studsluzba.model.*;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class Converters {
@@ -26,50 +23,6 @@ public class Converters {
         nastavnik.setPol(nastavnikRequest.getPol());
         nastavnik.setJmbg(nastavnikRequest.getJmbg());
         return nastavnik;
-    }
-
-    public NastavnikResponse toNastavnikResponse(Nastavnik nastavnik)
-    {
-        NastavnikResponse response = new NastavnikResponse();
-        response.setId(nastavnik.getId());
-        response.setIme(nastavnik.getIme());
-        response.setPrezime(nastavnik.getPrezime());
-        response.setSrednjeIme(nastavnik.getSrednjeIme());
-        response.setEmail(nastavnik.getEmail());
-        response.setBrojTelefona(nastavnik.getBrojTelefona());
-        response.setAdresa(nastavnik.getAdresa());
-        response.setZvanja(nastavnik.getZvanja() != null ? 
-            nastavnik.getZvanja().stream()
-                .map(this::toNastavnikZvanjeResponse)
-                .collect(Collectors.toSet()) : null);
-
-        response.setDatumRodjenja(nastavnik.getDatumRodjenja());
-        response.setPol(nastavnik.getPol());
-        response.setJmbg(nastavnik.getJmbg());
-        return response;
-    }
-
-    private NastavnikZvanjeResponse toNastavnikZvanjeResponse(NastavnikZvanje zvanje) {
-        if (zvanje == null) {
-            return null;
-        }
-        NastavnikZvanjeResponse response = new NastavnikZvanjeResponse();
-        response.setId(zvanje.getId());
-        response.setDatumIzbora(zvanje.getDatumIzbora());
-        response.setNaucnaOblast(zvanje.getNaucnaOblast());
-        response.setUzaNaucnaOblast(zvanje.getUzaNaucnaOblast());
-        response.setZvanje(zvanje.getZvanje());
-        response.setAktivno(zvanje.isAktivno());
-        return response;
-    }
-
-    public List<NastavnikResponse> toNastavnikResponseList(Iterable<Nastavnik> nastavnikIterable) {
-        List<NastavnikResponse> nastavnikResponses = new ArrayList<>();
-
-        nastavnikIterable.forEach((nastavnik) -> {
-            nastavnikResponses.add(toNastavnikResponse(nastavnik));
-        });
-        return nastavnikResponses;
     }
 
     public StudentPodaci toStudentPodaci(StudentPodaciRequest request) {
@@ -221,28 +174,6 @@ public class Converters {
         }
         
         return sp;
-    }
-
-    public DrziPredmetResponse toDrziPredmetResponse(DrziPredmet dp) {
-        DrziPredmetResponse r = new DrziPredmetResponse();
-        r.setId(dp.getId());
-
-        if (dp.getNastavnik() != null) {
-            r.setNastavnikId(dp.getNastavnik().getId());
-            r.setNastavnikIme(dp.getNastavnik().getIme());
-            r.setNastavnikPrezime(dp.getNastavnik().getPrezime());
-            r.setNastavnikEmail(dp.getNastavnik().getEmail());
-        }
-        if (dp.getPredmet() != null) {
-            r.setPredmetId(dp.getPredmet().getId());
-            r.setPredmetNaziv(dp.getPredmet().getNaziv());
-            r.setPredmetSifra(dp.getPredmet().getSifra());
-        }
-        if (dp.getSkolskaGodina() != null) {
-            r.setSkolskaGodinaId(dp.getSkolskaGodina().getId());
-            r.setSkolskaGodinaNaziv(dp.getSkolskaGodina().getNaziv());
-        }
-        return r;
     }
 
     public Ispit toIspit(IspitRequest ispitRequest) {

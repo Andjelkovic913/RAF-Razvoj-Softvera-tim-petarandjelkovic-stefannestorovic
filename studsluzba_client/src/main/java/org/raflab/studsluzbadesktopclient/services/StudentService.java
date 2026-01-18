@@ -1,6 +1,7 @@
 package org.raflab.studsluzbadesktopclient.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -117,7 +118,7 @@ public class StudentService {
 		}
 
 		try {
-			// Prvo dohvati postojeće podatke studenta
+			// prvo dohvati postojece podatke studenta
 			UriComponentsBuilder getBuilder = UriComponentsBuilder.fromHttpUrl(createURL("podaci/" + kontaktPodaci.getStudentId()));
 			ResponseEntity<Map<String, Object>> getResponse = restTemplate.exchange(
 					getBuilder.toUriString(),
@@ -133,7 +134,6 @@ public class StudentService {
 
 			Map<String, Object> postojeciPodaci = getResponse.getBody();
 
-			// Kreiraj request sa svim postojećim podacima
 			StudentPodaciRequest request = new StudentPodaciRequest();
 			request.setIme((String) postojeciPodaci.get("ime"));
 			request.setPrezime((String) postojeciPodaci.get("prezime"));
@@ -157,10 +157,8 @@ public class StudentService {
 			request.setBrojLicneKarte((String) postojeciPodaci.get("brojLicneKarte"));
 			request.setLicnuKartuIzdao((String) postojeciPodaci.get("licnuKartuIzdao"));
 
-			// Sačuvaj postojeću adresu (obavezno polje)
 			request.setAdresa((String) postojeciPodaci.get("adresa"));
 
-			// Ažuriraj samo kontakt polja
 			request.setAdresaStanovanja(kontaktPodaci.getAdresa());
 			request.setBrojTelefonaMobilni(kontaktPodaci.getBrojTelefonaMobilni());
 			request.setBrojTelefonaFiksni(kontaktPodaci.getBrojTelefonaFiksni());
@@ -242,9 +240,9 @@ public class StudentService {
         builder.queryParam("size", 100);
         
         String url = builder.toUriString();
-        System.out.println("DEBUG: Search URL: " + url);
-        System.out.println("DEBUG: Ime parameter: '" + ime + "'");
-        System.out.println("DEBUG: Prezime parameter: '" + prezime + "'");
+//        System.out.println("DEBUG: Search URL: " + url);
+//        System.out.println("DEBUG: Ime parameter: '" + ime + "'");
+//        System.out.println("DEBUG: Prezime parameter: '" + prezime + "'");
         
         ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                 url,
@@ -253,20 +251,20 @@ public class StudentService {
                 new ParameterizedTypeReference<Map<String, Object>>() {}
         );
         
-        System.out.println("DEBUG: Response status: " + response.getStatusCode());
-        System.out.println("DEBUG: Response body: " + response.getBody());
+//        System.out.println("DEBUG: Response status: " + response.getStatusCode());
+//        System.out.println("DEBUG: Response body: " + response.getBody());
         
         if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null)
             return List.of();
 
         Object contentObj = response.getBody().get("content");
-        System.out.println("DEBUG: Content object: " + contentObj);
-        System.out.println("DEBUG: Content is List: " + (contentObj instanceof List<?>));
+//        System.out.println("DEBUG: Content object: " + contentObj);
+//        System.out.println("DEBUG: Content is List: " + (contentObj instanceof List<?>));
         
         if (!(contentObj instanceof List<?> list))
             return List.of();
         
-        System.out.println("DEBUG: Number of results: " + list.size());
+//        System.out.println("DEBUG: Number of results: " + list.size());
 
         List<StudentDTO> result = new ArrayList<>();
         for (Object item : list) {
@@ -287,7 +285,7 @@ public class StudentService {
         return result;
     }
 
-    public List<StudentDTO> searchByIndex(Integer broj, Integer godina) {
+    public List<StudentDTO> searchByIndex(Integer broj, Integer godina, String studProgram) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURL("search"));
         
         if (broj != null) {
@@ -295,6 +293,9 @@ public class StudentService {
         }
         if (godina != null) {
             builder.queryParam("godina", godina);
+        }
+        if (studProgram != null && !studProgram.trim().isEmpty()) {
+            builder.queryParam("studProgram", studProgram);
         }
         
         builder.queryParam("page", 0);
@@ -350,6 +351,99 @@ public class StudentService {
         }
         return List.of();
     }
+
+
+
+//      Asinhrona pretraga studenata po imenu i prezimenu.
+//      Koristi WebClient za ne-blokirajući poziv - UI ostaje responzivan.
+
+    public Mono<List<StudentDTO>> searchByNameAndSurnameAsync(String ime, String prezime) {
+        String normalizedIme = (ime != null && !ime.trim().isEmpty()) 
+            ? org.raflab.studsluzbadesktopclient.utils.StringUtils.normalizeSerbianDiacritics(ime) : null;
+        String normalizedPrezime = (prezime != null && !prezime.trim().isEmpty()) 
+            ? org.raflab.studsluzbadesktopclient.utils.StringUtils.normalizeSerbianDiacritics(prezime) : null;
+
+        return webClient.get()
+                .uri(uriBuilder -> {
+                    uriBuilder.path(STUDENT_URL_PATH + "/search");
+                    if (normalizedIme != null) uriBuilder.queryParam("ime", normalizedIme);
+                    if (normalizedPrezime != null) uriBuilder.queryParam("prezime", normalizedPrezime);
+                    uriBuilder.queryParam("page", 0);
+                    uriBuilder.queryParam("size", 100);
+                    return uriBuilder.build();
+                })
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                .map(this::parseStudentListFromPagedResponse)
+                .onErrorReturn(List.of());
+    }
+
+
+    public Mono<List<StudentDTO>> searchByIndexAsync(Integer broj, Integer godina, String studProgram) {
+        return webClient.get()
+                .uri(uriBuilder -> {
+                    uriBuilder.path(STUDENT_URL_PATH + "/search");
+                    if (broj != null) uriBuilder.queryParam("broj", broj);
+                    if (godina != null) uriBuilder.queryParam("godina", godina);
+                    if (studProgram != null && !studProgram.trim().isEmpty()) {
+                        uriBuilder.queryParam("studProgram", studProgram);
+                    }
+                    uriBuilder.queryParam("page", 0);
+                    uriBuilder.queryParam("size", 100);
+                    return uriBuilder.build();
+                })
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                .map(this::parseStudentListFromPagedResponse)
+                .onErrorReturn(List.of());
+    }
+
+
+    public Mono<List<StudentBySrednjaSkolaDTO>> searchByHighSchoolAsync(Long srednjaSkolaId) {
+        if (srednjaSkolaId == null) {
+            return Mono.just(new ArrayList<StudentBySrednjaSkolaDTO>());
+        }
+        
+        return webClient.get()
+                .uri(STUDENT_URL_PATH + "/srednja-skola/" + srednjaSkolaId)
+                .retrieve()
+                .bodyToMono(StudentBySrednjaSkolaDTO[].class)
+                .map(arr -> {
+                    List<StudentBySrednjaSkolaDTO> result = new ArrayList<>();
+                    if (arr != null) {
+                        result.addAll(java.util.Arrays.asList(arr));
+                    }
+                    return result;
+                })
+                .onErrorReturn(new ArrayList<StudentBySrednjaSkolaDTO>());
+    }
+
+
+    private List<StudentDTO> parseStudentListFromPagedResponse(Map<String, Object> responseBody) {
+        if (responseBody == null) return List.of();
+        
+        Object contentObj = responseBody.get("content");
+        if (!(contentObj instanceof List<?> list)) return List.of();
+
+        List<StudentDTO> result = new ArrayList<>();
+        for (Object item : list) {
+            if (!(item instanceof Map<?, ?> map)) continue;
+
+            StudentDTO dto = new StudentDTO();
+            if (map.get("idIndeks") instanceof Number) dto.setIdIndeks(((Number) map.get("idIndeks")).longValue());
+            if (map.get("idStudentPodaci") instanceof Number) dto.setIdStudentPodaci(((Number) map.get("idStudentPodaci")).longValue());
+            if (map.get("ime") instanceof String) dto.setIme((String) map.get("ime"));
+            if (map.get("prezime") instanceof String) dto.setPrezime((String) map.get("prezime"));
+            if (map.get("godinaUpisa") instanceof Number) dto.setGodinaUpisa(((Number) map.get("godinaUpisa")).intValue());
+            if (map.get("studProgramOznaka") instanceof String) dto.setStudProgramOznaka((String) map.get("studProgramOznaka"));
+            if (map.get("broj") instanceof Number) dto.setBroj(((Number) map.get("broj")).intValue());
+            if (map.get("aktivanIndeks") instanceof Boolean) dto.setAktivanIndeks((Boolean) map.get("aktivanIndeks"));
+
+            result.add(dto);
+        }
+        return result;
+    }
+
 
     public Long saveStudentIndeks(StudentIndeksRequest indeksRequest) {
         if (indeksRequest.getStudentId() == null) {
@@ -409,7 +503,6 @@ public class StudentService {
         }
 
         try {
-            // Fetch basic student data
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURL("podaci/" + studentPodaciId));
             ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                     builder.toUriString(),
@@ -426,7 +519,6 @@ public class StudentService {
             Map<String, Object> data = response.getBody();
             StudentProfileDTO profile = new StudentProfileDTO();
 
-            // Basic info
             profile.setIdStudentPodaci(studentPodaciId);
             profile.setIdIndeks(indeksId);
             profile.setIme(getStringValue(data, "ime"));
@@ -438,7 +530,7 @@ public class StudentService {
                 try {
                     profile.setDatumRodjenja(java.time.LocalDate.parse(data.get("datumRodjenja").toString()));
                 } catch (Exception e) {
-                    // ignore date parsing errors
+                    //
                 }
             }
             
@@ -449,14 +541,12 @@ public class StudentService {
             profile.setNacionalnost(getStringValue(data, "nacionalnost"));
             profile.setBrojLicneKarte(getStringValue(data, "brojLicneKarte"));
             
-            // Contact info
             profile.setAdresa(getStringValue(data, "adresa"));
             profile.setMestoStanovanja(getStringValue(data, "mestoStanovanja"));
             profile.setEmailPrivatni(getStringValue(data, "emailPrivatni"));
             profile.setEmailFakultetski(getStringValue(data, "emailFakultetski"));
             profile.setBrojTelefona(getStringValue(data, "brojTelefonaMobilni"));
 
-            // Fetch index info if available
             if (indeksId != null) {
                 try {
                     UriComponentsBuilder indeksBuilder = UriComponentsBuilder.fromHttpUrl(createURL("indeks/" + indeksId));
@@ -486,17 +576,14 @@ public class StudentService {
                 }
             }
 
-            // Initialize empty lists for related data (to be populated by API calls when available)
             profile.setPolozeniIspiti(new ArrayList<>());
             profile.setNepolozeniIspiti(new ArrayList<>());
             profile.setUplate(new ArrayList<>());
             profile.setUpisi(new ArrayList<>());
             
-            // Default statistics
             profile.setUkupnoEspb(0);
             profile.setProsecnaOcena(0.0);
 
-            // Try to fetch exams, payments, enrollments if APIs exist
             fetchStudentExams(profile, indeksId);
             fetchStudentPayments(profile, indeksId);
             fetchStudentEnrollments(profile, indeksId, profile.getBrojIndeksa());
@@ -803,7 +890,7 @@ public class StudentService {
         
         try {
             String url = baseUrl + "/api/student-srednja-skola/student/" + studentPodaciId;
-            System.out.println("DEBUG: Fetching high school from: " + url);
+//            System.out.println("DEBUG: Fetching high school from: " + url);
             
             ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
                     url,
@@ -812,17 +899,17 @@ public class StudentService {
                     new ParameterizedTypeReference<List<Map<String, Object>>>() {}
             );
             
-            System.out.println("DEBUG: High school response status: " + response.getStatusCode());
-            System.out.println("DEBUG: High school response body: " + response.getBody());
+//            System.out.println("DEBUG: High school response status: " + response.getStatusCode());
+//            System.out.println("DEBUG: High school response body: " + response.getBody());
             
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null && !response.getBody().isEmpty()) {
                 // Take the first high school record (most recent or primary)
                 Map<String, Object> highSchool = response.getBody().get(0);
-                System.out.println("DEBUG: High school data: " + highSchool);
+//                System.out.println("DEBUG: High school data: " + highSchool);
                 
                 String naziv = getStringValue(highSchool, "srednjaSkolaNaziv");
                 String mesto = getStringValue(highSchool, "srednjaSkolaMesto");
-                System.out.println("DEBUG: Naziv: " + naziv + ", Mesto: " + mesto);
+//                System.out.println("DEBUG: Naziv: " + naziv + ", Mesto: " + mesto);
                 
                 profile.setSrednjaSkolaNaziv(naziv);
                 profile.setSrednjaSkolaMesto(mesto);
@@ -845,5 +932,262 @@ public class StudentService {
     private String getStringValue(Map<String, Object> map, String key) {
         Object value = map.get(key);
         return value instanceof String ? (String) value : null;
+    }
+
+    public List<String> getAllStudijskiProgrami() {
+        try {
+            String url = createURL("studijski-programi");
+            ResponseEntity<List<String>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<String>>() {}
+            );
+            
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                return response.getBody();
+            }
+            return List.of();
+        } catch (Exception e) {
+            System.err.println("Greška pri ucitavanju studijskih programa: " + e.getMessage());
+            return List.of();
+        }
+    }
+
+    public boolean dodajUplatu(Long studentIndeksId, Long skolskaGodinaId, double iznosRsd, String opis) {
+        try {
+            Map<String, Object> request = new HashMap<>();
+            request.put("studentIndeksId", studentIndeksId);
+            request.put("skolskaGodinaId", skolskaGodinaId);
+            request.put("iznosRsd", iznosRsd);
+            request.put("tip", "SKOLARINA");
+            request.put("opis", opis);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
+
+            String url = baseUrl + "/api/uplata/add";
+            ResponseEntity<Long> response = restTemplate.postForEntity(url, entity, Long.class);
+
+            return response.getStatusCode() == HttpStatus.OK && response.getBody() != null;
+        } catch (Exception e) {
+            System.err.println("Greška pri dodavanju uplate: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Map<String, Double> getPreostaliIznos(Long studentIndeksId) {
+        try {
+            String url = baseUrl + "/api/uplata/preostalo/" + studentIndeksId;
+            ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+            
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                Map<String, Double> result = new HashMap<>();
+                Map body = response.getBody();
+                result.put("preostaloRSD", body.get("preostaloRSD") != null ? ((Number) body.get("preostaloRSD")).doubleValue() : 0.0);
+                result.put("preostaloEUR", body.get("preostaloEUR") != null ? ((Number) body.get("preostaloEUR")).doubleValue() : 0.0);
+                result.put("ukupnoUplacenoRSD", body.get("ukupnoUplacenoRSD") != null ? ((Number) body.get("ukupnoUplacenoRSD")).doubleValue() : 0.0);
+                result.put("ukupnoUplacenoEUR", body.get("ukupnoUplacenoEUR") != null ? ((Number) body.get("ukupnoUplacenoEUR")).doubleValue() : 0.0);
+                return result;
+            }
+            return null;
+        } catch (Exception e) {
+            System.err.println("Greška pri dobijanju preostalog iznosa: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public List<Map<String, Object>> getSkolskeGodine() {
+        try {
+            String url = baseUrl + "/api/skolska-godina/all";
+            ResponseEntity<List> response = restTemplate.getForEntity(url, List.class);
+            
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                return response.getBody();
+            }
+            return List.of();
+        } catch (Exception e) {
+            System.err.println("Greška pri učitavanju školskih godina: " + e.getMessage());
+            return List.of();
+        }
+    }
+
+
+    public Long createUpisGodine(Long studentIndeksId, Long skolskaGodinaId, Integer godina, Integer prenetiESPB) {
+        try {
+            Map<String, Object> request = new HashMap<>();
+            request.put("studentIndeksId", studentIndeksId);
+            request.put("skolskaGodinaId", skolskaGodinaId);
+            request.put("godina", godina);
+            request.put("datumUpisa", java.time.LocalDate.now().toString());
+            if (prenetiESPB != null) {
+                request.put("prenetiESPB", prenetiESPB);
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
+
+            String url = baseUrl + "/api/upis-godine/add";
+            ResponseEntity<Long> response = restTemplate.postForEntity(url, entity, Long.class);
+
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                return response.getBody();
+            }
+            return null;
+        } catch (Exception e) {
+            System.err.println("Greška pri upisu godine: " + e.getMessage());
+            throw new RuntimeException(extractErrorMessage(e), e);
+        }
+    }
+
+
+    public Long createObnovaGodine(Long studentIndeksId, Long skolskaGodinaId, Integer godina, 
+                                    Long prethodniUpisId, Integer prenetiESPB, String razlogObnove,
+                                    List<Long> nextYearDrziPredmetIds) {
+        try {
+            Map<String, Object> request = new HashMap<>();
+            request.put("studentIndeksId", studentIndeksId);
+            request.put("skolskaGodinaId", skolskaGodinaId);
+            request.put("godina", godina);
+            if (prethodniUpisId != null) {
+                request.put("prethodniUpisId", prethodniUpisId);
+            }
+            if (prenetiESPB != null) {
+                request.put("prenetiESPB", prenetiESPB);
+            }
+            if (razlogObnove != null && !razlogObnove.isEmpty()) {
+                request.put("razlogObnove", razlogObnove);
+            }
+            if (nextYearDrziPredmetIds != null && !nextYearDrziPredmetIds.isEmpty()) {
+                request.put("nextYearDrziPredmetIds", nextYearDrziPredmetIds);
+            }
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
+
+            String url = baseUrl + "/api/obnova-godine/obnovi";
+            ResponseEntity<Long> response = restTemplate.postForEntity(url, entity, Long.class);
+
+            if (response.getStatusCode() == HttpStatus.CREATED && response.getBody() != null) {
+                return response.getBody();
+            }
+            return null;
+        } catch (Exception e) {
+            System.err.println("Greška pri obnovi godine: " + e.getMessage());
+            throw new RuntimeException(extractErrorMessage(e), e);
+        }
+    }
+
+
+    public Map<String, Object> getFailedSubjects(Long studentIndeksId) {
+        try {
+            String url = baseUrl + "/api/obnova-godine/failed-subjects/" + studentIndeksId;
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                return response.getBody();
+            }
+            return null;
+        } catch (Exception e) {
+            System.err.println("Greška pri dobijanju nepoloženih predmeta: " + e.getMessage());
+            return null;
+        }
+    }
+
+
+    public Integer getCurrentStudentYear(Long indeksId, Integer brojIndeksa) {
+        if (brojIndeksa == null) return 1;
+        
+        try {
+            String url = baseUrl + "/api/upis-godine/student/" + brojIndeksa;
+            ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+            );
+            
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                int maxGodina = 0;
+                for (Map<String, Object> enrollment : response.getBody()) {
+                    if (enrollment.get("godina") instanceof Number) {
+                        int godina = ((Number) enrollment.get("godina")).intValue();
+                        if (godina > maxGodina) {
+                            maxGodina = godina;
+                        }
+                    }
+                }
+                return maxGodina > 0 ? maxGodina : 1;
+            }
+            return 1;
+        } catch (Exception e) {
+            System.err.println("Greška pri dobijanju trenutne godine studenta: " + e.getMessage());
+            return 1;
+        }
+    }
+
+
+    public Integer getPrenetiESPBForYear(Integer brojIndeksa, Integer godina) {
+        if (brojIndeksa == null || godina == null) return 0;
+        
+        try {
+            String url = baseUrl + "/api/upis-godine/student/" + brojIndeksa;
+            ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+            );
+            
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+                // Find the most recent enrollment for the given year
+                Map<String, Object> latestEnrollment = null;
+                for (Map<String, Object> enrollment : response.getBody()) {
+                    if (enrollment.get("godina") instanceof Number) {
+                        int enrollmentGodina = ((Number) enrollment.get("godina")).intValue();
+                        if (enrollmentGodina == godina) {
+                            latestEnrollment = enrollment;
+                            // Assuming list is ordered by date, take the last one
+                        }
+                    }
+                }
+                
+                if (latestEnrollment != null && latestEnrollment.get("prenetiESPB") instanceof Number) {
+                    return ((Number) latestEnrollment.get("prenetiESPB")).intValue();
+                }
+            }
+            return 0;
+        } catch (Exception e) {
+            System.err.println("Greška pri dobijanju prenetih ESPB: " + e.getMessage());
+            return 0;
+        }
+    }
+
+    private String extractErrorMessage(Exception e) {
+        String message = e.getMessage();
+        if (message != null && message.contains("\"message\":\"")) {
+            int start = message.indexOf("\"message\":\"") + 11;
+            int end = message.indexOf("\"", start);
+            if (end > start) {
+                return message.substring(start, end);
+            }
+        }
+        if (message != null && message.contains(":")) {
+            // Try to get meaningful part of error
+            String[] parts = message.split(":");
+            if (parts.length > 1) {
+                return parts[parts.length - 1].trim().replace("\"", "").replace("}", "");
+            }
+        }
+        return message != null ? message : "Nepoznata greška";
     }
 }

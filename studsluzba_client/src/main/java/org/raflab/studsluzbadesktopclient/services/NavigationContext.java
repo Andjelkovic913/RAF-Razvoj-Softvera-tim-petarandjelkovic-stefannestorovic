@@ -18,27 +18,22 @@ public class NavigationContext {
     private boolean cached;
     
     public enum NavigationType {
-        VIEW_CHANGE,    // Root view change (different FXML)
-        TAB_CHANGE,     // Tab selection within same view
-        DATA_CHANGE     // Same view but different data (e.g., different student)
+        VIEW_CHANGE,    // da li je view
+        TAB_CHANGE,     // da li je tab
+        DATA_CHANGE     // menja se data
     }
     
-    // Constructors
     public NavigationContext() {
         this.type = NavigationType.VIEW_CHANGE;
     }
     
-    public NavigationContext(String viewName) {
-        this.viewName = viewName;
-        this.type = NavigationType.VIEW_CHANGE;
-    }
-    
+
     public NavigationContext(String viewName, NavigationType type) {
         this.viewName = viewName;
         this.type = type;
     }
     
-    // Factory methods for common scenarios
+
     public static NavigationContext forViewChange(String viewName, boolean cached) {
         NavigationContext context = new NavigationContext(viewName, NavigationType.VIEW_CHANGE);
         context.setCached(cached);
@@ -50,14 +45,10 @@ public class NavigationContext {
         context.setSelectedTabIndex(tabIndex);
         return context;
     }
-    
-    public static NavigationContext forDataChange(String viewName, String dataKey, Object dataValue) {
-        NavigationContext context = new NavigationContext(viewName, NavigationType.DATA_CHANGE);
-        context.addCustomData(dataKey, dataValue);
-        return context;
-    }
-    
-    // Helper methods
+
+
+
+    // helper
     public void addCustomData(String key, Object value) {
         customData.put(key, value);
     }
@@ -162,4 +153,11 @@ public class NavigationContext {
         return "NavigationContext{viewName='" + viewName + "', type=" + type + 
                ", tabIndex=" + selectedTabIndex + ", cached=" + cached + "}";
     }
+
+//    public static NavigationContext forDataChange(String viewName, String dataKey, Object dataValue) {
+//        NavigationContext context = new NavigationContext(viewName, NavigationType.DATA_CHANGE);
+//        context.addCustomData(dataKey, dataValue);
+//        return context;
+//    }
+
 }

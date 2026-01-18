@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.raflab</groupId>
   <artifactId>studsluzba</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   
   <modules>
@@ -21,7 +21,7 @@
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>2.2.2.RELEASE</version>
+        <version>3.3.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

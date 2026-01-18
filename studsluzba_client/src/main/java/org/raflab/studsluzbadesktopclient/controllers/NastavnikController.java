@@ -10,14 +10,11 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.raflab.studsluzbadesktopclient.MainView;
 import org.raflab.studsluzbadesktopclient.coder.CoderFactory;
 import org.raflab.studsluzbadesktopclient.coder.SimpleCode;
-import org.raflab.studsluzba.dtos.NastavnikReportDTO;
 import org.raflab.studsluzba.dtos.NastavnikRequest;
 import org.raflab.studsluzbadesktopclient.services.NastavnikService;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @Component
 public class NastavnikController {
@@ -307,38 +304,45 @@ public class NastavnikController {
     }
 
     public void handleIzvestaj(ActionEvent event) {
-        CompletableFuture.runAsync(() -> {
-            try {
-                List<NastavnikReportDTO> nastavnici = nastavnikService.getNastavniciForReport();
+        nastavnikService.getNastavniciForReportAsync()
+            .subscribe(
+                nastavnici -> {
+                    try {
+                        JasperReport report = JasperCompileManager.compileReport(
+                                MainView.class.getResourceAsStream("/reports/sviNastavnici.jrxml")
+                        );
 
-                JasperReport report = JasperCompileManager.compileReport(
-                        MainView.class.getResourceAsStream("/reports/sviNastavnici.jrxml")
-                );
+                        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(nastavnici);
+                        JasperPrint jp = JasperFillManager.fillReport(report, new HashMap<>(), dataSource);
 
-                JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(nastavnici);
-                JasperPrint jp = JasperFillManager.fillReport(report, new HashMap<>(), dataSource);
+                        JasperExportManager.exportReportToPdfFile(jp, "sviNastavnici.pdf");
 
-                JasperExportManager.exportReportToPdfFile(jp, "sviNastavnici.pdf");
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Izveštaj");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Izveštaj je uspešno generisan: sviNastavnici.pdf");
+                            alert.showAndWait();
+                        });
 
-                Platform.runLater(() -> {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Izveštaj");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Izveštaj je uspešno generisan: sviNastavnici.pdf");
-                    alert.showAndWait();
-                });
-
-            } catch (JRException e) {
-                Platform.runLater(() -> {
+                    } catch (JRException e) {
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Greška");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Greška pri generisanju izveštaja: " + e.getMessage());
+                            alert.showAndWait();
+                        });
+                    }
+                },
+                error -> Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Greška");
                     alert.setHeaderText(null);
-                    alert.setContentText("Greška pri generisanju izveštaja: " + e.getMessage());
+                    alert.setContentText("Greška pri dohvatanju podataka: " + error.getMessage());
                     alert.showAndWait();
-                });
-            }
-        });
-        System.out.println("Izveštaj nastavnika se generiše u pozadini...");
+                })
+            );
     }
 
     private void showAlert(String title, String content) {

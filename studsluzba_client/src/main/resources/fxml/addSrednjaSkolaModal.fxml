@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.raflab.studsluzbadesktopclient.controllers.AddSrednjaSkolaModalController"
+      spacing="15" alignment="CENTER" style="-fx-padding: 20;">
+    
+    <GridPane hgap="10" vgap="10" alignment="CENTER">
+        <Label text="Naziv škole" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="RIGHT"/>
+        <TextField fx:id="nazivTf" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="250"/>
+        
+        <Label text="Vrsta" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.halignment="RIGHT"/>
+        <TextField fx:id="vrstaTf" GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="250"/>
+        
+        <Label text="Mesto" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.halignment="RIGHT"/>
+        <TextField fx:id="mestoTf" GridPane.columnIndex="1" GridPane.rowIndex="2" prefWidth="250"/>
+        
+        <Label text="Napomena" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.halignment="RIGHT"/>
+        <TextField fx:id="napomenaTf" GridPane.columnIndex="1" GridPane.rowIndex="3" prefWidth="250"/>
+    </GridPane>
+    
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Dodaj" onAction="#handleDodaj" prefWidth="100"/>
+        <Button text="Otkaži" onAction="#handleOtkazi" prefWidth="100"/>
+    </HBox>
+</VBox>

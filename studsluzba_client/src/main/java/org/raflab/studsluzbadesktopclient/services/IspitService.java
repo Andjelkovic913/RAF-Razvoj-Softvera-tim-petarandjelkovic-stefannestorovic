@@ -7,6 +7,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,6 +22,7 @@ import java.util.Map;
 public class IspitService {
 
     private RestTemplate restTemplate;
+    private WebClient webClient;
     private String baseUrl;
 
     private static final String API_PATH = "/api/ispit";
@@ -245,5 +248,79 @@ public class IspitService {
         }
 
         return dto;
+    }
+
+    // ==================== ASINHRONE METODE (WebClient) ====================
+
+    /**
+     * Asinhrono dohvatanje svih ispita.
+     */
+    public Mono<List<IspitDTO>> getAllAsync() {
+        return webClient.get()
+                .uri(API_PATH + "/all")
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                .map(list -> {
+                    List<IspitDTO> result = new ArrayList<>();
+                    if (list != null) {
+                        for (Map<String, Object> item : list) {
+                            result.add(mapToDTO(item));
+                        }
+                    }
+                    return result;
+                })
+                .onErrorReturn(new ArrayList<>());
+    }
+
+    /**
+     * Asinhrono dohvatanje ispita po ispitnom roku.
+     */
+    public Mono<List<IspitDTO>> getByIspitniRokAsync(Long ispitniRokId) {
+        return getAllAsync()
+                .map(list -> list.stream()
+                        .filter(i -> ispitniRokId.equals(i.getIspitniRokId()))
+                        .toList());
+    }
+
+    /**
+     * Asinhrono dohvatanje prijavljenih studenata za ispit.
+     */
+    public Mono<List<PrijavljeniStudentDTO>> getPrijavljeniStudentiAsync(Long ispitId) {
+        return webClient.get()
+                .uri(PRIJAVA_API_PATH + "/" + ispitId + "/students")
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Map<String, Object>>>() {})
+                .map(list -> {
+                    List<PrijavljeniStudentDTO> result = new ArrayList<>();
+                    if (list != null) {
+                        for (Map<String, Object> item : list) {
+                            PrijavljeniStudentDTO dto = new PrijavljeniStudentDTO();
+                            if (item.get("prijavaId") instanceof Number) {
+                                dto.setPrijavaId(((Number) item.get("prijavaId")).longValue());
+                            }
+                            if (item.get("studentIndeksId") instanceof Number) {
+                                dto.setStudentIndeksId(((Number) item.get("studentIndeksId")).longValue());
+                            }
+                            if (item.get("slusaPredmetId") instanceof Number) {
+                                dto.setSlusaPredmetId(((Number) item.get("slusaPredmetId")).longValue());
+                            }
+                            dto.setIme((String) item.get("ime"));
+                            dto.setPrezime((String) item.get("prezime"));
+                            if (item.get("broj") instanceof Number) {
+                                dto.setBroj(((Number) item.get("broj")).intValue());
+                            }
+                            if (item.get("godina") instanceof Number) {
+                                dto.setGodina(((Number) item.get("godina")).intValue());
+                            }
+                            dto.setStudProgramOznaka((String) item.get("studProgramOznaka"));
+                            if (item.get("predispitneObaveze") instanceof Number) {
+                                dto.setPredispitneObaveze(((Number) item.get("predispitneObaveze")).doubleValue());
+                            }
+                            result.add(dto);
+                        }
+                    }
+                    return result;
+                })
+                .onErrorReturn(new ArrayList<>());
     }
 }

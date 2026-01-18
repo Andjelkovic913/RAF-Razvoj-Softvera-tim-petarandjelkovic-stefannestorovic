@@ -7,7 +7,7 @@ import org.raflab.studsluzba.services.StudentSrednjaSkolaManagementService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @CrossOrigin
 @RestController

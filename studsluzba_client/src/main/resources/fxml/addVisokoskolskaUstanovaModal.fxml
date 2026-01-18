@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.raflab.studsluzbadesktopclient.controllers.AddVisokoskolskaUstanovaModalController"
+      spacing="15" alignment="CENTER" style="-fx-padding: 20;">
+    
+    <GridPane hgap="10" vgap="10" alignment="CENTER">
+        <Label text="Naziv ustanove" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.halignment="RIGHT"/>
+        <TextField fx:id="nazivTf" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="250"/>
+        
+        <Label text="Tip škole" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.halignment="RIGHT"/>
+        <TextField fx:id="tipSkoleTf" GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="250"/>
+    </GridPane>
+    
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Dodaj" onAction="#handleDodaj" prefWidth="100"/>
+        <Button text="Otkaži" onAction="#handleOtkazi" prefWidth="100"/>
+    </HBox>
+</VBox>

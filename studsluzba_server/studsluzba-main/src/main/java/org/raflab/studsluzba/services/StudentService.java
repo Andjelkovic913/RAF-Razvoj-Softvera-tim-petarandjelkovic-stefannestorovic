@@ -1,8 +1,8 @@
 package org.raflab.studsluzba.services;
 
 import lombok.RequiredArgsConstructor;
-import org.raflab.studsluzba.controllers.request.StudentIndeksRequest;
-import org.raflab.studsluzba.controllers.request.StudentPodaciRequest;
+import org.raflab.studsluzba.dtos.StudentIndeksRequest;
+import org.raflab.studsluzba.dtos.StudentPodaciRequest;
 import org.raflab.studsluzba.controllers.response.StudentIndeksResponse;
 import org.raflab.studsluzba.controllers.response.StudentPodaciResponse;
 import org.raflab.studsluzba.model.*;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -79,11 +79,26 @@ public class StudentService {
                 throw new RuntimeException("Student sa fakultetskim email-om " + request.getEmailFakultetski() + " već postoji");
             }
         }
+        
+        // Provera privatnog email-a
+        if (request.getEmailPrivatni() != null && !request.getEmailPrivatni().trim().isEmpty()) {
+            if (studentPodaciRepository.findByEmailPrivatni(request.getEmailPrivatni()).isPresent()) {
+                throw new RuntimeException("Student sa privatnim email-om " + request.getEmailPrivatni() + " već postoji");
+            }
+        }
     }
 
     public List<StudentPodaciResponse> getAllStudentPodaci() {
         return studentPodaciRepository.findAll().stream()
                 .map(entityMappers::fromStudentPodaciToResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getAllStudijskiProgrami() {
+        return ((List<StudijskiProgram>) studijskiProgramRepository.findAll()).stream()
+                .map(StudijskiProgram::getOznaka)
+                .distinct()
+                .sorted()
                 .collect(Collectors.toList());
     }
 
@@ -133,6 +148,13 @@ public class StudentService {
         if (request.getEmailFakultetski() != null && !request.getEmailFakultetski().trim().isEmpty()) {
             if (studentPodaciRepository.existsByEmailFakultetskiAndIdNot(request.getEmailFakultetski(), id)) {
                 throw new RuntimeException("Student sa fakultetskim email-om " + request.getEmailFakultetski() + " već postoji");
+            }
+        }
+        
+        // Provera privatnog email-a
+        if (request.getEmailPrivatni() != null && !request.getEmailPrivatni().trim().isEmpty()) {
+            if (studentPodaciRepository.existsByEmailPrivatniAndIdNot(request.getEmailPrivatni(), id)) {
+                throw new RuntimeException("Student sa privatnim email-om " + request.getEmailPrivatni() + " već postoji");
             }
         }
     }

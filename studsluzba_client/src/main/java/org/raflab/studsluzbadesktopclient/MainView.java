@@ -42,12 +42,11 @@ public class MainView {
 		  BorderPane borderPane = loader.load();
 		  this.scene = new Scene(borderPane,1000,800);
 		  scene.getStylesheets().add(Objects.requireNonNull(MainView.class.getResource("/css/stylesheet.css")).toExternalForm());
-		  
-		  // Register initial view in navigation history
+
+		  // registrovanje inicijalnog view-a za history
 		  currentViewName = "main";
 		  navigationHistoryService.navigateTo("main", null, false);
 		  
-		  // Setup navigation event handlers
 		  setupNavigationHandlers();
 		  
 	  } catch (IOException e) {
@@ -56,9 +55,7 @@ public class MainView {
 	  return this.scene;
 	 }
 	 
-	/**
-	 * Sets up mouse, keyboard, and touchpad navigation handlers.
-	 */
+
 	private void setupNavigationHandlers() {
 		// Mouse button 4/5 (Back/Forward buttons on mouse)
 		// Using addEventFilter to catch events before they're consumed by other controls
@@ -96,28 +93,52 @@ public class MainView {
 			goForward();
 			event.consume();
 		});
+		
+		// Shift + Scroll for touchpad navigation (more reliable on macOS)
+		// Horizontal scroll: Shift + scroll left/right
+		// Vertical scroll: Shift + scroll up/down
+		scene.addEventFilter(javafx.scene.input.ScrollEvent.SCROLL, event -> {
+			if (event.isShiftDown()) {
+				double deltaX = event.getDeltaX();
+				double deltaY = event.getDeltaY();
+				
+				// Horizontal scroll takes priority if present
+				if (Math.abs(deltaX) > Math.abs(deltaY)) {
+					if (deltaX > 5) {
+						goBack();
+						event.consume();
+					} else if (deltaX < -5) {
+						goForward();
+						event.consume();
+					}
+				} else {
+					// Vertical scroll as fallback
+					if (deltaY > 5) {
+						goBack();
+						event.consume();
+					} else if (deltaY < -5) {
+						goForward();
+						event.consume();
+					}
+				}
+			}
+		});
 	}
 	
-	/**
-	 * Navigate back in history.
-	 */
+
 	public void goBack() {
 		Optional<NavigationContext> previousContext = navigationHistoryService.goBackContext();
 		previousContext.ifPresent(this::restoreNavigationContext);
 	}
 	
-	/**
-	 * Navigate forward in history.
-	 */
+
+
 	public void goForward() {
 		Optional<NavigationContext> nextContext = navigationHistoryService.goForwardContext();
 		nextContext.ifPresent(this::restoreNavigationContext);
 	}
 	
-	/**
-	 * Restores a navigation context, handling both view changes and tab selections.
-	 * Works like browser navigation - each step (view change OR tab change) is one history entry.
-	 */
+
 	private void restoreNavigationContext(NavigationContext context) {
 		navigationHistoryService.setNavigating(true);
 		isNavigatingFromHistory = true;
@@ -138,9 +159,7 @@ public class MainView {
 		}
 	}
 	
-	/**
-	 * Restores tab selection in the current view.
-	 */
+
 	private void restoreTabSelection(int tabIndex) {
 		Parent root = scene.getRoot();
 		if (root != null) {
@@ -151,9 +170,7 @@ public class MainView {
 		}
 	}
 	
-	/**
-	 * Finds the first TabPane in the scene graph.
-	 */
+//nadje prvi tabPane
 	private TabPane findTabPane(Parent parent) {
 		if (parent instanceof TabPane) {
 			return (TabPane) parent;
@@ -177,25 +194,19 @@ public class MainView {
 	}
 	
 	public void changeRoot(String fxml, boolean cache) {
-		// Only track in history if not navigating from history itself
 		if (!isNavigatingFromHistory) {
-			navigationHistoryService.navigateTo(fxml, null, cache);
+			navigationHistoryService.navigateTo(fxml, null, cache); //dodaje u history
 		}
-		changeRootInternal(fxml, cache);
+		changeRootInternal(fxml, cache); // ucita ekran
 	}
 	
-	/**
-	 * Internal method to change root without affecting history.
-	 * Used by goBack/goForward to avoid double-recording in history.
-	 */
+
 	private void changeRootInternal(String fxml, boolean cache) {
 		try {
 			Parent root;
 			if (cache && cachedRoots.containsKey(fxml)) {
-				// Use cached root to preserve state
 				root = cachedRoots.get(fxml);
 			} else {
-				// Load new root
 				FXMLLoader loader = appFXMLLoader.getLoader(MainView.class.getResource("/fxml/"+fxml+".fxml"));
 				root = loader.load();
 				if (cache) {
@@ -214,50 +225,50 @@ public class MainView {
 			cachedRoots.put(fxml, (Parent) scene.getRoot());
 		}
 	}
-	
-	public Node loadPane(String fxml) {
-		FXMLLoader loader = appFXMLLoader.getLoader(MainView.class.getResource("/fxml/"+fxml+".fxml"));
-		try {
-			return loader.load();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public void openModal(String fxml) {
-		FXMLLoader loader = appFXMLLoader.getLoader(MainView.class.getResource("/fxml/"+fxml+".fxml"));
-		try {
-			Parent parent = loader.load();
-			Scene scene = new Scene(parent, 400, 300);
-	        Stage stage = new Stage();
-	        stage.initModality(Modality.APPLICATION_MODAL);
-	        
-	        stage.setScene(scene);
-	        stage.showAndWait();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void openModal(String fxml, String title) {
-		FXMLLoader loader = appFXMLLoader.getLoader(MainView.class.getResource("/fxml/"+fxml+".fxml"));
-		try {
-			Parent parent = loader.load();
-			Scene scene = new Scene(parent, 400, 300);
-	        Stage stage = new Stage();
-	        stage.setTitle(title);
-	        stage.initModality(Modality.APPLICATION_MODAL);
-	        
-	        stage.setScene(scene);
-	        stage.showAndWait();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
+//
+//	public Node loadPane(String fxml) {
+//		FXMLLoader loader = appFXMLLoader.getLoader(MainView.class.getResource("/fxml/"+fxml+".fxml"));
+//		try {
+//			return loader.load();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+//	}
+//
+//	public void openModal(String fxml) {
+//		FXMLLoader loader = appFXMLLoader.getLoader(MainView.class.getResource("/fxml/"+fxml+".fxml"));
+//		try {
+//			Parent parent = loader.load();
+//			Scene scene = new Scene(parent, 400, 300);
+//	        Stage stage = new Stage();
+//	        stage.initModality(Modality.APPLICATION_MODAL);
+//
+//	        stage.setScene(scene);
+//	        stage.showAndWait();
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
+//
+//	public void openModal(String fxml, String title) {
+//		FXMLLoader loader = appFXMLLoader.getLoader(MainView.class.getResource("/fxml/"+fxml+".fxml"));
+//		try {
+//			Parent parent = loader.load();
+//			Scene scene = new Scene(parent, 400, 300);
+//	        Stage stage = new Stage();
+//	        stage.setTitle(title);
+//	        stage.initModality(Modality.APPLICATION_MODAL);
+//
+//	        stage.setScene(scene);
+//	        stage.showAndWait();
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
+//
 	public void openModal(String fxml, String title,  int weight, int height) {
 		FXMLLoader loader = appFXMLLoader.getLoader(MainView.class.getResource("/fxml/"+fxml+".fxml"));
 		try {

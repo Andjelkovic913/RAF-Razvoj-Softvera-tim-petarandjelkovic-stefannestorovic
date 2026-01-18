@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +28,7 @@ public class UpisGodineService {
     private final DrziPredmetRepository drziPredmetRepository;
     private final SlusaPredmetRepository slusaPredmetRepository;
     private final PredmetRepository predmetRepository;
+    private final IzlazakNaIspitRepository izlazakNaIspitRepository;
     private final Converters converters;
     private final EntityMappers entityMappers;
 
@@ -64,6 +65,9 @@ public class UpisGodineService {
                     String.format("Student ne može da upise %d. godinu jer je već upisao %d. godinu",
                             request.getGodina(), maksimalnaGodina));
         }
+
+        // Validacija: provera da li student ima dovoljno ESPB bodova za upis godine
+        validateESPBRequirements(studentIndeks, request.getGodina());
 
         UpisGodine upisGodine = converters.toUpisGodine(request);
         UpisGodine saved = upisGodineRepository.save(upisGodine);
@@ -150,6 +154,60 @@ public class UpisGodineService {
                     return response;
                 })
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Validates if student has enough ESPB points to enroll in the requested year.
+     * Requirements:
+     * - 30 ESPB for 2nd year
+     * - 90 ESPB for 3rd year
+     * - 150 ESPB for 4th year
+     */
+    private void validateESPBRequirements(StudentIndeks studentIndeks, Integer godinaZaUpis) {
+        // First year has no requirements
+        if (godinaZaUpis == 1) {
+            return;
+        }
+
+        // Calculate total earned ESPB
+        List<SlusaPredmet> allEnrolledSubjects = slusaPredmetRepository.findByStudentIndeksId(studentIndeks.getId());
+        int totalEarnedESPB = 0;
+
+        for (SlusaPredmet slusaPredmet : allEnrolledSubjects) {
+            // Check if student passed the subject
+            boolean passed = izlazakNaIspitRepository.findBySlusaPredmetId(slusaPredmet.getId()).stream()
+                    .anyMatch(izlazak -> izlazak.getOcena() != null && izlazak.getOcena() >= 6 && !izlazak.isPonistio());
+
+            if (passed && slusaPredmet.getDrziPredmet() != null 
+                    && slusaPredmet.getDrziPredmet().getPredmet() != null 
+                    && slusaPredmet.getDrziPredmet().getPredmet().getEspb() != null) {
+                totalEarnedESPB += slusaPredmet.getDrziPredmet().getPredmet().getEspb();
+            }
+        }
+
+        // Define minimum ESPB requirements per year
+        int requiredESPB = 0;
+        switch (godinaZaUpis) {
+            case 2:
+                requiredESPB = 30;
+                break;
+            case 3:
+                requiredESPB = 90;
+                break;
+            case 4:
+                requiredESPB = 150;
+                break;
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Nevažeća godina studija: " + godinaZaUpis);
+        }
+
+        if (totalEarnedESPB < requiredESPB) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format("Student nema dovoljno ESPB bodova za upis %d. godine. " +
+                            "Potrebno: %d ESPB, Ostvareno: %d ESPB",
+                            godinaZaUpis, requiredESPB, totalEarnedESPB));
+        }
     }
 }
 

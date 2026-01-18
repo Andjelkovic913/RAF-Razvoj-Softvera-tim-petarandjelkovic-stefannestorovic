@@ -1,7 +1,6 @@
 package org.raflab.studsluzba.model;
 
-import javax.persistence.*;
-
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 

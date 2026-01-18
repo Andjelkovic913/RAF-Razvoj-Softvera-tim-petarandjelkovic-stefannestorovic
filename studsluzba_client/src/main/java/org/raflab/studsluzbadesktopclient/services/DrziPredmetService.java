@@ -1,7 +1,7 @@
 package org.raflab.studsluzbadesktopclient.services;
 
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzbadesktopclient.dtos.DrziPredmetDTO;
+import org.raflab.studsluzba.dtos.DrziPredmetDTO;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -22,52 +22,27 @@ public class DrziPredmetService {
 
     /**
      * Vraća sve DrziPredmet zapise za dati predmet (svi nastavnici koji drže taj predmet).
-     * Koristi /api/drzipredmet/all i filtrira po predmetId na klijentu.
+     * Koristi /api/drzipredmet/all i filtrira po subjectId na klijentu.
      */
     public List<DrziPredmetDTO> getDrziPredmetByPredmetId(Long predmetId) {
         try {
             String url = baseUrl + "/api/drzipredmet/all";
             
-            ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
+            ResponseEntity<List<DrziPredmetDTO>> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
                     null,
-                    new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+                    new ParameterizedTypeReference<List<DrziPredmetDTO>>() {}
             );
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 List<DrziPredmetDTO> result = new ArrayList<>();
-                for (Map<String, Object> item : response.getBody()) {
-                    // Filter by predmetId
-                    Long itemPredmetId = null;
-                    if (item.get("predmetId") instanceof Number) {
-                        itemPredmetId = ((Number) item.get("predmetId")).longValue();
+                for (DrziPredmetDTO dto : response.getBody()) {
+                    // Filter by subject id
+                    if (dto.getSubject() != null && dto.getSubject().getId() != null && 
+                        dto.getSubject().getId().equals(predmetId.intValue())) {
+                        result.add(dto);
                     }
-                    
-                    if (itemPredmetId == null || !itemPredmetId.equals(predmetId)) {
-                        continue; // Skip if not matching predmet
-                    }
-                    
-                    DrziPredmetDTO dto = new DrziPredmetDTO();
-                    
-                    if (item.get("id") instanceof Number) {
-                        dto.setId(((Number) item.get("id")).longValue());
-                    }
-                    dto.setPredmetId(itemPredmetId);
-                    dto.setPredmetOznaka(getStringValue(item, "predmetOznaka"));
-                    dto.setPredmetNaziv(getStringValue(item, "predmetNaziv"));
-                    
-                    if (item.get("nastavnikId") instanceof Number) {
-                        dto.setNastavnikId(((Number) item.get("nastavnikId")).longValue());
-                    }
-                    dto.setNastavnikIme(getStringValue(item, "nastavnikIme"));
-                    dto.setNastavnikPrezime(getStringValue(item, "nastavnikPrezime"));
-                    
-                    if (item.get("skolskaGodinaId") instanceof Number) {
-                        dto.setSkolskaGodinaId(((Number) item.get("skolskaGodinaId")).longValue());
-                    }
-                    
-                    result.add(dto);
                 }
                 return result;
             }
@@ -77,10 +52,5 @@ public class DrziPredmetService {
             throw new RuntimeException("Greška pri učitavanju nastavnika za predmet: " + e.getMessage());
         }
         return new ArrayList<>();
-    }
-
-    private String getStringValue(Map<String, Object> map, String key) {
-        Object value = map.get(key);
-        return value != null ? value.toString() : null;
     }
 }

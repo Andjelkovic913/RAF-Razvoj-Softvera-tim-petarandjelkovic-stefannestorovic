@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
-import org.raflab.studsluzbadesktopclient.dtos.DrziPredmetDTO;
+import org.raflab.studsluzba.dtos.DrziPredmetDTO;
 import org.raflab.studsluzba.dtos.PredmetDTO;
 import org.raflab.studsluzba.dtos.StudentDTO;
 import org.raflab.studsluzbadesktopclient.services.DrziPredmetService;
@@ -80,7 +80,8 @@ public class ListaPrijavljenihController {
             @Override
             public String toString(DrziPredmetDTO drzi) {
                 if (drzi == null) return "Svi nastavnici";
-                return drzi.getNastavnikIme() + " " + drzi.getNastavnikPrezime();
+                if (drzi.getTeacher() == null) return "Nepoznat nastavnik";
+                return drzi.getTeacher().getFirstName() + " " + drzi.getTeacher().getLastName();
             }
 
             @Override
@@ -141,7 +142,7 @@ public class ListaPrijavljenihController {
         }
 
         try {
-            List<StudentDTO> studenti = slusaPredmetService.getStudentiZaDrziPredmet(selectedDrzi.getId());
+            List<StudentDTO> studenti = slusaPredmetService.getStudentiZaDrziPredmet((long) selectedDrzi.getId());
             studentiTable.setItems(FXCollections.observableArrayList(studenti));
             brojStudenataLabel.setText("Ukupno studenata: " + studenti.size());
         } catch (Exception e) {

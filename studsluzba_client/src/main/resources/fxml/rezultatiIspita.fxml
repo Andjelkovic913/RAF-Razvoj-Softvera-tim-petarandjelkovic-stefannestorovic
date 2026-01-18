@@ -22,18 +22,6 @@
                 <Button text="← Nazad na ispite" onAction="#handleBackToIspiti"/>
             </HBox>
             
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Ispitni rok:"/>
-                <ComboBox fx:id="ispitniRokComboBox" promptText="Izaberite ispitni rok" prefWidth="300" onAction="#handleIspitniRokSelected"/>
-                <Button text="✕" onAction="#handleClearIspitniRok" style="-fx-font-size: 14px;" prefWidth="30"/>
-            </HBox>
-            
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Ispit:"/>
-                <ComboBox fx:id="ispitComboBox" promptText="Izaberite ispit" prefWidth="400" onAction="#handleIspitSelected"/>
-                <Button text="✕" onAction="#handleClearIspit" style="-fx-font-size: 14px;" prefWidth="30"/>
-            </HBox>
-            
             <!-- Result entry form -->
             <TitledPane text="Unos rezultata za studenta" expanded="true">
                 <GridPane hgap="10" vgap="10">
@@ -41,25 +29,33 @@
                         <Insets top="10" right="10" bottom="10" left="10"/>
                     </padding>
                     
-                    <Label text="Student:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                    <ComboBox fx:id="studentCb" prefWidth="350" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.columnSpan="3"/>
+                    <Label text="Ispitni rok:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <ComboBox fx:id="ispitniRokComboBox" promptText="Izaberite ispitni rok" prefWidth="300" onAction="#handleIspitniRokSelected" GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+                    <Button text="✕" onAction="#handleClearIspitniRok" style="-fx-font-size: 14px;" prefWidth="30" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
                     
-                    <Label text="Predispitni poeni:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                    <TextField fx:id="predispitniPoeniTf" prefWidth="80" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    <Label text="Ispit:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <ComboBox fx:id="ispitComboBox" promptText="Izaberite ispit" prefWidth="400" onAction="#handleIspitSelected" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.columnSpan="2"/>
+                    <Button text="✕" onAction="#handleClearIspit" style="-fx-font-size: 14px;" prefWidth="30" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
                     
-                    <Label text="Ispitni poeni:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                    <TextField fx:id="ispitniPoeniTf" prefWidth="80" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                    <Label text="Student:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <ComboBox fx:id="studentCb" prefWidth="350" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.columnSpan="3"/>
                     
-                    <Label text="Ocena:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                    <ComboBox fx:id="ocenaCb" prefWidth="80" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    <Label text="Predispitni poeni:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <TextField fx:id="predispitniPoeniTf" prefWidth="80" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                     
-                    <Label text="Poništio:" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-                    <CheckBox fx:id="ponistioCb" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                    <Label text="Ispitni poeni:" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                    <TextField fx:id="ispitniPoeniTf" prefWidth="80" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
                     
-                    <Label text="Napomena:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                    <TextField fx:id="napomenaTf" prefWidth="350" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="3"/>
+                    <Label text="Ocena:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                    <ComboBox fx:id="ocenaCb" prefWidth="80" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
                     
-                    <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                    <Label text="Poništio:" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+                    <CheckBox fx:id="ponistioCb" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+                    
+                    <Label text="Napomena:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                    <TextField fx:id="napomenaTf" prefWidth="350" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.columnSpan="3"/>
+                    
+                    <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="6">
                         <Button text="Sačuvaj rezultat" onAction="#handleSaveResult" 
                                 style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
                         <Button text="Očisti" onAction="#handleClearForm"/>
@@ -114,6 +110,8 @@
             </TableView>
             
             <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Štampaj zapisnik" onAction="#handlePrintProtocol" 
+                        style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
                 <Button text="Osveži listu" onAction="#handleRefresh"/>
             </HBox>
         </VBox>

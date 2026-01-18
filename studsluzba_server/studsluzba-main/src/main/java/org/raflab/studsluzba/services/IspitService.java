@@ -10,7 +10,7 @@ import org.raflab.studsluzba.utils.EntityMappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -117,7 +117,7 @@ public class IspitService {
         response.setDatumOdrzavanja(ispit.getDatumOdrzavanja());
         response.setVremePocetka(ispit.getVremePocetka());
         response.setVremeZavrsetka(ispit.getVremeZavrsetka());
-        response.setDrziPredmet(ispit.getDrziPredmet() != null ? converters.toDrziPredmetResponse(ispit.getDrziPredmet()) : null);
+        response.setDrziPredmet(ispit.getDrziPredmet() != null ? entityMappers.fromDrziPredmetToResponse(ispit.getDrziPredmet()) : null);
         response.setPredmet(ispit.getPredmet() != null ? entityMappers.fromPredmetToResponse(ispit.getPredmet()) : null);
         response.setIspitniRokId(ispit.getIspitniRok() != null ? ispit.getIspitniRok().getId() : null);
         response.setSkolskaGodinaId(ispit.getSkolskaGodina() != null ? ispit.getSkolskaGodina().getId() : null);
