@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.raflab.studsluzbadesktopclient.controllers.PrijavaStudentaController">
+    <top>
+        <fx:include source="menuBar.fxml"/>
+    </top>
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            
+            <Label text="Prijava studenta na predmet" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            
+            <!-- Student search -->
+            <TitledPane text="Pretraga studenta" expanded="true">
+                <VBox spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Ime:"/>
+                        <TextField fx:id="imeTf" promptText="Ime studenta" prefWidth="150"/>
+                        <Label text="Prezime:"/>
+                        <TextField fx:id="prezimeTf" promptText="Prezime studenta" prefWidth="150"/>
+                        <Button text="Pretraži" onAction="#handleSearchStudent" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Smer:"/>
+                        <ComboBox fx:id="smerCb" promptText="Izaberite smer" prefWidth="120"/>
+                        <Label text="Broj indeksa:"/>
+                        <TextField fx:id="brojIndeksaTf" promptText="Broj" prefWidth="80"/>
+                        <Label text="/"/>
+                        <TextField fx:id="godinaIndeksaTf" promptText="Godina" prefWidth="80"/>
+                        <Button text="Pretraži po indeksu" onAction="#handleSearchByIndex" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Izabrani student:"/>
+                        <Label fx:id="selectedStudentLabel" style="-fx-font-weight: bold;"/>
+                    </HBox>
+                </VBox>
+            </TitledPane>
+            
+            <!-- Student results table -->
+            <TableView fx:id="studentiTable" VBox.vgrow="ALWAYS" minHeight="200">
+                <columns>
+                    <TableColumn fx:id="indeksColumn" prefWidth="120" text="Indeks">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="fullIndexDisplay"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="imeColumn" prefWidth="150" text="Ime">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="ime"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="prezimeColumn" prefWidth="150" text="Prezime">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="prezime"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="studProgramColumn" prefWidth="100" text="Smer">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="studProgramOznaka"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+            
+            <!-- Subject selection -->
+            <TitledPane text="Izbor predmeta" expanded="true">
+                <VBox spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Predmet:" style="-fx-min-width: 80;"/>
+                        <ComboBox fx:id="predmetComboBox" promptText="Izaberite predmet" prefWidth="400"/>
+                    </HBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Nastavnik:" style="-fx-min-width: 80;"/>
+                        <ComboBox fx:id="nastavnikComboBox" promptText="Izaberite nastavnika" prefWidth="400"/>
+                    </HBox>
+                </VBox>
+            </TitledPane>
+            
+            <!-- Action buttons -->
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Prijavi studenta na predmet" onAction="#handlePrijaviStudenta" 
+                        style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-min-width: 200;"/>
+                <Button text="Očisti" onAction="#handleClear" 
+                        style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 14px; -fx-min-width: 100;"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

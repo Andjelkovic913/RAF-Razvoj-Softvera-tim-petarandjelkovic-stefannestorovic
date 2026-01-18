@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.raflab.studsluzbadesktopclient.controllers.IspitniRokoviController">
+    <top>
+        <fx:include source="menuBar.fxml"/>
+    </top>
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            
+            <Label text="Upravljanje ispitnim rokovima" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            
+            <!-- Add new exam period form -->
+            <TitledPane text="Dodaj novi ispitni rok" expanded="true">
+                <GridPane hgap="10" vgap="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    
+                    <Label text="Tip roka:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <ComboBox fx:id="tipRokaCb" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    
+                    <Label text="Datum početka:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <DatePicker fx:id="datumPocetkaDp" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    
+                    <Label text="Datum završetka:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <DatePicker fx:id="datumZavrsetkaDp" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    
+                    <Label text="Školska godina:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                    <ComboBox fx:id="skolskaGodinaCb" prefWidth="200" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                    
+                    <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <Button text="Dodaj" onAction="#handleAddIspitniRok" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                        <Button text="Ažuriraj" onAction="#handleUpdateIspitniRok" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                        <Button text="Očisti" onAction="#handleClearForm"/>
+                    </HBox>
+                </GridPane>
+            </TitledPane>
+            
+            <!-- Table of exam periods -->
+            <TableView fx:id="ispitniRokoviTable" VBox.vgrow="ALWAYS" minHeight="300">
+                <columns>
+                    <TableColumn fx:id="idColumn" prefWidth="60" text="ID">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="id"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="tipColumn" prefWidth="150" text="Tip roka">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="tipRoka"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="datumPocetkaColumn" prefWidth="120" text="Datum početka">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="datumPocetka"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="datumZavrsetkaColumn" prefWidth="120" text="Datum završetka">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="datumZavrsetka"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="actionColumn" prefWidth="250" text="Akcije"/>
+                </columns>
+            </TableView>
+            
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Osveži listu" onAction="#handleRefresh"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

@@ -1,0 +1,25 @@
+- dodati endpoint-e za sve crud operacije
+- dodavanje nove skolske godine
+ NEDOSTAJE:
+- prosečna ocena studenata na predmetu za raspon godina (na primer zadaje se godine
+2015-2018 i vraća se prosečna ocena svih studenata koji su položili predmet u tom
+periodu)
+- rezultati ispita u vidu sortiranog spiska studenata (sortirati prvo po stud programu, zatim
+po godini upisa, pa po broju) sa ukupnim brojem poena na ispitu (predispitne obaveze
+plus poeni sa ispita)
+- selekcija ostvarenih poena na predispitnim obavezama za studenta na određenom
+predmetu u školskoj godini
+- prosečna ocena na ispitu
+- 3.4 dodavanje izlaska na ispit sa osvojenim poenima (predispitni i ispitni poeni, ukupno poena i ocena)
+
+- obnova i upis godine predmeti
+
+
+MOJE IZMENE:
+	[ ]	Datum rodjenja studenta se promeni za dan unazad kada ga napravis i kada ga nadjes u tabeli
+	[ ]	Provera kada se pravi novi indeks da se ne dozvoli za istog studenta ista godina/isti smer/stari indeks mora da bude neaktivan
+	[ ]	Da li novi nastavnik kada se doda moze da se doda da Drzi neki Predmet?
+	[ ]	IzlazakNaIspit
+	[ ]	Duplikati za kreiranje entiteta ne smeju
+
+

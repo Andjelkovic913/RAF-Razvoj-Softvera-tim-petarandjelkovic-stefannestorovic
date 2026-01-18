@@ -1,0 +1,58 @@
+package org.raflab.studsluzba.controllers;
+
+import lombok.RequiredArgsConstructor;
+import org.raflab.studsluzba.controllers.request.IzlazakNaIspitRequest;
+import org.raflab.studsluzba.controllers.response.IzlazakNaIspitResponse;
+import org.raflab.studsluzba.services.IzlazakNaIspitService;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+@CrossOrigin
+@RestController
+@RequestMapping("/api/izlazak-na-ispit")
+@RequiredArgsConstructor
+public class IzlazakNaIspitController {
+
+    private final IzlazakNaIspitService izlazakNaIspitService;
+
+    // 1.2 selekcija svih položenih ispita za broj indeksa studenta, paginirano
+    @GetMapping("/student-indeks/{id}/passed")
+    public Page<IzlazakNaIspitResponse> getPassedExams(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        return izlazakNaIspitService.getPassedExams(id, page, size);
+    }
+
+    // 1.3 selekcija svih nepoloženih ispita za broj indeksa studenta, paginirano
+    @GetMapping("/student-indeks/{id}/failed")
+    public Page<IzlazakNaIspitResponse> getFailedExams(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        return izlazakNaIspitService.getFailedExams(id, page, size);
+    }
+
+    @GetMapping("/all")
+    public Page<IzlazakNaIspitResponse> getAllExamResults(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        return izlazakNaIspitService.getAllExamResults(page, size);
+    }
+
+    // 3.4 dodavanje izlaska na ispit sa osvojenim poenima (predispitni i ispitni poeni, ukupno poena i ocena)
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Long createExamResult(@RequestBody IzlazakNaIspitRequest request) {
+        return izlazakNaIspitService.createExamResult(request);
+    }
+
+    // 3.7 za datog studenta i predmet vratiti koliko je puta student polagao predmet (izašao na ispit)
+    @GetMapping("/student/{studentIndeksId}/predmet/{predmetId}/broj-pokusaja")
+    public Long getExamAttemptCount(
+            @PathVariable Long studentIndeksId,
+            @PathVariable Long predmetId) {
+        return izlazakNaIspitService.getExamAttemptCount(studentIndeksId, predmetId);
+    }
+}

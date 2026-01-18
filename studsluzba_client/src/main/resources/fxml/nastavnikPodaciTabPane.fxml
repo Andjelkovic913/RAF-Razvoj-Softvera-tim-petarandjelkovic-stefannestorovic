@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<TabPane fx:id="nastavnikTabPane" xmlns:fx="http://javafx.com/fxml" fx:controller="org.raflab.studsluzbadesktopclient.controllers.NastavnikController">
+    <Tab text="Osnovni podaci" closable="false">
+        <VBox alignment="center" spacing="10">
+            <HBox alignment="center">
+                <GridPane alignment="center" hgap="10" vgap="10">
+
+                    <Label text="Ime" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <TextField fx:id="imeTf"  GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                    <Label text="Prezime" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <TextField fx:id="prezimeTf"  GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <Label text="Srednje ime" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <TextField fx:id="srednjeImeTf"  GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <Label text="JMBG" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <TextField fx:id="jmbgTf"  GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                    <Label text="Datum rođenja" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                    <DatePicker fx:id="datumRodjenjaDp"  GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                    <Label text="Pol" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                    <HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
+                        <fx:define>
+                            <ToggleGroup fx:id="polGroup" />
+                        </fx:define>
+                        <RadioButton fx:id="muski" text="Muški" toggleGroup="$polGroup">
+                            <HBox.margin>
+                                <Insets right="3.0"/>
+                            </HBox.margin>
+                        </RadioButton>
+
+                        <RadioButton fx:id="zenski" text="Ženski" toggleGroup="$polGroup">
+                            <HBox.margin>
+                                <Insets right="10.0" />
+                            </HBox.margin>
+                        </RadioButton>
+                    </HBox>
+
+                </GridPane>
+            </HBox>
+        </VBox>
+    </Tab>
+
+    <Tab text="Kontakt podaci" closable="false">
+        <VBox alignment="center" spacing="10">
+            <GridPane alignment="center" hgap="10" vgap="10">
+                <Label text="ID nastavnika" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="nastavnikIdKontaktTf"  GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                
+                <Label text="E-mail" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <TextField fx:id="emailTf"  GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                
+                <Label text="Broj telefona" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <TextField fx:id="brojTelefonaTf"   GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                
+                <Label text="Adresa" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <TextField fx:id="adresaTf" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            </GridPane>
+        </VBox>
+    </Tab>
+
+    <Tab text="Zvanja" closable="false">
+        <VBox alignment="center" spacing="10">
+            <GridPane alignment="center" hgap="10" vgap="10">
+                <Label text="ID nastavnika" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="nastavnikIdZvanjaTf"  GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                <Label text="Naziv zvanja" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <ComboBox fx:id="nazivZvanjaCb"  GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Label text="Datum izbora" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <DatePicker fx:id="datumIzboraDp"  GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Label text="Uža naučna oblast" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <TextField fx:id="uzaNaucnaOblastTf"  GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            </GridPane>
+        </VBox>
+    </Tab>
+
+    <Tab text="Obrazovanje" closable="false">
+        <VBox alignment="center" spacing="10">
+            <GridPane alignment="center" hgap="10" vgap="10">
+                <Label text="ID nastavnika" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="nastavnikIdObrazovanjeTf"  GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                <Label text="Visokoškolska ustanova" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <ComboBox fx:id="visokoskolskaUstanovaCb"  GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Button text="Dodaj" GridPane.columnIndex="2" GridPane.rowIndex="1" onAction="#handleOpenModalVisokoskolskeUstanove"/>
+
+                <Label text="Nivo studija" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <ComboBox fx:id="nivoStudijaCb"  GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Label text="Godina završetka" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <TextField fx:id="godinaZavrsetkaTf"  GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            </GridPane>
+        </VBox>
+    </Tab>
+</TabPane>

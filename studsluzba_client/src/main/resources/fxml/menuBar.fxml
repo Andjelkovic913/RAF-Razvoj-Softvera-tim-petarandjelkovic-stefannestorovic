@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+                    fx:controller="org.raflab.studsluzbadesktopclient.controllers.MenuBarController">
+        <MenuBar fx:id="menuBar" style="-fx-background-color: #ADD8E6; -fx-text-fill: black;">
+            <Menu text="Studenti">
+                <items>
+                    <MenuItem onAction="#openSearchStudent" text="Pretraži" />   
+                    <MenuItem onAction="#openNewStudent" text="Novi" />
+                </items>                           
+            </Menu>
+            <Menu text="Nastavnici">
+                <items>
+                    <MenuItem onAction="#openSearchNastavnik" text="Pretraži" />
+                    <MenuItem onAction="#openNewNastavnik" text="Novi" />
+                </items>
+            </Menu>
+            <Menu text="Predmeti">
+                <items>
+                    <MenuItem text="Predmeti" onAction="#openPredmeti" />                  
+                    <MenuItem text="Prosečna ocena na predmetu" onAction="#openProsecnaOcena" />                  
+                </items>                          
+            </Menu>
+            <Menu text="Nastava i ispiti">
+                <items>
+                	<MenuItem text="Ispitni rokovi" onAction="#openIspitniRokovi" />
+                    <MenuItem text="Ispiti - unos" onAction="#openIspiti" />
+                    <MenuItem text="Ispiti - prijave" onAction="#openPrijaveIspita" />
+                    <MenuItem text="Ispiti - rezultati" onAction="#openRezultatiIspita" />
+                </items>                          
+            </Menu>
+        </MenuBar>
+</VBox>

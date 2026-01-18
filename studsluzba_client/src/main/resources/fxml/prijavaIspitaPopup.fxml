@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.raflab.studsluzbadesktopclient.controllers.PrijavaIspitaPopupController"
+      spacing="15" style="-fx-padding: 20;">
+    
+    <Label text="Prijava studenta na ispit" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+    
+    <!-- Student info (read-only) -->
+    <TitledPane text="Student" expanded="true" collapsible="false">
+        <VBox spacing="10" style="-fx-padding: 10;">
+            <HBox spacing="10">
+                <Label text="Ime i prezime:" style="-fx-font-weight: bold; -fx-min-width: 100;"/>
+                <Label fx:id="studentNameLabel"/>
+            </HBox>
+            <HBox spacing="10">
+                <Label text="Broj indeksa:" style="-fx-font-weight: bold; -fx-min-width: 100;"/>
+                <Label fx:id="studentIndexLabel"/>
+            </HBox>
+        </VBox>
+    </TitledPane>
+    
+    <!-- Exam selection -->
+    <TitledPane text="Izbor ispita" expanded="true" collapsible="false">
+        <VBox spacing="10" style="-fx-padding: 10;">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Ispitni rok:" style="-fx-min-width: 100;"/>
+                <ComboBox fx:id="ispitniRokComboBox" promptText="Izaberite ispitni rok" prefWidth="350" onAction="#handleIspitniRokSelected"/>
+            </HBox>
+            
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Ispit:" style="-fx-min-width: 100;"/>
+                <ComboBox fx:id="ispitComboBox" promptText="Izaberite ispit" prefWidth="350"/>
+            </HBox>
+        </VBox>
+    </TitledPane>
+    
+    <!-- Action buttons -->
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Prijavi" onAction="#handlePrijavi" 
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-min-width: 100;"/>
+        <Button text="Otkaži" onAction="#handleOtkazi" 
+                style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-min-width: 100;"/>
+    </HBox>
+</VBox>

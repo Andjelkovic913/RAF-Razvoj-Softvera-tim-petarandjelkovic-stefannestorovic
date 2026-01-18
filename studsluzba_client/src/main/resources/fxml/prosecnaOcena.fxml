@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.raflab.studsluzbadesktopclient.controllers.ProsecnaOcenaController"
+            prefHeight="500.0" prefWidth="700.0">
+
+    <top>
+        <VBox spacing="0">
+            <fx:include source="menuBar.fxml"/>
+            <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 10 20 10 20;">
+                <Label text="Prosečna ocena na predmetu za raspon godina" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="20" style="-fx-padding: 30;">
+            <VBox spacing="15" style="-fx-padding: 20;">
+                <Label text="Izaberite predmet i raspon godina" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <Label text="Predmet:" prefWidth="80"/>
+                    <ComboBox fx:id="predmetCb" prefWidth="400" promptText="Izaberite predmet"/>
+                    <Button text="X" onAction="#handleClearSubject" style="-fx-font-weight: bold;"/>
+                </HBox>
+                
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <Label text="Godina od:" prefWidth="80"/>
+                    <ComboBox fx:id="godinaOdCb" prefWidth="120" promptText="Od"/>
+                    <Label text="Godina do:" prefWidth="80"/>
+                    <ComboBox fx:id="godinaDoCb" prefWidth="120" promptText="Do"/>
+                </HBox>
+                
+                <HBox alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+                    <Button text="Izračunaj prosečnu ocenu" onAction="#handleCalculateAverageGrade" 
+                            style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10 20;"/>
+                </HBox>
+            </VBox>
+            
+            <VBox fx:id="resultContainer" spacing="15" 
+                  style="-fx-padding: 25;" 
+                  visible="false" managed="false">
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <Label text="Rezultat" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                    <Button text="Štampaj izveštaj" onAction="#handlePrintReport" 
+                            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                </HBox>
+                
+                <HBox spacing="30" alignment="CENTER_LEFT">
+                    <VBox spacing="5">
+                        <Label text="Predmet:" style="-fx-font-size: 12px;"/>
+                        <Label fx:id="resultPredmetLabel" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                    </VBox>
+                    <VBox spacing="5">
+                        <Label text="Period:" style="-fx-font-size: 12px;"/>
+                        <Label fx:id="resultPeriodLabel" style="-fx-font-size: 14px;"/>
+                    </VBox>
+                </HBox>
+                
+                <HBox spacing="50" alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="Prosečna ocena (ukupno)" style="-fx-font-size: 12px;"/>
+                        <Label fx:id="resultAverageLabel" style="-fx-font-size: 36px; -fx-font-weight: bold;"/>
+                    </VBox>
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="Broj položenih ispita" style="-fx-font-size: 12px;"/>
+                        <Label fx:id="resultCountLabel" style="-fx-font-size: 36px; -fx-font-weight: bold;"/>
+                    </VBox>
+                </HBox>
+                
+                <Label text="Statistika po godinama" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 15 0 5 0;"/>
+                <TableView fx:id="statsTable" prefHeight="200">
+                    <columns>
+                        <TableColumn fx:id="godinaColumn" text="Godina" />
+                        <TableColumn fx:id="brStudenataColumn" text="Br. studenata" />
+                        <TableColumn fx:id="poloziloColumn" text="Položilo" />
+                        <TableColumn fx:id="prosecnaOcenaColumn" text="Prosečna ocena" />
+                        <TableColumn fx:id="procenatColumn" text="Prolaz (%)" />
+                    </columns>
+                </TableView>
+            </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="prosecnaOcenaNaPredmetu"
+              pageWidth="595"
+              pageHeight="842"
+              columnWidth="535"
+              leftMargin="30"
+              rightMargin="30"
+              topMargin="30"
+              bottomMargin="30">
+
+    <parameter name="predmetNaziv" class="java.lang.String"/>
+    <parameter name="odGodine" class="java.lang.Integer"/>
+    <parameter name="doGodine" class="java.lang.Integer"/>
+    <parameter name="ukupnoBrStudenata" class="java.lang.Integer"/>
+    <parameter name="ukupnoPolozilo" class="java.lang.Integer"/>
+    <parameter name="ukupnoProsecnaOcena" class="java.lang.Double"/>
+    <parameter name="ukupnoProcenatProlaz" class="java.lang.Double"/>
+
+    <field name="godina" class="java.lang.Integer"/>
+    <field name="brStudenata" class="java.lang.Integer"/>
+    <field name="polozilo" class="java.lang.Integer"/>
+    <field name="prosecnaOcena" class="java.lang.Double"/>
+    <field name="procenatProlaz" class="java.lang.Double"/>
+
+    <title>
+        <band height="140">
+            <staticText>
+                <reportElement x="0" y="0" width="535" height="25"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="16" isBold="true" pdfEncoding="UTF-8"/>
+                </textElement>
+                <text><![CDATA[PROSEČNA OCENA NA PREDMETU]]></text>
+            </staticText>
+            <line>
+                <reportElement x="0" y="30" width="535" height="1"/>
+            </line>
+            
+            <staticText>
+                <reportElement x="0" y="50" width="120" height="20"/>
+                <textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+                <text><![CDATA[Statistika za predmet:]]></text>
+            </staticText>
+            <textField isBlankWhenNull="true">
+                <reportElement x="120" y="50" width="350" height="20"/>
+                <textElement><font fontName="DejaVu Sans" size="11" isBold="true" pdfEncoding="UTF-8"/></textElement>
+                <textFieldExpression><![CDATA[$P{predmetNaziv}]]></textFieldExpression>
+            </textField>
+            
+            <staticText>
+                <reportElement x="0" y="70" width="50" height="20"/>
+                <textElement><font fontName="DejaVu Sans" size="11" pdfEncoding="UTF-8"/></textElement>
+                <text><![CDATA[Period:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="50" y="70" width="200" height="20"/>
+                <textElement><font fontName="DejaVu Sans" size="11" isBold="true" pdfEncoding="UTF-8"/></textElement>
+                <textFieldExpression><![CDATA[$P{odGodine} + " - " + $P{doGodine}]]></textFieldExpression>
+            </textField>
+            
+            <line>
+                <reportElement x="0" y="100" width="535" height="1"/>
+            </line>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="25">
+            <staticText>
+                <reportElement mode="Opaque" x="0" y="0" width="130" height="25" backcolor="#E0E0E0"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="10" isBold="true" pdfEncoding="UTF-8"/>
+                </textElement>
+                <text><![CDATA[Br. studenata]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="130" y="0" width="130" height="25" backcolor="#E0E0E0"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="10" isBold="true" pdfEncoding="UTF-8"/>
+                </textElement>
+                <text><![CDATA[Položilo]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="260" y="0" width="140" height="25" backcolor="#E0E0E0"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="10" isBold="true" pdfEncoding="UTF-8"/>
+                </textElement>
+                <text><![CDATA[Prosečna ocena]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="400" y="0" width="135" height="25" backcolor="#E0E0E0"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="10" isBold="true" pdfEncoding="UTF-8"/>
+                </textElement>
+                <text><![CDATA[% prolaz]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="20">
+            <textField isBlankWhenNull="true">
+                <reportElement x="0" y="0" width="130" height="20"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="9" pdfEncoding="UTF-8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{brStudenata}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="130" y="0" width="130" height="20"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="9" pdfEncoding="UTF-8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{polozilo}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="260" y="0" width="140" height="20"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="9" pdfEncoding="UTF-8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{prosecnaOcena} != null ? String.format("%.2f", $F{prosecnaOcena}) : "-"]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="400" y="0" width="135" height="20"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="9" pdfEncoding="UTF-8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{procenatProlaz} != null ? String.format("%.1f%%", $F{procenatProlaz}) : "-"]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <summary>
+        <band height="100">
+            <staticText>
+                <reportElement mode="Opaque" x="0" y="0" width="130" height="25" backcolor="#D0D0D0"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="10" isBold="true" pdfEncoding="UTF-8"/>
+                </textElement>
+                <text><![CDATA[UKUPNO]]></text>
+            </staticText>
+            <textField isBlankWhenNull="true">
+                <reportElement mode="Opaque" x="130" y="0" width="130" height="25" backcolor="#D0D0D0"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="10" isBold="true" pdfEncoding="UTF-8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{ukupnoPolozilo}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement mode="Opaque" x="260" y="0" width="140" height="25" backcolor="#D0D0D0"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="10" isBold="true" pdfEncoding="UTF-8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{ukupnoProsecnaOcena} != null ? String.format("%.2f", $P{ukupnoProsecnaOcena}) : "-"]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement mode="Opaque" x="400" y="0" width="135" height="25" backcolor="#D0D0D0"/>
+                <box><pen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans" size="10" isBold="true" pdfEncoding="UTF-8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{ukupnoProcenatProlaz} != null ? String.format("%.1f%%", $P{ukupnoProcenatProlaz}) : "-"]]></textFieldExpression>
+            </textField>
+            
+            <line>
+                <reportElement x="0" y="40" width="535" height="1"/>
+            </line>
+            
+            <staticText>
+                <reportElement x="0" y="50" width="80" height="20"/>
+                <textElement><font fontName="DejaVu Sans" size="10" pdfEncoding="UTF-8"/></textElement>
+                <text><![CDATA[U Beogradu,]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="70" y="50" width="150" height="20"/>
+                <textElement><font fontName="DejaVu Sans" size="10" pdfEncoding="UTF-8"/></textElement>
+                <textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd.MM.yyyy.").format(new java.util.Date())]]></textFieldExpression>
+            </textField>
+            
+            <line>
+                <reportElement x="350" y="60" width="185" height="1"/>
+            </line>
+            <staticText>
+                <reportElement x="350" y="62" width="185" height="15"/>
+                <textElement textAlignment="Center"><font fontName="DejaVu Sans" size="9" pdfEncoding="UTF-8"/></textElement>
+                <text><![CDATA[Studentska služba]]></text>
+            </staticText>
+        </band>
+    </summary>
+
+</jasperReport>

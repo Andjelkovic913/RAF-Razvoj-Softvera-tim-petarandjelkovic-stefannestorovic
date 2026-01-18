@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.*?>
+
+<BorderPane fx:id="mainPane" xmlns:fx="http://javafx.com/fxml" fx:controller="org.raflab.studsluzbadesktopclient.controllers.NastavnikController">
+
+    <top>
+        <fx:include source="menuBar.fxml"/>
+    </top>
+
+    <center>
+        <BorderPane>
+            <center>
+                <fx:include source="nastavnikPodaciTabPane.fxml"/>
+            </center>
+            <bottom>
+                <GridPane alignment="center" hgap="10" vgap="10">
+                    <padding><Insets top="20" right="0" bottom="10" left="0"/></padding>
+                    <Button fx:id="saveOsnovniPodaciBtn" onAction="#handleSaveOsnovniPodaci" text="Sačuvaj osnovne podatke" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <Button fx:id="saveKontaktPodaciBtn" onAction="#handleSaveKontaktPodaci" text="Sačuvaj kontakt podatke" GridPane.columnIndex="0" GridPane.rowIndex="0" visible="false" managed="false"/>
+                    <Button fx:id="dodajZvanjeBtn" onAction="#handleDodajZvanje" text="Dodaj zvanje" GridPane.columnIndex="1" GridPane.rowIndex="0" visible="false" managed="false"/>
+                    <Button fx:id="dodajObrazovanjeBtn" onAction="#handleDodajObrazovanje" text="Dodaj obrazovanje" GridPane.columnIndex="1" GridPane.rowIndex="0" visible="false" managed="false"/>
+                    <Button text="Izvestaj" GridPane.columnIndex="2" GridPane.rowIndex="0" onAction="#handleIzvestaj"/>
+                </GridPane>
+            </bottom>
+        </BorderPane>
+    </center>
+
+</BorderPane>

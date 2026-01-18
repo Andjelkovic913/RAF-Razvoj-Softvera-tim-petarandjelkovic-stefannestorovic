@@ -1,0 +1,649 @@
+{
+  "info": {
+    "_postman_id": "ba4673b5-aa92-4649-b495-7d20e86caf34",
+    "name": "Studentska Sluzba - Implementirane Operacije",
+    "description": "Postman kolekcija za testiranje svih implementiranih operacija iz specifikacije projekta Studentska Sluzba.\n\n**Status**: Sve operacije iz specifikacije koje su uspešno implementirane.\n\n**Base URL**: http://localhost:8090",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "49679603"
+  },   
+  "item": [
+    {
+      "name": "1. Selekcija studenta preko broja indeksa",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8090/api/student/podaci/prekoindeksa/broj/5?studProgramOznaka=SI&godina=2024",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "student", "podaci", "prekoindeksa", "broj", "85"],
+          "query": [
+            {"key": "studProgramOznaka", "value": "SI", "description": "Oznaka studijskog programa (opciono)"},
+            {"key": "godina", "value": "2024", "description": "Godina upisa (opciono)"}
+          ]
+        },
+        "description": "Selekcija studenta (njegovih licnih podataka) preko broja indeksa.\n\n**Path parametri:**\n- `broj` - broj indeksa studenta\n\n**Query parametri (opcioni):**\n- `studProgramOznaka` - oznaka studijskog programa\n- `godina` - godina upisa\n\n**Napomena**: Ako postoji vise aktivnih indeksa sa istim brojem, obavezno navesti query parametre."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Response is JSON\", function () { pm.response.to.be.json; });",
+              "const student = pm.response.json();",
+              "pm.test(\"Student has required fields\", function () {",
+              "    pm.expect(student).to.have.property(\"ime\");",
+              "    pm.expect(student).to.have.property(\"prezime\");",
+              "    pm.expect(student).to.have.property(\"srednjeIme\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Selekcija studenata po imenu i/ili prezimenu",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8090/api/student/search?ime=Milan&prezime=Milić&page=0&size=10",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "student", "search"],
+          "query": [
+            {"key": "ime", "value": "Milan", "description": "Ime studenta (opciono)"},
+            {"key": "prezime", "value": "Milić", "description": "Prezime studenta (opciono)"},
+            {"key": "studProgram", "value": "", "description": "Oznaka studijskog programa (opciono)"},
+            {"key": "godina", "value": "", "description": "Godina upisa (opciono)"},
+            {"key": "broj", "value": "", "description": "Broj indeksa (opciono)"},
+            {"key": "page", "value": "0", "description": "Broj stranice (paginacija)"},
+            {"key": "size", "value": "10", "description": "Broj elemenata po stranici"}
+          ]
+        },
+        "description": "Selekcija studenata na osnovu imena i/ili prezimena, paginirano.\n\n**Query parametri:**\n- `ime` - ime studenta (opciono)\n- `prezime` - prezime studenta (opciono)\n- `studProgram` - oznaka studijskog programa (opciono)\n- `godina` - godina upisa (opciono)\n- `broj` - broj indeksa (opciono)\n- `page` - broj stranice (default: 0)\n- `size` - broj elemenata po stranici (default: 10)"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Response is JSON\", function () { pm.response.to.be.json; });",
+              "const data = pm.response.json();",
+              "pm.test(\"Response has pagination structure\", function () {",
+              "    pm.expect(data).to.have.property(\"content\");",
+              "    pm.expect(data).to.have.property(\"totalElements\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Selekcija svih polozenih ispita za broj indeksa",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8090/api/izlazak-na-ispit/student-indeks/1/passed?page=0&size=10",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "izlazak-na-ispit", "student-indeks", "1", "passed"],
+          "query": [
+            {"key": "page", "value": "0", "description": "Broj stranice"},
+            {"key": "size", "value": "10", "description": "Broj elemenata po stranici"}
+          ]
+        },
+        "description": "Selekcija svih polozenih ispita za broj indeksa studenta, paginirano.\n\n**Path parametri:**\n- `id` - ID student indeksa\n\n**Query parametri:**\n- `page` - broj stranice (default: 0)\n- `size` - broj elemenata po stranici (default: 10)"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Response is JSON\", function () { pm.response.to.be.json; });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Selekcija svih nepolozenih ispita za broj indeksa",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8090/api/izlazak-na-ispit/student-indeks/1/failed?page=0&size=10",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "izlazak-na-ispit", "student-indeks", "1", "failed"],
+          "query": [
+            {"key": "page", "value": "0", "description": "Broj stranice"},
+            {"key": "size", "value": "10", "description": "Broj elemenata po stranici"}
+          ]
+        },
+        "description": "Selekcija svih nepoloženih ispita za broj indeksa studenta, paginirano.\n\n**Path parametri:**\n- `id` - ID student indeksa\n\n**Query parametri:**\n- `page` - broj stranice (default: 0)\n- `size` - broj elemenata po stranici (default: 10)"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Response is JSON\", function () { pm.response.to.be.json; });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Selekcija svih upisanih studenata koji su završili određenu srednju školu",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8090/api/student/srednja-skola/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "student", "srednja-skola", "1"]
+        },
+        "description": "Selekcija svih upisanih studenata koji su završili određenu srednju školu.\n\n**Path parametri:**\n- `srednjaSkolaId` - ID srednje škole"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Response is JSON\", function () { pm.response.to.be.json; });",
+              "const data = pm.response.json();",
+              "pm.test(\"Response is array\", function () { pm.expect(data).to.be.an(\"array\"); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Pregled svih upisanih godina za broj indeksa",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8090/api/upis-godine/student/85",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "upis-godine", "student", "85"]
+        },
+        "description": "Pregled svih upisanih godina za broj indeksa.\n\n**Path parametri:**\n- `brojIndeksa` - broj indeksa studenta"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Response is JSON\", function () { pm.response.to.be.json; });",
+              "const data = pm.response.json();",
+              "pm.test(\"Response is array\", function () { pm.expect(data).to.be.an(\"array\"); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Upis studenta na godinu",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"datumUpisa\": \"2024-10-01\",\n  \"godina\": 1,\n  \"prenetiESPB\": 0,\n  \"studentIndeksId\": 1,\n  \"skolskaGodinaId\": 1\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "c",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "upis-godine", "add"]
+        },
+        "description": "Upis studenta na godinu. Dodaje novi upis za studenta i predmete koje sluša (inicijalno nepoloženi).\n\n**Request body:**\n- `datumUpisa` - datum upisa (format: YYYY-MM-DD)\n- `godina` - godina studija (1-6)\n- `prenetiESPB` - preneti ESPB poeni (opciono)\n- `studentIndeksId` - ID student indeksa\n- `skolskaGodinaId` - ID školske godine"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 or 201\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+              "pm.test(\"Response contains ID\", function () {",
+              "    const id = pm.response.text().replace(/\"/g, '').trim();",
+              "    pm.expect(id).to.not.be.empty;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Pregled obnovljenih godina za broj indeksa",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8090/api/obnova-godine/student-indeks/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "obnova-godine", "student-indeks", "1"]
+        },
+        "description": "Pregled obnovljenih godina za broj indeksa.\n\n**Path parametri:**\n- `studentIndeksId` - ID student indeksa"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Response is JSON\", function () { pm.response.to.be.json; });",
+              "const data = pm.response.json();",
+              "pm.test(\"Response is array\", function () { pm.expect(data).to.be.an(\"array\"); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Obnova godine",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentIndeksId\": 1,\n  \"godina\": 1,\n  \"skolskaGodinaId\": 1,\n  \"prenetiESPB\": 0,\n  \"nextYearDrziPredmetIds\": [1, 2],\n  \"razlogObnove\": \"Nepoloženi predmeti\"\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/obnova-godine/obnovi",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "obnova-godine", "obnovi"]
+        },
+        "description": "Obnova godine za studenta. Omogućava obnovu godine sa automatskom detekcijom nepoloženih predmeta + izbor dodatnih predmeta (max 60 ESPB).\n\n**Request body:**\n- `studentIndeksId` - ID student indeksa\n- `godina` - godina studija (1-6)\n- `skolskaGodinaId` - ID školske godine\n- `prenetiESPB` - preneti ESPB poeni (opciono)\n- `nextYearDrziPredmetIds` - lista ID-jeva predmeta iz naredne godine (opciono)\n- `razlogObnove` - razlog obnove (opciono)\n\n**Napomena**: Automatski se detektuju nepoloženi predmeti. Validacija: zbir ESPB ≤ 60."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+              "pm.test(\"Response contains ID\", function () {",
+              "    const id = pm.response.text().replace(/\"/g, '').trim();",
+              "    pm.expect(id).to.not.be.empty;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Dodavanje nove uplate",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentIndeksId\": 1,\n  \"iznosDinara\": 150000\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/uplata/dodaj",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "uplata", "dodaj"]
+        },
+        "description": "Dodavanje nove uplate. Čuva se datum uplate, iznos u dinarima i srednji kurs (dohvaćen sa API-ja).\n\n**Request body:**\n- `studentIndeksId` - ID student indeksa\n- `iznosDinara` - iznos uplate u dinarima\n\n**Napomena**: Automatski se dohvata trenutni srednji kurs EUR-a sa API-ja: https://kurs.resenje.org/api/v1/currencies/eur/rates/today. Automatski se pronalazi aktivna školska godina."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 or 201\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+              "pm.test(\"Response contains ID\", function () {",
+              "    const id = pm.response.text().replace(/\"/g, '').trim();",
+              "    pm.expect(id).to.not.be.empty;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Selekcija preostalog iznosa za uplatu",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8090/api/uplata/preostalo/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "uplata", "preostalo", "1"]
+        },
+        "description": "Selekcija preostalog iznosa za uplatu u evrima i dinarima. Školarina = 3000 EUR.\n\n**Path parametri:**\n- `studentIndeksId` - ID student indeksa\n\n**Response:**\n- `preostaloEUR` - preostali iznos u EUR\n- `preostaloRSD` - preostali iznos u RSD\n- `ukupnoUplacenoEUR` - ukupno uplaćeno u EUR\n- `ukupnoUplacenoRSD` - ukupno uplaćeno u RSD"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Response is JSON\", function () { pm.response.to.be.json; });",
+              "const data = pm.response.json();",
+              "pm.test(\"Response has required fields\", function () {",
+              "    pm.expect(data).to.have.property(\"preostaloEUR\");",
+              "    pm.expect(data).to.have.property(\"preostaloRSD\");",
+              "    pm.expect(data).to.have.property(\"ukupnoUplacenoEUR\");",
+              "    pm.expect(data).to.have.property(\"ukupnoUplacenoRSD\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "12. Broj puta koliko je student polagao predmet",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8090/api/izlazak-na-ispit/student/1/predmet/1/broj-pokusaja",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "izlazak-na-ispit", "student", "1", "predmet", "1", "broj-pokusaja"]
+        },
+        "description": "Broj puta koliko je student polagao predmet (izašao na ispit).\n\n**Path parametri:**\n- `studentIndeksId` - ID student indeksa\n- `predmetId` - ID predmeta\n\n**Response:** Broj pokušaja (Long)"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Response contains number\", function () {",
+              "    const count = parseInt(pm.response.text());",
+              "    pm.expect(count).to.be.a('number');",
+              "    pm.expect(count).to.be.at.least(0);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "13. Spisak predmeta na studijskom programu",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8090/api/predmet/by-program/1?obavezan=true",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "predmet", "by-program", "1"],
+          "query": [
+            {"key": "obavezan", "value": "true", "description": "Filter za obavezne predmete (opciono)"}
+          ]
+        },
+        "description": "Spisak predmeta na studijskom programu.\n\n**Path parametri:**\n- `programId` - ID studijskog programa\n\n**Query parametri:**\n- `obavezan` - filter za obavezne predmete (true/false, opciono)"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Response is JSON\", function () { pm.response.to.be.json; });",
+              "const data = pm.response.json();",
+              "pm.test(\"Response is array\", function () { pm.expect(data).to.be.an(\"array\"); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "14. Spisak svih predmeta sa svim podacima",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8090/api/predmet/svi",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "predmet", "svi"]
+        },
+        "description": "Spisak svih predmeta sa svim podacima.\n\n**Response:** Lista svih predmeta sa detaljima (sifra, naziv, opis, ESPB, semestar, fond časova, itd.)"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Response is JSON\", function () { pm.response.to.be.json; });",
+              "const data = pm.response.json();",
+              "pm.test(\"Response is array\", function () { pm.expect(data).to.be.an(\"array\"); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "15. Dodavanje novog predmeta na studijski program",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sifra\": \"PRED-001\",\n  \"naziv\": \"Novi Predmet\",\n  \"opis\": \"Opis novog predmeta\",\n  \"espb\": 6,\n  \"semestar\": 1,\n  \"fondCasovaVezbe\": 30,\n  \"fondCasovaPredavanja\": 60,\n  \"studProgramId\": 1,\n  \"obavezan\": true\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/predmet/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "predmet", "add"]
+        },
+        "description": "Dodavanje novog predmeta na studijski program.\n\n**Request body:**\n- `sifra` - šifra predmeta (jedinstvena)\n- `naziv` - naziv predmeta\n- `opis` - opis predmeta\n- `espb` - ESPB poeni\n- `semestar` - semestar (opciono)\n- `fondCasovaVezbe` - fond časova za vežbe (opciono)\n- `fondCasovaPredavanja` - fond časova za predavanja (opciono)\n- `studProgramId` - ID studijskog programa\n- `obavezan` - da li je predmet obavezan (opciono, default: false)"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 or 201\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+              "pm.test(\"Response contains ID\", function () {",
+              "    const id = pm.response.text().replace(/\"/g, '').trim();",
+              "    pm.expect(id).to.not.be.empty;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "16. Svi prijavljeni studenti za ispit",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8090/api/prijava-ispita/1/students",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "prijava-ispita", "1", "students"]
+        },
+        "description": "Svi prijavljeni studenti za ispit.\n\n**Path parametri:**\n- `ispitId` - ID ispita\n\n**Response:** Lista prijavljenih studenata sa podacima o prijavi."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Response is JSON\", function () { pm.response.to.be.json; });",
+              "const data = pm.response.json();",
+              "pm.test(\"Response is array\", function () { pm.expect(data).to.be.an(\"array\"); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "17. Prijava ispita",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentIndeksId\": 1,\n  \"ispitId\": 1,\n  \"datumPrijave\": \"2025-11-23\"\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/prijava-ispita/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "prijava-ispita", "add"]
+        },
+        "description": "Prijava ispita za studenta.\n\n**Request body:**\n- `studentIndeksId` - ID student indeksa\n- `ispitId` - ID ispita\n- `datumPrijave` - datum prijave (format: YYYY-MM-DD, opciono)"
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 or 201\", function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+              "pm.test(\"Response contains ID\", function () {",
+              "    const id = pm.response.text().replace(/\"/g, '').trim();",
+              "    pm.expect(id).to.not.be.empty;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "18. Dodavanje izlaska na ispit",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"prijavaIspitaId\": 1,\n  \"slusaPredmetId\": 1,\n  \"osvojeniPredispitniPoeni\": 30,\n  \"osvojeniIspitniPoeni\": 50,\n  \"ukupnoPoena\": 80,\n  \"ocena\": 8,\n  \"ponistio\": false,\n  \"napomena\": \"Uspesan polaganje\"\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/izlazak-na-ispit",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "izlazak-na-ispit"]
+        },
+        "description": "Dodavanje izlaska na ispit (rezultata ispita).\n\n**Request body:**\n- `prijavaIspitaId` - ID prijave ispita\n- `slusaPredmetId` - ID slusa predmet zapisa\n- `osvojeniPredispitniPoeni` - osvojeni predispitni poeni\n- `osvojeniIspitniPoeni` - osvojeni ispitni poeni\n- `ukupnoPoena` - ukupno poena\n- `ocena` - ocena (opciono)\n- `ponistio` - da li je poništeno (opciono)\n- `napomena` - napomena (opciono)\n\n**Napomena**: Implementirana logika za čuvanje položenog predmeta."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () { pm.response.to.have.status(201); });",
+              "pm.test(\"Response contains ID\", function () {",
+              "    const id = pm.response.text().replace(/\"/g, '').trim();",
+              "    pm.expect(id).to.not.be.empty;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8090",
+      "type": "string"
+    },
+    {
+      "key": "studentIndeksId",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

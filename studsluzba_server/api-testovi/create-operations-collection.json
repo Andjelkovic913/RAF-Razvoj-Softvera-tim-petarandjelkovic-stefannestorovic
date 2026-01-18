@@ -1,0 +1,286 @@
+{
+  "info": {
+    "_postman_id": "create-ops-2024-11-24",
+    "name": "Studentska Sluzba - CREATE Operacije",
+    "description": "Postman kolekcija za testiranje svih CREATE (POST) operacija u sistemu Studentska Sluzba.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Kreiranje Školske Godine",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"naziv\": \"2024/2025\",\n  \"aktivna\": true\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/skolska-godina/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "skolska-godina", "add"]
+        }
+      }
+    },
+    {
+      "name": "2. Kreiranje Studijskog Programa",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"oznaka\": \"SI\",\n  \"naziv\": \"Softversko inženjerstvo\",\n  \"godinaAkreditacije\": 2020,\n  \"zvanje\": \"Diplomirani inženjer\",\n  \"trajanjeGodina\": 4,\n  \"trajanjeSemestara\": 8,\n  \"vrstaStudija\": \"Osnovne akademske studije\",\n  \"ukupnoEspb\": 240,\n  \"skolskaGodinaId\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/studijskiprogram/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "studijskiprogram", "add"]
+        }
+      }
+    },
+    {
+      "name": "3. Kreiranje Srednje Škole",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"naziv\": \"Matematička gimnazija\",\n  \"vrsta\": \"Gimnazija\",\n  \"mesto\": \"Beograd\",\n  \"napomena\": \"Prirodno-matematički smer\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/srednja-skola/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "srednja-skola", "add"]
+        }
+      }
+    },
+    {
+      "name": "4. Kreiranje Studenta",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ime\": \"Marko\",\n  \"prezime\": \"Marković\",\n  \"srednjeIme\": \"Petar\",\n  \"jmbg\": \"0101995710001\",\n  \"datumRodjenja\": \"1995-01-01\",\n  \"mestoPrebivalista\": \"Beograd\",\n  \"drzavljanstvo\": \"Srpsko\",\n  \"pol\": \"M\",\n  \"adresa\": \"Kneza Miloša 10\",\n  \"emailPrivatni\": \"marko.markovic@gmail.com\",\n  \"emailFakultetski\": \"marko.markovic@raf.rs\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/student/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "student", "add"]
+        }
+      }
+    },
+    {
+      "name": "5. Kreiranje Student Indeksa",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"godina\": 2024,\n  \"studProgramOznaka\": \"SI\",\n  \"nacinFinansiranja\": \"Budžet\",\n  \"aktivan\": true,\n  \"vaziOd\": \"2024-10-01\",\n  \"studentId\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/student/saveindeks",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "student", "saveindeks"]
+        }
+      }
+    },
+    {
+      "name": "6. Kreiranje Nastavnika",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"ime\": \"Petar\",\n  \"prezime\": \"Petrović\",\n  \"srednjeIme\": \"Milan\",\n  \"email\": \"petar.petrovic@raf.rs\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/nastavnik/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "nastavnik", "add"]
+        }
+      }
+    },
+    {
+      "name": "7. Kreiranje Predmeta",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sifra\": \"RS-001\",\n  \"naziv\": \"Razvoj softvera\",\n  \"opis\": \"Predmet o razvoju softvera\",\n  \"espb\": 8,\n  \"semestar\": 5,\n  \"fondCasovaVezbe\": 45,\n  \"fondCasovaPredavanja\": 45,\n  \"studProgramId\": 1,\n  \"obavezan\": true\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/predmet/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "predmet", "add"]
+        }
+      }
+    },
+    {
+      "name": "8. Kreiranje Drži Predmet",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nastavnikId\": 1,\n  \"predmetId\": 1,\n  \"skolskaGodinaId\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/drzi-predmet/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "drzi-predmet", "add"]
+        }
+      }
+    },
+    {
+      "name": "9. Kreiranje Ispitnog Roka",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"datumPocetka\": \"2025-01-15\",\n  \"datumZavrsetka\": \"2025-02-15\",\n  \"tipRoka\": \"JANUAR\",\n  \"skolskaGodinaId\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/ispitni-rok/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "ispitni-rok", "add"]
+        }
+      }
+    },
+    {
+      "name": "10. Kreiranje Ispita",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"datumOdrzavanja\": \"2025-01-20\",\n  \"vremePocetka\": \"10:00:00\",\n  \"vremeZavrsetka\": \"12:00:00\",\n  \"drziPredmetId\": 1,\n  \"predmetId\": 1,\n  \"ispitniRokId\": 1,\n  \"skolskaGodinaId\": 1,\n  \"zakljucen\": false\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/ispit/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "ispit", "add"]
+        }
+      }
+    },
+    {
+      "name": "11. Upis Studenta na Godinu",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"datumUpisa\": \"2024-10-01\",\n  \"godina\": 1,\n  \"prenetiESPB\": 0,\n  \"studentIndeksId\": 1,\n  \"skolskaGodinaId\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/upis-godine/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "upis-godine", "add"]
+        }
+      }
+    },
+    {
+      "name": "12. Obnova Godine",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentIndeksId\": 1,\n  \"godina\": 1,\n  \"skolskaGodinaId\": 1,\n  \"prenetiESPB\": 0,\n  \"razlogObnove\": \"Nepoloženi predmeti\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/obnova-godine/obnovi",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "obnova-godine", "obnovi"]
+        }
+      }
+    },
+    {
+      "name": "13. Prijava Ispita",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentIndeksId\": 1,\n  \"ispitId\": 1,\n  \"datumPrijave\": \"2025-01-10\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/prijava-ispita/add",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "prijava-ispita", "add"]
+        }
+      }
+    },
+    {
+      "name": "14. Dodavanje Izlaska na Ispit",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"prijavaIspitaId\": 1,\n  \"slusaPredmetId\": 1,\n  \"osvojeniPredispitniPoeni\": 30,\n  \"osvojeniIspitniPoeni\": 50,\n  \"ukupnoPoena\": 80,\n  \"ocena\": 8,\n  \"ponistio\": false\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/izlazak-na-ispit",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "izlazak-na-ispit"]
+        }
+      }
+    },
+    {
+      "name": "15. Dodavanje Uplate",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentIndeksId\": 1,\n  \"iznosDinara\": 150000\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/uplata/dodaj",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8090",
+          "path": ["api", "uplata", "dodaj"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8090"
+    }
+  ]
+}
